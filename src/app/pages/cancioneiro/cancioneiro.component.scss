@@ -1,0 +1,11 @@
+ion-content ion-virtual-scroll ion-item ion-chip {
+  width: 50px;
+  justify-content: center;
+  margin-left: 0;
+  margin-right: 10px;
+}
+
+ion-content ion-virtual-scroll ion-item ion-label p {
+  font-size: 12px !important;
+  line-height: 14px !important;
+}

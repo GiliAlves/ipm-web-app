@@ -1,0 +1,24 @@
+ion-label {
+
+  h4 {
+    margin-bottom: 10px;
+  }
+
+  p {
+    text-align: justify;
+    white-space: pre-wrap;
+  }
+}
+ion-segment {
+  --background: #54dc98;
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+
+  img {
+    margin: 10px;
+    border-radius: 10px;
+  }
+}

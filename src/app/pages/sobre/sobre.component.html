@@ -1,0 +1,57 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Sobre</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Sobre</ion-title>
+    </ion-toolbar>
+
+    <ion-toolbar>
+      <ion-segment value="ipm" (ionChange)="handleHistory($event)">
+        <ion-segment-button value="ipm">
+          IPM
+        </ion-segment-button>
+        <ion-segment-button value="ipb">
+          IPB
+        </ion-segment-button>
+      </ion-segment>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-list>
+    <div *ngIf="ipm; else IPB">
+      <section>
+        <img [defaultImage]="defaultImage" [lazyLoad]="'https://firebasestorage.googleapis.com/v0/b/ipm-task-app.appspot.com/o/app%2F01.png?alt=media&token=4d2dd536-d2af-46b0-92be-d002fa47f23e'">
+      </section>
+      <section *ngFor="let text of histIPM">
+        <ion-item>
+          <ion-label>
+            <h4>{{ text.title }}</h4>
+            <p>{{ text.description }}</p>
+          </ion-label>
+        </ion-item>
+        <section *ngIf="text.img">
+          <img [defaultImage]="defaultImage" [lazyLoad]="text.img">
+        </section>
+      </section>
+      <section>
+        <img [defaultImage]="defaultImage" [lazyLoad]="'https://firebasestorage.googleapis.com/v0/b/ipm-task-app.appspot.com/o/app%2F02.png?alt=media&token=1a91ffc6-c190-4ff0-84ff-c92e1b5989c4'">
+      </section>
+    </div>
+    <ng-template #IPB>
+      <ion-item *ngFor="let text of histIPB">
+        <ion-label>
+          <h4>{{ text.title }}</h4>
+          <p>{{ text.description }}</p>
+        </ion-label>
+      </ion-item>
+    </ng-template>
+  </ion-list>
+</ion-content>

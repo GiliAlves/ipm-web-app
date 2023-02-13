@@ -1,0 +1,68 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Novo Cântico</ion-title>
+  </ion-toolbar>
+  <ion-toolbar color="primary">
+    <ion-searchbar
+      animated="true" placeholder="Procurar Hino"
+      [debounce]="1000"
+      (ionChange)="handleChange($event)"
+      (ionClear)="handleCancel()"
+      (ionCancel)="handleCancel()">
+    </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Novo Cântico</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-virtual-scroll [items]="hinos$ | async">
+    <ion-item *virtualItem="let hino" button (click)="openModal(hino)"
+      lines="inset"
+      detail="true"
+      detail-icon="caret-forward-outline">
+      <ion-chip slot="start" color="success" [outline]="true">{{ hino.numero }}</ion-chip>
+      <ion-label>
+        <h2>{{ hino.titulo }}</h2>
+        <p class="description" [innerHTML]="hino.letra.slice(0, 80) + '...' | sanitizedHtml"></p>
+      </ion-label>
+    </ion-item>
+  </ion-virtual-scroll>
+
+  <ion-modal [isOpen]="isModalOpen">
+    <ng-template>
+
+      <ion-header>
+        <ion-toolbar>
+          <ion-title slot="start">{{ hino.numero + ' ∙ ' + hino.titulo }}</ion-title>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content>
+        <ion-fab vertical="top" slot="fixed" horizontal="end" [edge]="true">
+          <ion-fab-button size="small" color="tertiary" (click)="closeModal()">
+            <ion-icon name="close" color="light"></ion-icon>
+          </ion-fab-button>
+        </ion-fab>
+
+        <ion-item>
+          <div class="custom-text-editor" [innerHtml]="hino.letra | sanitizedHtml" #letraTarget></div>
+        </ion-item>
+
+        <ion-note>{{hino.autor}}</ion-note>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>
+

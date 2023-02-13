@@ -1,0 +1,77 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Pastoral</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Pastoral</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-card *ngIf="pastoral$" (click)="openModal(pastoral$)">
+    <img [alt]="pastoral$.destaque" [lazyLoad]="pastoral$.imgURL || ''" [defaultImage]="defaultImage"/>
+    <ion-card-header>
+      <ion-card-subtitle>{{ pastoral$.data | date: 'dd/MM/yyyy' }}</ion-card-subtitle>
+      <ion-card-title>{{ pastoral$.titulo.toLowerCase() }}</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      {{pastoral$.destaque}}
+    </ion-card-content>
+  </ion-card>
+
+  <ion-virtual-scroll [items]="pastorais$ | async">
+    <ion-item *virtualItem="let pastoral" button (click)="openModal(pastoral)"
+      lines="inset"
+      detail="true"
+      detail-icon="caret-forward-outline">
+
+      <ion-thumbnail slot="start">
+        <img [alt]="pastoral.destaque" [lazyLoad]="pastoral.imgURL" [defaultImage]="defaultImage"/>
+      </ion-thumbnail>
+
+      <ion-label>
+        <h3>{{ pastoral.titulo.toLowerCase() }}</h3>
+        <ion-note>{{ pastoral.data | date: 'dd/MM/yyyy' }}</ion-note>
+      </ion-label>
+
+    </ion-item>
+  </ion-virtual-scroll>
+
+
+  <ion-modal [isOpen]="isModalOpen">
+    <ng-template>
+      <ion-content [fullscreen]="true">
+
+        <ion-fab vertical="top" slot="fixed" horizontal="end">
+          <ion-fab-button size="small" color="tertiary" (click)="closeModal()">
+            <ion-icon name="close" color="light"></ion-icon>
+          </ion-fab-button>
+        </ion-fab>
+
+        <ion-item>
+          <h4>{{ pastoral.titulo.toLowerCase() }}</h4>
+        </ion-item>
+
+        <ion-item *ngIf="pastoral.destaque">
+          <h5>{{pastoral.destaque}}</h5>
+        </ion-item>
+
+        <ion-item class="item-text">
+          <div [innerHtml]="pastoral.descricao | sanitizedHtml"></div>
+        </ion-item>
+
+        <ion-item>
+          <ion-note slot="start">{{pastoral.autor}}</ion-note>
+          <ion-note slot="end">{{pastoral.data | date: 'dd/MM/yyyy'}}</ion-note>
+        </ion-item>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>

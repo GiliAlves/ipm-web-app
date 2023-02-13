@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "ipm-task-app": {
+      "hosting": {
+        "app": [
+          "ipm-web-app"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "ipm-web-app"
+  }
+}

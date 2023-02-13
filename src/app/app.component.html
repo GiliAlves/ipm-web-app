@@ -1,0 +1,51 @@
+<ion-app>
+  <ion-split-pane contentId="main-content">
+    <ion-menu contentId="main-content" type="overlay">
+      <ion-header>
+        <ion-toolbar color="primary">
+          <ion-avatar slot="start">
+            <img alt="Silhouette of a person's head" src="../assets/icon/logo.png" />
+          </ion-avatar>
+          <ion-list-header>Igreja Presbiteriana de Mauá</ion-list-header>
+        </ion-toolbar>
+        <ion-toolbar color="primary" id="sec-toolbar">
+          <ion-note>{{ note }}</ion-note>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content [fullscreen]="true">
+        <ion-list id="inbox-list-tab">
+          <ion-menu-toggle auto-hide="false" *ngFor="let p of pagesTab; let i = index">
+            <ion-tab-button fill="clear" shape="round" routerDirection="root" [routerLink]="[p.url]" detail="false" routerLinkActive="selected">
+                <ion-icon [color]="p.color" [ios]="p.icon + '-outline'" [md]="p.icon + '-outline'"></ion-icon>
+                {{ p.title }}
+            </ion-tab-button>
+          </ion-menu-toggle>
+        </ion-list>
+
+        <ion-list id="inbox-list">
+          <ion-menu-toggle auto-hide="false" *ngFor="let p of pagesList; let i = index">
+            <ion-item routerDirection="root" [routerLink]="[p.url]" [lines]="p.line" detail="false" routerLinkActive="selected">
+              <ion-icon slot="start" [color]="p.color" [ios]="p.icon + '-outline'" [md]="p.icon + '-outline'"></ion-icon>
+              <ion-label [color]="p.color">{{ p.title }}</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+        </ion-list>
+      </ion-content>
+
+      <ion-list id="inbox-list-social">
+        <ion-menu-toggle auto-hide="false" *ngFor="let p of social; let i = index">
+          <ion-tab-button fill="clear" shape="round" [href]="[p.url]" target="_blank" detail="false">
+              <ion-icon [color]="p.color" [ios]="p.icon" [md]="p.icon"></ion-icon>
+          </ion-tab-button>
+        </ion-menu-toggle>
+      </ion-list>
+
+      <section id="inbox-list-about">
+        <p>Feito com <ion-icon color="danger" ios="fitness-outline" md="fitness-outline"></ion-icon> <ion-icon color="dark" ios="barbell-outline" md="barbell-outline"></ion-icon>  <ion-icon color="secondary" ios="cafe-outline" md="cafe-outline"></ion-icon> <ion-icon color="warning" ios="bug-outline" md="bug-outline"></ion-icon> por <a href="https://instagram.com/gilialvesilva?igshid=ZDdkNTZiNTM=" target="_blank">@GiliAlveSilva</a></p>
+        <small>versão Beta 1.0.0</small>
+      </section>
+    </ion-menu>
+    <ion-router-outlet id="main-content"></ion-router-outlet>
+  </ion-split-pane>
+</ion-app>
