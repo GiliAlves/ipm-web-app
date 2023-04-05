@@ -3,23 +3,26 @@ import { NgModule } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { SharedModule } from 'src/app/components/shared.module';
+import { ColorPickerModule } from 'ngx-color-picker';
+import { SharedModule } from 'src/app/model/shared.module';
 import { PipesModule } from 'src/app/pipes/pipes.module';
-import { CancioneiroService } from 'src/app/services/cancioneiro.service';
+import { FirebaseService } from 'src/app/services/firebase.service';
 import { CancioneiroRoutingModule } from './cancioneiro-routing.module';
 import { CancioneiroComponent } from './cancioneiro.component';
 
-
 @NgModule({
-  declarations: [CancioneiroComponent],
+  declarations: [
+    CancioneiroComponent
+  ],
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
     CancioneiroRoutingModule,
     SharedModule,
-    PipesModule
+    PipesModule,
+    ColorPickerModule
   ],
-  providers: [CancioneiroService]
+  providers: [ FirebaseService ]
 })
 export class CancioneiroModule { }

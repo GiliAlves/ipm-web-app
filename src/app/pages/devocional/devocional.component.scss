@@ -1,26 +1,45 @@
-ion-virtual-scroll {
-  ion-label {
-    h3 {
-      white-space: pre-wrap;
-      font-size: 14px;
-      text-transform: capitalize;
-    }
-  }
-
-  ion-thumbnail {
-    img {
-      border-radius: 4px;
-    }
-  }
-
+.devocional-row {
+  margin-top: -80px;
 }
 
 ion-card {
-  ion-card-title {
-    text-transform: capitalize;
+  height: 100px;
+  box-shadow: 4px 4px 4px rgb(0 0 0 / 40%);
+  border-radius: 14px;
+
+  #grad1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(180deg,transparent,rgba(0,0,0,.8));
+  }
+}
+
+img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+section {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 6px;
+  z-index: 99;
+
+  h5 {
+    font-size: 12px;
+    margin: 0;
+    color: var(--ion-color-light);
   }
 
-  img {
+  ion-note {
+    color: var(--ion-color-light);
+    font-size: 10px;
   }
 }
 
@@ -29,34 +48,42 @@ ion-card-header.ios {
   flex-flow: column-reverse;
 }
 
-ion-modal ion-content {
-
-  .item-text {
-    padding: 15px 0;
-  }
-
-  ion-item {
-
-    h4 {
-      font-size: 18px;
-      text-transform: capitalize;
-      color: var(--ion-color-primary);
-
-      padding: 42px 0 0;
-    }
-
-    h5 {
-      font-size: 14px;
-      text-align: justify;
-      font-style: italic;
-      color: var(--ion-color-secondary);
-
-      margin: 12px 10px;
-    }
-
-    div {
-      text-align: justify;
-    }
-  }
+.social-row {
+  padding: 40px 60px 80px;
+  background-color: var(--ion-color-primary-contrast);
 }
 
+.map-row {
+  background-color: var(--ion-color-primary-contrast);
+}
+
+.header-modal-open {
+  ion-toolbar {
+    --background: transparent;
+  }
+
+  .toolbar-destaque {
+    padding: 15px;
+
+    ion-note {
+      font-size: 11px;
+    }
+  }
+
+  img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 0;
+    height: 100%;
+  }
+
+  #grad1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(180deg,transparent,rgba(0, 0, 0, 1));
+  }
+}

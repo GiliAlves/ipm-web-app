@@ -6,7 +6,12 @@ const routes: Routes = [
   {
     path: '',
     component: CancioneiroComponent
-  }];
+  },
+  {
+    path: ':id',
+    component: CancioneiroComponent
+  }
+  ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

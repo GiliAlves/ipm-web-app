@@ -1,77 +1,71 @@
-<ion-header [translucent]="true">
-  <ion-toolbar color="tertiary">
+<ion-header [translucent]="false" mode="ios" class="ion-no-border">
+  <ion-toolbar color="secondary">
     <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
+      <ion-menu-button color="light"></ion-menu-button>
     </ion-buttons>
-    <ion-title>Devocional</ion-title>
+    <ion-title color="light">devocionais</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Devocional</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content *ngIf="devocionais$ && (devocionais$ | async)?.length"
+  [fullscreen]="true"
+  [scrollEvents]="true"
+  color="medium"
+  (ionScroll)="handleScroll($any($event))">
 
-  <ion-card *ngIf="devocional$" (click)="openModal(devocional$)">
-    <img [alt]="devocional$.destaque" [src]="devocional$.imgURL"/>
-    <ion-card-header>
-      <ion-card-subtitle>{{ devocional$.data | date: 'dd/MM/yyyy' }}</ion-card-subtitle>
-      <ion-card-title>{{ devocional$.titulo.toLowerCase() }}</ion-card-title>
-    </ion-card-header>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+    <path fill="#4DA186" fill-opacity="1" d="M0,192L24,202.7C48,213,96,235,144,213.3C192,192,240,128,288,106.7C336,85,384,107,432,106.7C480,107,528,85,576,96C624,107,672,149,720,154.7C768,160,816,128,864,138.7C912,149,960,203,1008,218.7C1056,235,1104,213,1152,213.3C1200,213,1248,235,1296,256C1344,277,1392,299,1416,309.3L1440,320L1440,0L1416,0C1392,0,1344,0,1296,0C1248,0,1200,0,1152,0C1104,0,1056,0,1008,0C960,0,912,0,864,0C816,0,768,0,720,0C672,0,624,0,576,0C528,0,480,0,432,0C384,0,336,0,288,0C240,0,192,0,144,0C96,0,48,0,24,0L0,0Z"></path>
+  </svg>
 
-    <ion-card-content>
-      {{devocional$.destaque}}
-    </ion-card-content>
-  </ion-card>
+    <ion-grid class="ion-no-padding">
+      <ion-row class="devocional-row">
+        <ion-col *ngFor="let devocional of (devocionais$ | async)" size="6">
+          <ion-card lines="none" class="ion-no-padding" button (click)="openModal(devocional)">
+            <img [src]="devocional.imgURL">
 
-  <ion-virtual-scroll [items]="devocionais$ | async">
-    <ion-item *virtualItem="let devocional" button (click)="openModal(devocional)"
-      lines="inset"
-      detail="true"
-      detail-icon="caret-forward-outline">
+            <section>
+              <h5 class="ion-text-uppercase">{{ devocional.titulo }}</h5>
+              <ion-note>{{ devocional.autor }}</ion-note>
+            </section>
+            <div id="grad1"></div>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
 
-      <ion-thumbnail slot="start">
-        <img [alt]="devocional.destaque" [src]="devocional.imgURL"/>
-      </ion-thumbnail>
-
-      <ion-label>
-        <h3>{{ devocional.titulo.toLowerCase() }}</h3>
-        <ion-note>{{ devocional.data | date: 'dd/MM/yyyy' }}</ion-note>
-      </ion-label>
-
-    </ion-item>
-  </ion-virtual-scroll>
-
-
-  <ion-modal [isOpen]="isModalOpen">
-    <ng-template>
-      <ion-content [fullscreen]="true">
-
-        <ion-fab vertical="top" slot="fixed" horizontal="end">
-          <ion-fab-button size="small" color="tertiary" (click)="closeModal()">
-            <ion-icon name="close" color="light"></ion-icon>
-          </ion-fab-button>
-        </ion-fab>
-
-        <ion-item>
-          <h4>{{ devocional.titulo.toLowerCase() }}</h4>
-        </ion-item>
-
-        <ion-item *ngIf="devocional.destaque">
-          <h5>{{devocional.destaque}}</h5>
-        </ion-item>
-
-        <ion-item class="item-text">
-          <div [innerHtml]="devocional.descricao | sanitizedHtml"></div>
-        </ion-item>
-
-        <ion-item>
-          <ion-note slot="start">{{devocional.autor}}</ion-note>
-          <ion-note slot="end">{{devocional.data | date: 'dd/MM/yyyy'}}</ion-note>
-        </ion-item>
-      </ion-content>
-    </ng-template>
-  </ion-modal>
+    <ion-fab slot="fixed" vertical="bottom" horizontal="end" *ngIf="!isScrollTop">
+      <ion-fab-button (click)="scrollToTop()" color="secondary">
+        <ion-icon name="chevron-up-outline" color="light"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
 </ion-content>
+
+
+<ion-modal [isOpen]="isModalOpen">
+  <ng-template>
+    <ion-header [translucent]="false" class="ion-no-border header-modal-open" mode="ios">
+      <img [src]="devocional.imgURL" [alt]="devocional.titulo">
+      <div id="grad1"></div>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button size="small" fill="clear" (click)="toggleModal()">
+            <ion-icon color="light" name="arrow-back-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-title color="light">{{ devocional.titulo.toUpperCase() }}</ion-title>
+        <ion-buttons slot="end">
+          <ion-button fill="clear" (click)="presentActionSheet(devocional)">
+            <ion-icon slot="icon-only" name="ellipsis-vertical-outline" color="light"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+      <ion-toolbar class="ion-text-justify toolbar-destaque">
+        <ion-note color="light">{{  devocional.destaque }}</ion-note>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content [fullscreen]="true" class="ion-padding">
+      <ion-text [innerHtml]="devocional.descricao | sanitizedHtml"></ion-text>
+    </ion-content>
+  </ng-template>
+</ion-modal>

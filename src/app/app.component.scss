@@ -19,8 +19,8 @@ ion-menu ion-header {
 
       &.md {
         margin-left: 8px;
-        width: 48px;
-        height: 48px;
+        width: 100px;
+        height: 100px;
       }
     }
 
@@ -35,47 +35,19 @@ ion-menu ion-header {
   }
 }
 
+.about {
+  a {
+    color: var(--ion-color-light);
+  }
+  ion-icon {
+    margin: 0 2px;
+  }
+}
+
 #inbox-list-tab,
 #inbox-list-social {
   display: flex;
   justify-content: space-around;
-}
-
-#inbox-list-tab {
-  padding: 10px 0;
-}
-
-#inbox-list-social {
-  padding: 20px 0;
-}
-
-#inbox-list-about {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-  font-size: 12px;
-  z-index: 1;
-  margin: 10px 0;
-
-  p {
-    margin: 0;
-  }
-  a {
-    text-decoration: none;
-  }
-  small {
-    font-size: 12px;
-    color: #757575;
-  }
-
-  ion-icon {
-    margin: 0 4px;
-  }
-}
-
-ion-menu ion-content {
-  --background: var(--ion-item-background, var(--ion-background-color, #fff));
 }
 
 ion-menu.md ion-content {
@@ -85,22 +57,13 @@ ion-menu.md ion-content {
   --padding-bottom: 20px;
 }
 
-ion-menu.md ion-list {
-  padding: 20px 0;
-}
-
-ion-menu.md ion-note {
+ion-menu.md #sec-toolbar ion-note {
   margin-top: 15px;
-  margin-bottom: 30px;
 }
 
 ion-menu.md ion-list-header,
-ion-menu.md ion-note {
+ion-menu.md #sec-toolbar ion-note {
   padding: 0 10px 15px 15px;
-}
-
-ion-menu.md ion-list#inbox-list {
-  border-bottom: 1px solid var(--ion-color-step-150, #d7d8da);
 }
 
 ion-menu.md ion-list#inbox-list ion-list-header {
@@ -197,4 +160,8 @@ ion-note {
 
 ion-item.selected {
   --color: var(--ion-color-primary);
+}
+
+#inbox-list {
+  padding-top: 20px;
 }

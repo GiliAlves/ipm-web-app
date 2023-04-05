@@ -3,23 +3,27 @@ import { NgModule } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { SharedModule } from 'src/app/components/shared.module';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { SharedModule } from 'src/app/model/shared.module';
 import { PipesModule } from 'src/app/pipes/pipes.module';
-import { NovoCanticoService } from 'src/app/services/novo-cantico.service';
+import { FirebaseService } from 'src/app/services/firebase.service';
 import { NovoCanticoRoutingModule } from './novo-cantico-routing.module';
 import { NovoCanticoComponent } from './novo-cantico.component';
 
 
 @NgModule({
-  declarations: [NovoCanticoComponent],
+  declarations: [
+    NovoCanticoComponent
+  ],
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
     NovoCanticoRoutingModule,
     SharedModule,
-    PipesModule
+    PipesModule,
+    PdfViewerModule
   ],
-  providers: [NovoCanticoService]
+  providers: [ FirebaseService ]
 })
 export class NovoCanticoModule { }

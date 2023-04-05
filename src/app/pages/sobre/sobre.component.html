@@ -5,6 +5,16 @@
     </ion-buttons>
     <ion-title>Sobre</ion-title>
   </ion-toolbar>
+  <ion-toolbar class="ion-padding">
+    <ion-segment value="ipm" (ionChange)="handleHistory($event)" mode="ios">
+      <ion-segment-button value="ipm">
+        IPM
+      </ion-segment-button>
+      <ion-segment-button value="ipb">
+        IPB
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
@@ -13,16 +23,6 @@
       <ion-title size="large">Sobre</ion-title>
     </ion-toolbar>
 
-    <ion-toolbar>
-      <ion-segment value="ipm" (ionChange)="handleHistory($event)">
-        <ion-segment-button value="ipm">
-          IPM
-        </ion-segment-button>
-        <ion-segment-button value="ipb">
-          IPB
-        </ion-segment-button>
-      </ion-segment>
-    </ion-toolbar>
   </ion-header>
 
   <ion-list>

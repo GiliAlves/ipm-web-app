@@ -1,0 +1,422 @@
+ion-row {
+  // position: relative;
+  background-color: var(--ion-color-primary-contrast);
+
+  &.top-row,
+  &.pastoral-row,
+  &.devocional-row,
+  &.youtube-row {
+    flex-wrap: nowrap;
+    overflow-y: hidden;
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    overflow: -moz-scrollbars-none;
+
+    &::-webkit-scrollbar {
+      width: 0 !important;
+      height: 0 !important;
+      display: none;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--ion-color-secondary);
+      border-radius: 9px;
+    }
+  }
+
+  &.tematica-row-title {
+    background-color: transparent;
+    flex-direction: column;
+  }
+
+  &.tematica-row-card {
+    position: relative;
+    padding: 20px 0 100px 0px;
+    background-color: transparent;
+
+    svg {
+      position: absolute;
+      top: -23px;
+      left: -28px;
+      height: 100%;
+    }
+
+    .row-card {
+      background-color: transparent;
+      flex-wrap: wrap;
+      overflow-y: hidden;
+      overflow-x: auto;
+      -ms-overflow-style: none;
+      overflow: -moz-scrollbars-none;
+
+      &::-webkit-scrollbar {
+        width: 0 !important;
+        height: 0 !important;
+        display: none;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: transparent;
+        border-radius: 9px;
+      }
+
+      ion-row {
+        background-color: transparent;
+        flex-wrap: nowrap;
+        margin-left: 80px;
+
+        &:last-child {
+          margin-left: 170px;
+        }
+
+        ion-card {
+          background-color: transparent;
+          width: 200px;
+          height: 100px;
+          box-shadow: 4px 4px 4px rgb(0 0 0 / 40%);
+          border-radius: 14px;
+
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 14px;
+          }
+
+          section {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            padding: 0 16px 10px 0;
+            z-index: 99;
+
+            p {
+              margin: 0;
+              color: var(--ion-color-primary-contrast);
+            }
+
+            small {
+              color: var(--ion-color-light);
+            }
+
+            ion-note {
+              color: var(--ion-color-medium-shade);
+              font-size: 12px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &.youtube-row {
+    padding-bottom: 40px;
+    ion-card {
+      border-top-left-radius: 14px;
+      border-top-right-radius: 14px;
+      box-shadow: none;
+    }
+
+    .img-youtube {
+      box-shadow: 0px 5px 8px rgb(0 0 0 / 35%);
+      border-radius: 14px;
+    }
+
+    .ver-mais-youtube {
+      ion-thumbnail {
+        width: 128px;
+        height: 128px;
+      }
+      ion-card {
+        width: 360px;
+        height: 180px;
+      }
+      ion-row {
+        height: 100%;
+        background-color: transparent;
+      }
+
+      h3 {
+        font-family: "Open Sans", sans-serif;
+        font-weight: 600;
+      }
+      ion-text ion-icon {
+        margin: 0 2px -2px;
+      }
+    }
+
+  }
+
+  &.top-row {
+    box-shadow: -1px 2px 3px rgba(0, 0, 0, 0.3);
+
+    ion-col {
+      max-width: 90px;
+    }
+
+    .ion-title {
+      font-size: 9px;
+      font-weight: 800;
+      margin-top: 4px;
+    }
+
+    ion-chip {
+      flex-direction: column;
+      width: 70px;
+      height: 70px;
+      border-radius: 21%;
+      box-shadow: 3px 4px 4px rgb(0 0 0 / 50%)
+    }
+
+    .background-cancioneiro {
+      background: rgb(235,68,90);
+      background: linear-gradient(53deg, rgba(235,68,90,1) 0%, rgba(0,176,150,1) 35%, rgba(255,196,9,1) 100%);
+    }
+
+    .background-novo-cantico {
+      background: rgb(0,91,64);
+      background: linear-gradient(53deg, rgba(0,91,64,1) 0%, rgba(0,176,150,1) 35%, rgba(0,91,64,1) 100%);
+    }
+  }
+
+  &.second-row {
+    background-color: var(--ion-color-primary-contrast);
+
+    .yt-logo {
+      display: inline-block;
+      height: 20px;
+      width: 90px;
+    }
+    .yt-country {
+      width: 20px;
+      font-size: 10px;
+      margin: 0 0 0 4px;
+      color: #606060;
+    }
+  }
+
+  &.quart-row,
+  &.devocional-row {
+    background-color: var(--ion-color-medium);
+  }
+
+  &.youtube-row {
+    background-color: transparent;
+    margin-top: -80px;
+
+    ion-card {
+      margin-top: 0;
+      background-color: transparent;
+    }
+
+    svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    ion-row {
+      background-color: transparent;
+    }
+
+    ion-thumbnail {
+      margin-right: 4px;
+    }
+  }
+
+  &.social-row {
+    padding: 40px 60px 80px;
+    background-color: var(--ion-color-primary-contrast);
+  }
+
+  &.quart-row {
+    margin-top: 10px;
+  }
+
+  &.devocional-row,
+  &.pastoral-row {
+    padding-bottom: 70px;
+  }
+
+  .ver-mais {
+    font-size: 24px;
+    background-color: transparent;
+    box-shadow: none !important;
+    display: flex;
+    align-items: center;
+
+    ion-text {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  &.terc-row,
+  &.pastoral-row {
+    background-color: var(--ion-color-primary);
+
+    ion-card {
+      background-color: var(--ion-color-primary);
+    }
+  }
+
+  &.terc-row {
+    flex-direction: column;
+    h2 {
+      font-family: "Dancing Script", cursive;
+      color: #ffd700;
+      font-size: 52px;
+    }
+  }
+
+  &.pastoral-row,
+  &.devocional-row {
+
+    ion-card {
+      box-shadow: 4px 4px 4px rgb(0 0 0 / 40%);
+      border-radius: 14px;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 14px;
+    }
+
+    section {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      padding: 0 0 10px 16px;
+      z-index: 99;
+
+      h5 {
+        margin: 0;
+        color: var(--ion-color-primary-contrast);
+      }
+
+      ion-note {
+        color: var(--ion-color-medium-shade);
+        font-size: 12px;
+      }
+    }
+  }
+
+  &.pastoral-row {
+    ion-col {
+      max-width: 250px;
+    }
+
+    ion-card {
+      width: 200px;
+      height: 300px;
+    }
+  }
+
+  &.devocional-row {
+    ion-col {
+      max-width: 350px;
+    }
+
+    ion-card {
+      width: 250px;
+      height: 150px;
+    }
+  }
+
+  &.quint-row {
+    margin-top: 10px;
+    background-color: transparent;
+
+    h6 {
+      font-size: 14px;
+    }
+
+    ion-label {
+      font-size: 12px;
+    }
+  }
+
+  ion-title {
+    font-size: 32px;
+  }
+}
+
+.ion-text-italic {
+  font-style: italic;
+}
+
+.terc-ver {
+  ion-note {
+    font-family: 'Comic Neue', cursive;
+    font-weight: lighter;
+  }
+}
+
+.ion-text-12 {
+  font-size: 12px;
+}
+
+#grad1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(180deg,transparent,rgba(0,0,0,.8));
+}
+
+h2 {
+  font-size: 32px;
+}
+
+ion-popover.timer-grid {
+  --min-width: 86vw;
+  --max-height: 90vh;
+}
+
+ion-popover.popover-search {
+  --min-width: 60vw;
+  --max-height: 316px;
+
+  ion-content {
+    min-height: 232px;
+  }
+
+  .row-1 {
+    padding: 10px;
+    padding-bottom: 0;
+    --min-height: 20px;
+  }
+
+  ion-grid {
+    padding: 0;
+  }
+
+  ion-chip {
+    width: 50px;
+    height: 32px;
+    box-shadow: 2px 2px 3px rgb(0 0 0 / 20%)
+  }
+
+  ion-note {
+    font-size: 12px;
+    white-space: nowrap;
+  }
+}
+
+ion-segment {
+  background: var(--ion-color-medium);
+  width: 36vw;
+  margin: 10px auto;
+}
+
+.spotify {
+  header {
+    display: none;
+  }
+  footer {
+    display: none;
+  }
+}

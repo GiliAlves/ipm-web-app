@@ -9,3 +9,5 @@ export interface Devocional {
   pathURL?: string;
   publicado?: boolean;
 }
+
+export type Position = 'top' | 'middle' | 'bottom'

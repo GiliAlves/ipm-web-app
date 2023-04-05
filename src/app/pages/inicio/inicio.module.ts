@@ -3,7 +3,9 @@ import { NgModule } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { SharedModule } from 'src/app/components/shared.module';
+import { SharedModule } from 'src/app/model/shared.module';
+import { FirebaseService } from 'src/app/services/firebase.service';
+import { YoutubeService } from 'src/app/services/youtube.service';
 import { InicioRoutingModule } from './inicio-routing.module';
 import { InicioComponent } from './inicio.component';
 
@@ -15,7 +17,12 @@ import { InicioComponent } from './inicio.component';
     FormsModule,
     IonicModule,
     InicioRoutingModule,
-    SharedModule
+    SharedModule,
+
+  ],
+  providers: [
+    YoutubeService,
+    FirebaseService
   ]
 })
 export class InicioModule { }

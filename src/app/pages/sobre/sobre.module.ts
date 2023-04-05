@@ -4,8 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { LazyLoadImageModule } from 'ng-lazyload-image';
-import { SharedModule } from 'src/app/components/shared.module';
-import { SobreService } from 'src/app/services/sobre.service';
+import { SharedModule } from 'src/app/model/shared.module';
 import { SobreRoutingModule } from './sobre-routing.module';
 import { SobreComponent } from './sobre.component';
 
@@ -20,6 +19,6 @@ import { SobreComponent } from './sobre.component';
     SharedModule,
     LazyLoadImageModule
   ],
-  providers: [SobreService]
+  providers: []
 })
 export class SobreModule { }

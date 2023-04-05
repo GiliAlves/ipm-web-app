@@ -3,8 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { SharedModule } from 'src/app/components/shared.module';
-import { OracaoService } from 'src/app/services/oracao.service';
+import { SharedModule } from 'src/app/model/shared.module';
 import { OracaoRoutingModule } from './oracao-routing.module';
 import { OracaoComponent } from './oracao.component';
 
@@ -18,6 +17,6 @@ import { OracaoComponent } from './oracao.component';
     OracaoRoutingModule,
     SharedModule
   ],
-  providers: [OracaoService]
+  providers: []
 })
 export class OracaoModule { }

@@ -6,6 +6,10 @@ const routes: Routes = [
   {
     path: '',
     component: NovoCanticoComponent
+  },
+  {
+    path: ':id',
+    component: NovoCanticoComponent
   }
 ];
 
