@@ -1,23 +1,22 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { ToastController } from '@ionic/angular';
+import { IonDatetime, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
-import { OrderByDirection } from 'firebase/firestore';
+import { OrderByDirection, Timestamp } from 'firebase/firestore';
 import { Observable } from 'rxjs';
+import { Calendario } from 'src/app/interfaces/calendario.interface';
 import { Cantico } from 'src/app/interfaces/cantico.interface';
-import { Devocional } from 'src/app/interfaces/devocional.interface';
+import { Devocional, Position } from 'src/app/interfaces/devocional.interface';
 import { Cargo, Cargos, InicialStorage } from 'src/app/interfaces/inicial.interface';
 import { Membro } from 'src/app/interfaces/membros.interface';
-import { Tematica } from 'src/app/interfaces/novo-cantico.interface';
+import { NovoCantico, Tematica } from 'src/app/interfaces/novo-cantico.interface';
 import { Pastoral } from 'src/app/interfaces/pastoral.interface';
-import { GENESIS, HORARIOS, INICIAL_STORAGE, LINKS, MESSAGE_GET_STORAGE_ERROR, RESET_HINO_CANTICO, SOCIAL, TEMATICAS } from 'src/app/model/shared';
+import { YouTube } from 'src/app/interfaces/youTube.interface';
+import { BIBLIA, HORARIOS, INICIAL_STORAGE, LINKS, MESSAGE_GET_STORAGE_ERROR, RESET_HINO_CANTICO, SOCIAL, TEMATICAS } from 'src/app/model/shared';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { YoutubeService } from 'src/app/services/youtube.service';
 import { DECODE_HTML_CHAR_CODES, NORMALIZE_HTML } from 'src/utils/utils';
-import { Position } from '../cancioneiro/cancioneiro.component';
-import { Hino } from './../../../../../dashboard-ipm/src/app/interface/hino.interface';
-import { Biblia } from './../../interfaces/inicial.interface';
-import { YouTube } from './../../interfaces/youTube.interface';
+
 
 @Component({
   selector: 'app-inicio',
@@ -27,19 +26,24 @@ import { YouTube } from './../../interfaces/youTube.interface';
 export class InicioComponent implements OnInit {
   @ViewChild('popoverCancioneiro') popoverCancioneiro!: any;
   @ViewChild('popoverHino') popoverHino!: any;
+  @ViewChild('datetime') datetime!: IonDatetime;
 
   public pastorais$!: Observable<Pastoral[]>;
   public devocionais$!: Observable<Devocional[]>;
+  public calendar$!: Observable<Calendario[]>;
+  
   public cantico: Cantico[] = [];
-  public hino: Hino[] = [];
+  public hino: NovoCantico[] = [];
 
-  public genesis: Biblia = GENESIS;
+  public biblia = BIBLIA;
   public tematicas: Tematica[] = TEMATICAS;
   public inicialStorage: InicialStorage = INICIAL_STORAGE;
   public social = SOCIAL;
   public horarios = HORARIOS;
   public links = LINKS;
   private messageGetStorageError: string = MESSAGE_GET_STORAGE_ERROR;
+  
+  public date = new Date();
   public searchBarTerm: string = '';
   public scrollTop: boolean = true;
   public isSpinner: boolean = false;
@@ -64,6 +68,9 @@ export class InicioComponent implements OnInit {
     this.setFirebase('devocionais');
     this.getAllDevocionais();
 
+    this.setFirebase('eventos', 'dataInicio', 'asc');
+    this.getAllCalendar();
+
     this.setFirebase('membros', 'nome', 'asc');
 
     if (!this.inicialStorage.diaconos.length)
@@ -75,7 +82,10 @@ export class InicioComponent implements OnInit {
     if (!this.inicialStorage.presbiteros.length)
       this.getWhereMembros('Presbítero', 'presbiteros');
 
-    this.firebaseService.create({ Gênesis: this.genesis });
+      // this.biblia.forEach(async livro => console.log(livro));
+    
+    // this.biblia.forEach(async livro => 
+    //   await this.firebaseService.create(livro));
   }
 
   private setFirebase(path: string, fieldPath: string = 'data', orderByDirection: OrderByDirection = 'desc') {
@@ -98,6 +108,9 @@ export class InicioComponent implements OnInit {
 
   private getAllDevocionais = () =>
     this.devocionais$ = this.firebaseService.getLimit(6) as Observable<Devocional[]>;
+
+  private getAllCalendar  = () =>
+      this.calendar$ = this.firebaseService.getWhere('dataInicio', '>=', Timestamp.now()) as Observable<Calendario[]>;
 
   private getWhereMembros = (cargo: Cargo, key: Cargos) =>
     this.firebaseService.getWhere('cargo', '==', cargo).subscribe(membro => {
@@ -140,6 +153,10 @@ export class InicioComponent implements OnInit {
 
   public resetSearch = () => this.searchBarTerm = '';
 
+  public calendar() {
+    console.log(this.datetime.value);
+  }
+
   public searchBar(item: string, path: string, fieldPath: string) {
     switch (item) {
       case 'backspace':
@@ -178,7 +195,7 @@ export class InicioComponent implements OnInit {
 
               switch (path) {
                 case 'hinos':
-                  this.hino = value as Hino[];
+                  this.hino = value as NovoCantico[];
                   this.hino.forEach((hino, index) => this.hino[index].letra = DECODE_HTML_CHAR_CODES(NORMALIZE_HTML(hino.letra)));
                   this.inicialStorage.hino = this.hino[0];
                   this.setStorage();

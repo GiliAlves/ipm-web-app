@@ -376,6 +376,11 @@ ion-popover.timer-grid {
   --max-height: 90vh;
 }
 
+ion-popover.calendar-grid {
+  --min-width: 95vw;
+  --max-height: 90vh;
+}
+
 ion-popover.popover-search {
   --min-width: 60vw;
   --max-height: 316px;
@@ -419,4 +424,18 @@ ion-segment {
   footer {
     display: none;
   }
+}
+
+.calendar-grid ion-card {
+  margin: 12px 6px;
+}
+
+ion-card-title {
+  font-size: 20px;
+}
+
+ion-datetime {
+  max-width: 96%;
+  margin: 10px auto;
+  border-radius: 14px;
 }

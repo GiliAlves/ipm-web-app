@@ -8,8 +8,8 @@ export interface NovoCantico {
   tituloLowercase?: string;
   autor?: string;
   video?: string;
-  tematica: string;
-  assunto: string;
+  tematica?: string;
+  assunto?: string;
   partitura?: string;
   audios?: Audio[];
   favorito?: boolean;

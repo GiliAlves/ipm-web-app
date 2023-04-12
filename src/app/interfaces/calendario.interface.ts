@@ -1,9 +1,9 @@
-import * as firestore from 'firebase/firestore';
+import { Timestamp } from 'firebase/firestore';
 
 export interface Calendario {
   uid?: string;
-  dataInicio?: firestore.Timestamp;
-  dataFim?: firestore.Timestamp;
+  dataInicio?: Timestamp;
+  dataFim?: Timestamp;
   titulo?: string;
   descricao?: string;
   local?: string;

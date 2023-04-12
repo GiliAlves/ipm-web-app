@@ -18,7 +18,6 @@ import { environment } from 'src/environments/environment.prod';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-
 registerLocaleData(localePt, 'pt-BR');
 
 @NgModule({

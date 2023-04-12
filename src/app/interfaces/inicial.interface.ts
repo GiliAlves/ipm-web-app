@@ -1,6 +1,6 @@
-import { Hino } from '../../../../dashboard-ipm/src/app/interface/hino.interface';
-import { Cantico } from './../../../../dashboard-ipm/src/app/interface/cantico.interface';
+import { Cantico } from './cantico.interface';
 import { Membro } from "./membros.interface";
+import { NovoCantico } from './novo-cantico.interface';
 import { YouTube } from "./youTube.interface";
 
 export interface InicialStorage {
@@ -8,7 +8,7 @@ export interface InicialStorage {
   pastores: Membro[],
   presbiteros: Membro[],
   diaconos: Membro[],
-  hino: Hino,
+  hino: NovoCantico,
   cantico: Cantico
 }
 
