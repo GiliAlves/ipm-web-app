@@ -137,9 +137,10 @@
         <ion-datetime #datetime
           presentation="date"
           [multiple]="true"
+          [value]="calendarDates"
           (ionChange)="calendar()">
         </ion-datetime>
-
+        
         <ion-card *ngFor="let evento of (calendar$ | async)">
           <ion-card-header>
             <ion-card-subtitle>

@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonDatetime, ToastController } from '@ionic/angular';
@@ -44,13 +45,14 @@ export class InicioComponent implements OnInit {
   private messageGetStorageError: string = MESSAGE_GET_STORAGE_ERROR;
   
   public date = new Date();
+  public calendarDates: string[] = [];
   public searchBarTerm: string = '';
   public scrollTop: boolean = true;
   public isSpinner: boolean = false;
-
   public isSubmmit: boolean = false;
 
   constructor(
+    private datePipe: DatePipe,
     private firebaseService: FirebaseService,
     private youTubeService: YoutubeService,
     private toastController: ToastController,
@@ -82,10 +84,15 @@ export class InicioComponent implements OnInit {
     if (!this.inicialStorage.presbiteros.length)
       this.getWhereMembros('Presbítero', 'presbiteros');
 
-      // this.biblia.forEach(async livro => console.log(livro));
-    
-    // this.biblia.forEach(async livro => 
-    //   await this.firebaseService.create(livro));
+    this.calendar$.subscribe(calendar => 
+      calendar.forEach(evento => {
+        if (evento && evento.dataInicio) {
+          let date = this.datePipe.transform(evento.dataInicio.toDate(), 'yyyy-MM-dd')?.toString();
+          if (date)
+            this.calendarDates.push(date);          
+        }
+      })
+    )
   }
 
   private setFirebase(path: string, fieldPath: string = 'data', orderByDirection: OrderByDirection = 'desc') {

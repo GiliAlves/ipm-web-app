@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
@@ -18,11 +18,12 @@ import { InicioComponent } from './inicio.component';
     IonicModule,
     InicioRoutingModule,
     SharedModule,
-
+    
   ],
   providers: [
     YoutubeService,
-    FirebaseService
+    FirebaseService,
+    DatePipe
   ]
 })
 export class InicioModule { }
