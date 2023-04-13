@@ -427,7 +427,7 @@ ion-segment {
 }
 
 .calendar-grid ion-card {
-  margin: 12px 6px;
+  margin: 12px 0;
 }
 
 ion-card-title {
@@ -435,7 +435,5 @@ ion-card-title {
 }
 
 ion-datetime {
-  max-width: 96%;
-  margin: 10px auto;
   border-radius: 14px;
 }

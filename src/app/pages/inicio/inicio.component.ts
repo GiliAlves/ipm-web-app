@@ -35,6 +35,8 @@ export class InicioComponent implements OnInit {
   
   public cantico: Cantico[] = [];
   public hino: NovoCantico[] = [];
+  public eventos: Calendario[] = [];
+  public evento!: Calendario;
 
   public biblia = BIBLIA;
   public tematicas: Tematica[] = TEMATICAS;
@@ -47,6 +49,7 @@ export class InicioComponent implements OnInit {
   public date = new Date();
   public calendarDates: string[] = [];
   public searchBarTerm: string = '';
+  public valueDay: string | undefined = '';
   public scrollTop: boolean = true;
   public isSpinner: boolean = false;
   public isSubmmit: boolean = false;
@@ -72,6 +75,7 @@ export class InicioComponent implements OnInit {
 
     this.setFirebase('eventos', 'dataInicio', 'asc');
     this.getAllCalendar();
+    this.setEventsCalendar();
 
     this.setFirebase('membros', 'nome', 'asc');
 
@@ -83,16 +87,6 @@ export class InicioComponent implements OnInit {
 
     if (!this.inicialStorage.presbiteros.length)
       this.getWhereMembros('Presbítero', 'presbiteros');
-
-    this.calendar$.subscribe(calendar => 
-      calendar.forEach(evento => {
-        if (evento && evento.dataInicio) {
-          let date = this.datePipe.transform(evento.dataInicio.toDate(), 'yyyy-MM-dd')?.toString();
-          if (date)
-            this.calendarDates.push(date);          
-        }
-      })
-    )
   }
 
   private setFirebase(path: string, fieldPath: string = 'data', orderByDirection: OrderByDirection = 'desc') {
@@ -135,6 +129,24 @@ export class InicioComponent implements OnInit {
       .then(storage => this.inicialStorage = storage)
       .catch(err => this.messageErrorStorage(err));
 
+  private setEventsCalendar = () =>
+    this.calendar$.subscribe(calendar => {
+      this.evento = calendar[0]
+      this.valueDay = this.datePipe.transform(calendar[0].dataInicio?.toDate(), 'yyyy-MM-dd')?.toString();
+
+      calendar.forEach(evento => {
+        if (evento && evento.dataInicio) {
+          let date = this.datePipe.transform(evento.dataInicio.toDate(), 'dd')?.toString();
+          let month = evento.dataInicio.toDate().getMonth() + 1;
+          evento.day = date;
+          this.eventos.push(evento);
+
+          if (date && month === (this.date.getMonth() + 1))
+            this.calendarDates.push(date);
+        }
+      })
+    })
+
   private messageErrorStorage = (err: any) =>
     this.presentToast(this.messageGetStorageError, err);
 
@@ -161,7 +173,13 @@ export class InicioComponent implements OnInit {
   public resetSearch = () => this.searchBarTerm = '';
 
   public calendar() {
-    console.log(this.datetime.value);
+    console.log(this.datetime);
+      
+    this.eventos.forEach(evento => {
+      if (this.datePipe.transform(this.datetime.value?.toString(), 'dd') === evento.day) {
+        this.evento = evento;
+      }
+    })
   }
 
   public searchBar(item: string, path: string, fieldPath: string) {

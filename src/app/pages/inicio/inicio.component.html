@@ -131,17 +131,25 @@
         <ion-toolbar>
           <ion-title color="primary">Calendario {{ date.getFullYear() }}</ion-title>
         </ion-toolbar>
+        <ion-toolbar>
+          <ion-datetime #datetime
+            mode="ios"
+            presentation="date"
+            size="cover"
+            [yearValues]="date.getFullYear()"
+            [dayValues]="calendarDates"
+            [value]="valueDay"
+            (ionChange)="calendar()">
+          </ion-datetime>
+        </ion-toolbar>
       </ion-header>
 
-      <ion-content color="medium">
-        <ion-datetime #datetime
-          presentation="date"
-          [multiple]="true"
-          [value]="calendarDates"
-          (ionChange)="calendar()">
-        </ion-datetime>
-        
-        <ion-card *ngFor="let evento of (calendar$ | async)">
+      <ion-content color="medium" class="ion-padding">
+        <ion-text color="primary">
+          <h4>Próximo evento</h4>
+        </ion-text>
+
+        <ion-card *ngIf="evento">
           <ion-card-header>
             <ion-card-subtitle>
               <ion-icon name="calendar-clear-outline"></ion-icon>

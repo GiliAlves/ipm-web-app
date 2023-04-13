@@ -11,4 +11,5 @@ export interface Calendario {
   cor?: string;
   mes?: number;
   ano?: number;
+  day?: string;
 }
