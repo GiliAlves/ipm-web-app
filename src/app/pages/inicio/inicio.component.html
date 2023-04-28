@@ -124,22 +124,22 @@
     </ng-template>
   </ion-popover>
 
-  <ion-popover trigger="calendar-trigger" size="auto" class="calendar-grid" mode="ios">
+  <ion-popover trigger="calendar-trigger" size="auto" class="calendar-grid" mode="ios" (didPresent)="openCalendar()">
     <ng-template>
-      
       <ion-header class="ion-no-border">
         <ion-toolbar>
           <ion-title color="primary">Calendario {{ date.getFullYear() }}</ion-title>
         </ion-toolbar>
+
         <ion-toolbar>
-          <ion-datetime #datetime
+          <ion-datetime #datetime (click)="openCalendar()"
             mode="ios"
             presentation="date"
             size="cover"
             [yearValues]="date.getFullYear()"
             [dayValues]="calendarDates"
             [value]="valueDay"
-            (ionChange)="calendar()">
+            (ionChange)="selectedCalendar()">
           </ion-datetime>
         </ion-toolbar>
       </ion-header>

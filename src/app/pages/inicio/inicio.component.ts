@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { IonDatetime, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
 import { OrderByDirection, Timestamp } from 'firebase/firestore';
+import { padStart } from 'lodash';
 import { Observable } from 'rxjs';
 import { Calendario } from 'src/app/interfaces/calendario.interface';
 import { Cantico } from 'src/app/interfaces/cantico.interface';
@@ -53,6 +54,7 @@ export class InicioComponent implements OnInit {
   public scrollTop: boolean = true;
   public isSpinner: boolean = false;
   public isSubmmit: boolean = false;
+  public isSelected: boolean = false;
 
   constructor(
     private datePipe: DatePipe,
@@ -60,7 +62,7 @@ export class InicioComponent implements OnInit {
     private youTubeService: YoutubeService,
     private toastController: ToastController,
     private router: Router,
-    private storage: Storage) { }
+    private storage: Storage) {}
 
   async ngOnInit() {
     await this.getStorage();
@@ -75,7 +77,7 @@ export class InicioComponent implements OnInit {
 
     this.setFirebase('eventos', 'dataInicio', 'asc');
     this.getAllCalendar();
-    this.setEventsCalendar();
+    this.setEventsCalendar(this.date.getMonth() + 1);
 
     this.setFirebase('membros', 'nome', 'asc');
 
@@ -129,20 +131,23 @@ export class InicioComponent implements OnInit {
       .then(storage => this.inicialStorage = storage)
       .catch(err => this.messageErrorStorage(err));
 
-  private setEventsCalendar = () =>
+  private setEventsCalendar = (monthEvent: number) =>
     this.calendar$.subscribe(calendar => {
-      this.evento = calendar[0]
       this.valueDay = this.datePipe.transform(calendar[0].dataInicio?.toDate(), 'yyyy-MM-dd')?.toString();
+      this.calendarDates = [];
 
-      calendar.forEach(evento => {
+      if (!this.isSelected)
+        this.evento = calendar[0];
+
+      calendar.forEach(evento => {        
         if (evento && evento.dataInicio) {
-          let date = this.datePipe.transform(evento.dataInicio.toDate(), 'dd')?.toString();
-          let month = evento.dataInicio.toDate().getMonth() + 1;
-          evento.day = date;
+          let day = this.datePipe.transform(evento.dataInicio.toDate(), 'dd')?.toString();
+          evento.day = day;
           this.eventos.push(evento);
 
-          if (date && month === (this.date.getMonth() + 1))
-            this.calendarDates.push(date);
+          if (day && (evento.mes === monthEvent)) {
+            this.calendarDates.push(day);
+          }
         }
       })
     })
@@ -172,15 +177,29 @@ export class InicioComponent implements OnInit {
 
   public resetSearch = () => this.searchBarTerm = '';
 
-  public calendar() {
-    console.log(this.datetime);
-      
+  public selectedCalendar() {
+    this.isSelected = true;
+    const container: any = document.querySelector('ion-datetime');
+
     this.eventos.forEach(evento => {
-      if (this.datePipe.transform(this.datetime.value?.toString(), 'dd') === evento.day) {
-        this.evento = evento;
-      }
+      setTimeout(() => { 
+        const mesAtual = container.shadowRoot.querySelector('.calendar-body').children[1].querySelector('button[data-day="1"]').getAttribute('data-month');
+        if (this.datePipe.transform(this.datetime.value?.toString(), 'dd') === evento.day && evento.mes === +mesAtual) {
+          this.evento = evento;
+        }
+      }, 200);
     })
   }
+
+  public openCalendar() {
+    const container: any = document.querySelector('ion-datetime');
+
+    setTimeout(() => { 
+      const mesAtual = container.shadowRoot.querySelector('.calendar-body').children[1].querySelector('button[data-day="1"]').getAttribute('data-month');
+      this.setEventsCalendar(+mesAtual);
+    }, 500);
+  }
+  
 
   public searchBar(item: string, path: string, fieldPath: string) {
     switch (item) {
