@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Auth, GoogleAuthProvider, User, authState, signInWithPopup, signOut } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { IonDatetime, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
@@ -33,11 +34,13 @@ export class InicioComponent implements OnInit {
   public pastorais$!: Observable<Pastoral[]>;
   public devocionais$!: Observable<Devocional[]>;
   public calendar$!: Observable<Calendario[]>;
-  
+  public user$!:  Observable<User | null>;
+
   public cantico: Cantico[] = [];
   public hino: NovoCantico[] = [];
   public eventos: Calendario[] = [];
   public evento!: Calendario;
+  public user!: User | null;
 
   public biblia = BIBLIA;
   public tematicas: Tematica[] = TEMATICAS;
@@ -46,7 +49,7 @@ export class InicioComponent implements OnInit {
   public horarios = HORARIOS;
   public links = LINKS;
   private messageGetStorageError: string = MESSAGE_GET_STORAGE_ERROR;
-  
+
   public date = new Date();
   public calendarDates: string[] = [];
   public searchBarTerm: string = '';
@@ -57,6 +60,7 @@ export class InicioComponent implements OnInit {
   public isSelected: boolean = false;
 
   constructor(
+    private auth: Auth,
     private datePipe: DatePipe,
     private firebaseService: FirebaseService,
     private youTubeService: YoutubeService,
@@ -66,6 +70,8 @@ export class InicioComponent implements OnInit {
 
   async ngOnInit() {
     await this.getStorage();
+
+    this.authState();
 
     this.getVideos();
 
@@ -139,7 +145,7 @@ export class InicioComponent implements OnInit {
       if (!this.isSelected)
         this.evento = calendar[0];
 
-      calendar.forEach(evento => {        
+      calendar.forEach(evento => {
         if (evento && evento.dataInicio) {
           let day = this.datePipe.transform(evento.dataInicio.toDate(), 'dd')?.toString();
           evento.day = day;
@@ -182,7 +188,7 @@ export class InicioComponent implements OnInit {
     const container: any = document.querySelector('ion-datetime');
 
     this.eventos.forEach(evento => {
-      setTimeout(() => { 
+      setTimeout(() => {
         const mesAtual = container.shadowRoot.querySelector('.calendar-body').children[1].querySelector('button[data-day="1"]').getAttribute('data-month');
         if (this.datePipe.transform(this.datetime.value?.toString(), 'dd') === evento.day && evento.mes === +mesAtual) {
           this.evento = evento;
@@ -194,12 +200,12 @@ export class InicioComponent implements OnInit {
   public openCalendar() {
     const container: any = document.querySelector('ion-datetime');
 
-    setTimeout(() => { 
+    setTimeout(() => {
       const mesAtual = container.shadowRoot.querySelector('.calendar-body').children[1].querySelector('button[data-day="1"]').getAttribute('data-month');
       this.setEventsCalendar(+mesAtual);
     }, 500);
   }
-  
+
 
   public searchBar(item: string, path: string, fieldPath: string) {
     switch (item) {
@@ -258,5 +264,15 @@ export class InicioComponent implements OnInit {
         break;
     }
   }
-}
 
+  public authState = () => authState(this.auth).subscribe(user => this.user = user);
+
+  public loginWithGoogle = () => signInWithPopup(this.auth, new GoogleAuthProvider())
+    .then(data => {
+      this.presentToast(`Bem vindo ${data.user?.displayName}`, 1000, 'bottom')
+      console.log(data);
+      })
+    .catch(() => this.presentToast('Ops, não foi possivel fazer o login, tente novamente mais tarde', 500, 'bottom'));
+
+  public logout = () => signOut(this.auth);
+}
