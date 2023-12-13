@@ -19,7 +19,7 @@
 
     <ion-grid class="ion-no-padding">
       <ion-row class="pastoral-row">
-        <ion-col *ngFor="let pastoral of (pastorais$ | async)" size="4">
+        <ion-col *ngFor="let pastoral of (pastorais$ | async)" size="6">
           <ion-card lines="none" class="ion-no-padding" button (click)="openModal(pastoral)">
             <img [src]="pastoral.imgURL">
 

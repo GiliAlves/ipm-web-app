@@ -31,7 +31,6 @@ ion-row {
 
   &.tematica-row-card {
     position: relative;
-    padding: 20px 0 100px 0px;
     background-color: transparent;
 
     svg {
@@ -75,6 +74,7 @@ ion-row {
           height: 100px;
           box-shadow: 4px 4px 4px rgb(0 0 0 / 40%);
           border-radius: 14px;
+          margin: 8px;
 
           img {
             width: 100%;
@@ -110,11 +110,11 @@ ion-row {
   }
 
   &.youtube-row {
-    padding-bottom: 40px;
     ion-card {
       border-top-left-radius: 14px;
       border-top-right-radius: 14px;
       box-shadow: none;
+      margin: 0 8px;
     }
 
     .img-youtube {
@@ -225,7 +225,7 @@ ion-row {
   }
 
   &.social-row {
-    padding: 40px 60px 80px;
+    padding: 40px;
     background-color: var(--ion-color-primary-contrast);
   }
 
@@ -275,6 +275,7 @@ ion-row {
     ion-card {
       box-shadow: 4px 4px 4px rgb(0 0 0 / 40%);
       border-radius: 14px;
+      margin: 0 8px;
     }
 
     img {

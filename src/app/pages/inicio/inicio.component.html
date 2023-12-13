@@ -11,9 +11,9 @@
       <ion-button id="timer-trigger">
         <ion-icon slot="icon-only" name="time-outline" color="primary"></ion-icon>
       </ion-button>
-      <ion-button id="calendar-trigger">
+      <!-- <ion-button id="calendar-trigger">
         <ion-icon slot="icon-only" name="calendar-outline" color="primary"></ion-icon>
-      </ion-button>
+      </ion-button> -->
     </ion-buttons>
   </ion-toolbar>
 
@@ -96,7 +96,7 @@
             </ion-row>
           </ng-container>
 
-          <ion-row>
+          <!-- <ion-row>
             <ion-text>
               <h5>Localização</h5>
             </ion-text>
@@ -117,60 +117,9 @@
                 </a>
               </ion-text>
             </ion-row>
-          </ion-row>
+          </ion-row> -->
 
         </ion-grid>
-      </ion-content>
-    </ng-template>
-  </ion-popover>
-
-  <ion-popover trigger="calendar-trigger" size="auto" class="calendar-grid" mode="ios" (didPresent)="openCalendar()">
-    <ng-template>
-      <ion-header class="ion-no-border">
-        <ion-toolbar>
-          <ion-title color="primary">Calendario {{ date.getFullYear() }}</ion-title>
-        </ion-toolbar>
-
-        <ion-toolbar>
-          <ion-datetime #datetime (click)="openCalendar()"
-            mode="ios"
-            presentation="date"
-            size="cover"
-            [yearValues]="date.getFullYear()"
-            [dayValues]="calendarDates"
-            [value]="valueDay"
-            (ionChange)="selectedCalendar()">
-          </ion-datetime>
-        </ion-toolbar>
-      </ion-header>
-
-      <ion-content color="medium" class="ion-padding">
-        <ion-text color="primary">
-          <h4>Próximo evento</h4>
-        </ion-text>
-
-        <ion-card *ngIf="evento">
-          <ion-card-header>
-            <ion-card-subtitle>
-              <ion-icon name="calendar-clear-outline"></ion-icon>
-              {{ evento.dataInicio?.toDate() | date: "EEEE, d 'de' MMMM 'às' h:mm" }}
-            </ion-card-subtitle>
-            <ion-card-title>{{ evento.titulo }}</ion-card-title>
-            <ion-note *ngIf="evento.descricao !== evento.titulo">{{ evento.descricao }}</ion-note>
-          </ion-card-header>
-          <ion-card-content>
-            <ion-label color="secondary">
-              <h6 *ngIf="evento.local">
-                <ion-icon name="home-outline"></ion-icon>
-                {{ evento.local }}
-              </h6>
-              <p *ngIf="evento.endereco">
-                <ion-icon name="location-outline"></ion-icon>
-                {{ evento.endereco }}
-              </p>
-            </ion-label>
-          </ion-card-content>
-        </ion-card>
       </ion-content>
     </ng-template>
   </ion-popover>
@@ -294,38 +243,6 @@
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#005B40" fill-opacity="1" d="M0,96L16,90.7C32,85,64,75,96,74.7C128,75,160,85,192,101.3C224,117,256,139,288,165.3C320,192,352,224,384,240C416,256,448,256,480,218.7C512,181,544,107,576,101.3C608,96,640,160,672,154.7C704,149,736,75,768,42.7C800,11,832,21,864,37.3C896,53,928,75,960,96C992,117,1024,139,1056,133.3C1088,128,1120,96,1152,122.7C1184,149,1216,235,1248,229.3C1280,224,1312,128,1344,128C1376,128,1408,224,1424,272L1440,320L1440,0L1424,0C1408,0,1376,0,1344,0C1312,0,1280,0,1248,0C1216,0,1184,0,1152,0C1120,0,1088,0,1056,0C1024,0,992,0,960,0C928,0,896,0,864,0C832,0,800,0,768,0C736,0,704,0,672,0C640,0,608,0,576,0C544,0,512,0,480,0C448,0,416,0,384,0C352,0,320,0,288,0C256,0,224,0,192,0C160,0,128,0,96,0C64,0,32,0,16,0L0,0Z"></path></svg>
     </ng-container>
 
-
-    <ng-container *ngIf="devocionais$">
-      <ion-row class="quart-row ion-padding">
-        <ion-text class="ion-no-padding ion-text-start" color="primary">
-          <h2>Devocionais</h2>
-        </ion-text>
-      </ion-row>
-
-      <ion-row class="devocional-row">
-        <ion-col *ngFor="let devocional of devocionais$ | async">
-          <ion-card lines="none" class="ion-no-padding">
-            <img [src]="devocional.imgURL">
-
-            <section>
-              <h5 class="ion-text-uppercase">{{ devocional.titulo }}</h5>
-              <ion-note>{{ devocional.autor }}</ion-note>
-            </section>
-            <div id="grad1"></div>
-          </ion-card>
-        </ion-col>
-
-        <ion-col>
-          <ion-card class="ver-mais" [routerLink]="['/devocional']">
-            <ion-text color="primary">
-              <ion-label>Ver mais</ion-label>
-              <ion-icon name="chevron-forward-outline" color="primary"></ion-icon>
-            </ion-text>
-          </ion-card>
-        </ion-col>
-      </ion-row>
-    </ng-container>
-
     <ng-container *ngIf="tematicas">
       <ion-row class="tematica-row-title ion-padding ion-no-border">
         <ion-text class="ion-no-padding ion-text-end" color="tertiary">
@@ -402,84 +319,3 @@
     </ng-container>
   </ion-grid>
 </ion-content>
-
-<ion-footer class="ion-no-border">
-  <ion-segment mode="ios" (ionChange)="resetSearch()">
-    <ion-segment-button [value]="link.title" *ngFor="let link of links" [id]="'search-trigger-' + link.route">
-      <ion-icon color="primary" [name]="link.icon"></ion-icon>
-    </ion-segment-button>
-  </ion-segment>
-</ion-footer>
-
-
-<ion-popover #popoverCancioneiro trigger="search-trigger-cancioneiro" size="auto" mode="ios" class="popover-search ion-no-padding">
-  <ng-template>
-    <ion-header>
-      <ion-toolbar class="row-1 ion-text-center" color="medium">
-        <ion-text color="primary">
-            {{ searchBarTerm.length ? searchBarTerm : 'Câncioneiro' }}
-        </ion-text>
-      </ion-toolbar>
-      <ion-toolbar class="row-2 ion-text-center" color="medium">
-        <ion-note *ngIf="!isSpinner">
-          {{ cantico.length ? cantico[0].numero + ' ・ ' + cantico[0].titulo : 'digite o número do cântico' }}
-        </ion-note>
-        <ion-note *ngIf="isSpinner">
-          <ion-spinner name="dots" size="small"></ion-spinner>
-        </ion-note>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content class="ion-padding">
-      <ion-grid>
-        <ion-row class="ion-text-center">
-          <ion-col *ngFor="let item of ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'backspace', '0', 'arrow-forward']" size="4" color="primary" (click)="searchBar(item, 'canticos', 'id')">
-            <ion-chip button [outline]="true" class="ion-no-padding ion-justify-content-center" [disabled]="item !== 'arrow-forward' ? false : isSubmmit ? false : true">
-              <ng-container *ngIf="item !== 'backspace' && item !== 'arrow-forward'; else icon">
-                <ion-label color="primary">{{ item }}</ion-label>
-              </ng-container>
-              <ng-template #icon>
-                <ion-icon color="tertiary" [name]="item + '-outline'" class="ion-no-margin"></ion-icon>
-              </ng-template>
-            </ion-chip>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-content>
-  </ng-template>
-</ion-popover>
-
-<ion-popover #popoverHino trigger="search-trigger-novo-cantico" size="auto" mode="ios" class="popover-search ion-no-padding">
-  <ng-template>
-    <ion-header>
-      <ion-toolbar class="row-1 ion-text-center" color="medium">
-        <ion-text color="primary">
-            {{ searchBarTerm.length ? searchBarTerm : 'Novo Cântico' }}
-        </ion-text>
-      </ion-toolbar>
-      <ion-toolbar class="row-2 ion-text-center" color="medium">
-        <ion-note *ngIf="!isSpinner">
-          {{ hino.length ? hino[0].numero + ' ・ ' + hino[0].titulo : 'digite o número do hino'}}
-        </ion-note>
-        <ion-note *ngIf="isSpinner">
-          <ion-spinner name="dots" size="small"></ion-spinner>
-        </ion-note>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content class="ion-padding">
-      <ion-grid>
-        <ion-row class="ion-text-center">
-          <ion-col *ngFor="let item of ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'backspace', '0', 'arrow-forward']" size="4" color="primary" (click)="searchBar(item, 'hinos', 'indice')">
-            <ion-chip button [outline]="true" class="ion-no-padding ion-justify-content-center" [disabled]="item !== 'arrow-forward' ? false : isSubmmit ? false : true">
-              <ng-container *ngIf="item !== 'backspace' && item !== 'arrow-forward'; else icon">
-                <ion-label color="primary">{{ item }}</ion-label>
-              </ng-container>
-              <ng-template #icon>
-                <ion-icon color="tertiary" [name]="item + '-outline'" class="ion-no-margin"></ion-icon>
-              </ng-template>
-            </ion-chip>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-content>
-  </ng-template>
-</ion-popover>

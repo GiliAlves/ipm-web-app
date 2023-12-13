@@ -1,64 +1,30 @@
 <ion-app>
   <ion-split-pane contentId="main-content">
-    <ion-menu contentId="main-content" type="overlay">
-      <ion-header class="ion-no-border">
-        <ion-toolbar color="primary">
-          <ion-avatar slot="start">
-            <img alt="logo da Igreja" src="../assets/icon/logo.png" />
-          </ion-avatar>
-          <ion-list-header>{{ igreja.title }}</ion-list-header>
-        </ion-toolbar>
-        <ion-toolbar color="primary" id="sec-toolbar">
-          <ion-note>{{ igreja.description }}</ion-note>
-        </ion-toolbar>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-          <path fill="#005B40" fill-opacity="1" d="M0,128L34.3,154.7C68.6,181,137,235,206,261.3C274.3,288,343,288,411,250.7C480,213,549,139,617,117.3C685.7,96,754,128,823,128C891.4,128,960,96,1029,90.7C1097.1,85,1166,107,1234,122.7C1302.9,139,1371,149,1406,154.7L1440,160L1440,0L1405.7,0C1371.4,0,1303,0,1234,0C1165.7,0,1097,0,1029,0C960,0,891,0,823,0C754.3,0,686,0,617,0C548.6,0,480,0,411,0C342.9,0,274,0,206,0C137.1,0,69,0,34,0L0,0Z"></path>
-        </svg>
-      </ion-header>
-
-      <ion-content>
-        <ion-list id="inbox-list-tab" class="ion-no-padding">
-          <ion-menu-toggle auto-hide="false" *ngFor="let p of pagesTab; let i = index">
-            <ion-tab-button fill="clear" shape="round" routerDirection="root" [routerLink]="[p.url]" detail="false" routerLinkActive="selected">
-                <ion-icon [color]="p.color" [name]="p.icon + '-outline'"></ion-icon>
-                {{ p.title }}
-            </ion-tab-button>
-          </ion-menu-toggle>
-        </ion-list>
-
-        <ion-list id="inbox-list" lines="none">
-          <ion-menu-toggle auto-hide="false" *ngFor="let p of pagesList; let i = index">
-            <ion-item routerDirection="root" [routerLink]="[p.url]" [lines]="p.line" detail="false" routerLinkActive="selected">
-              <ion-icon slot="start" [color]="p.color" [name]="p.icon + '-outline'"></ion-icon>
-              <ion-label [color]="p.color">{{ p.title }}</ion-label>
-            </ion-item>
-          </ion-menu-toggle>
-        </ion-list>
-      </ion-content>
-
-      <ion-footer class="ion-no-border">
-        <svg style="margin-bottom: -6px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-          <path fill="#005B40" fill-opacity="1" d="M0,128L34.3,154.7C68.6,181,137,235,206,261.3C274.3,288,343,288,411,250.7C480,213,549,139,617,117.3C685.7,96,754,128,823,128C891.4,128,960,96,1029,90.7C1097.1,85,1166,107,1234,122.7C1302.9,139,1371,149,1406,154.7L1440,160L1440,320L1405.7,320C1371.4,320,1303,320,1234,320C1165.7,320,1097,320,1029,320C960,320,891,320,823,320C754.3,320,686,320,617,320C548.6,320,480,320,411,320C342.9,320,274,320,206,320C137.1,320,69,320,34,320L0,320Z"></path>
-        </svg>
-        <ion-toolbar color="primary"></ion-toolbar>
-        <ion-toolbar color="primary">
-          <section id="inbox-list-social">
-            <ion-menu-toggle auto-hide="false" *ngFor="let p of social; let i = index">
-              <ion-tab-button fill="clear" shape="round" [href]="[p.url]" target="_blank" detail="false">
-                  <ion-icon color="light" [name]="p.icon"></ion-icon>
-              </ion-tab-button>
-            </ion-menu-toggle>
-          </section>
-        </ion-toolbar>
-
-        <ion-toolbar color="primary" class="ion-text-center">
-          <ion-text class="ion-text-center about">
-            <p class="ion-font-small ion-no-margin">Feito com <ion-icon *ngFor="let icon of icons" [color]="icon.color" [name]="icon.name"></ion-icon> por <a href="https://instagram.com/gilialvesilva?igshid=ZDdkNTZiNTM=" target="_blank">@GiliAlveSilva</a></p>
-            <ion-note>versão Beta 1.0.0</ion-note>
-          </ion-text>
-        </ion-toolbar>
-      </ion-footer>
-    </ion-menu>
     <ion-router-outlet id="main-content"></ion-router-outlet>
+
+    <ion-tabs>
+      <ion-tab-bar slot="bottom">
+        <ion-tab-button tab="inicio">
+          <ion-icon name="home" size="small"></ion-icon>
+          Inicio
+        </ion-tab-button>
+        <ion-tab-button tab="pastoral">
+          <ion-icon name="bookmarks" size="small"></ion-icon>
+          Pastorais
+        </ion-tab-button>
+        <ion-tab-button tab="novo-cantico">
+          <ion-icon name="musical-notes" size="small"></ion-icon>
+          Novo Cântico
+        </ion-tab-button>
+        <ion-tab-button tab="cancioneiro">
+          <ion-icon name="radio" size="small"></ion-icon>
+          Cancioneiro
+        </ion-tab-button>
+        <ion-tab-button tab="sobre">
+          <ion-icon name="finger-print" size="small"></ion-icon>
+          Sobre
+        </ion-tab-button>
+      </ion-tab-bar>
+    </ion-tabs>
   </ion-split-pane>
 </ion-app>
