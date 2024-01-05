@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { IonDatetime, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
 import { OrderByDirection, Timestamp } from 'firebase/firestore';
-import { padStart } from 'lodash';
 import { Observable } from 'rxjs';
 import { Calendario } from 'src/app/interfaces/calendario.interface';
 import { Cantico } from 'src/app/interfaces/cantico.interface';
@@ -33,7 +32,7 @@ export class InicioComponent implements OnInit {
   public pastorais$!: Observable<Pastoral[]>;
   public devocionais$!: Observable<Devocional[]>;
   public calendar$!: Observable<Calendario[]>;
-  
+
   public cantico: Cantico[] = [];
   public hino: NovoCantico[] = [];
   public eventos: Calendario[] = [];
@@ -46,7 +45,7 @@ export class InicioComponent implements OnInit {
   public horarios = HORARIOS;
   public links = LINKS;
   private messageGetStorageError: string = MESSAGE_GET_STORAGE_ERROR;
-  
+
   public date = new Date();
   public calendarDates: string[] = [];
   public searchBarTerm: string = '';
@@ -75,20 +74,15 @@ export class InicioComponent implements OnInit {
     this.setFirebase('devocionais');
     this.getAllDevocionais();
 
-    this.setFirebase('eventos', 'dataInicio', 'asc');
-    this.getAllCalendar();
-    this.setEventsCalendar(this.date.getMonth() + 1);
+    // this.setFirebase('eventos', 'dataInicio', 'asc');
+    // this.getAllCalendar();
+    // this.setEventsCalendar(this.date.getMonth() + 1);
 
     this.setFirebase('membros', 'nome', 'asc');
 
-    if (!this.inicialStorage.diaconos.length)
-      this.getWhereMembros('Diácono', 'diaconos');
-
-    if (!this.inicialStorage.pastores.length)
-      this.getWhereMembros('Pastor', 'pastores');
-
-    if (!this.inicialStorage.presbiteros.length)
-      this.getWhereMembros('Presbítero', 'presbiteros');
+    this.getWhereMembros('Diácono', 'diaconos');
+    this.getWhereMembros('Pastor', 'pastores');
+    this.getWhereMembros('Presbítero', 'presbiteros');
   }
 
   private setFirebase(path: string, fieldPath: string = 'data', orderByDirection: OrderByDirection = 'desc') {
@@ -139,7 +133,7 @@ export class InicioComponent implements OnInit {
       if (!this.isSelected)
         this.evento = calendar[0];
 
-      calendar.forEach(evento => {        
+      calendar.forEach(evento => {
         if (evento && evento.dataInicio) {
           let day = this.datePipe.transform(evento.dataInicio.toDate(), 'dd')?.toString();
           evento.day = day;
@@ -182,7 +176,7 @@ export class InicioComponent implements OnInit {
     const container: any = document.querySelector('ion-datetime');
 
     this.eventos.forEach(evento => {
-      setTimeout(() => { 
+      setTimeout(() => {
         const mesAtual = container.shadowRoot.querySelector('.calendar-body').children[1].querySelector('button[data-day="1"]').getAttribute('data-month');
         if (this.datePipe.transform(this.datetime.value?.toString(), 'dd') === evento.day && evento.mes === +mesAtual) {
           this.evento = evento;
@@ -194,12 +188,12 @@ export class InicioComponent implements OnInit {
   public openCalendar() {
     const container: any = document.querySelector('ion-datetime');
 
-    setTimeout(() => { 
+    setTimeout(() => {
       const mesAtual = container.shadowRoot.querySelector('.calendar-body').children[1].querySelector('button[data-day="1"]').getAttribute('data-month');
       this.setEventsCalendar(+mesAtual);
     }, 500);
   }
-  
+
 
   public searchBar(item: string, path: string, fieldPath: string) {
     switch (item) {
