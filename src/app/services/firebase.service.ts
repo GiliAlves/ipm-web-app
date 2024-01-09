@@ -1,20 +1,18 @@
 import { Injectable } from '@angular/core';
 import {
+  FieldPath,
+  Firestore,
+  OrderByDirection,
+  WhereFilterOp,
+  addDoc,
   collection,
   collectionData,
   doc,
   docData,
-  Firestore,
-  orderBy,
-  OrderByDirection,
-  query,
   limit,
-  where,
-  WhereFilterOp,
-  FieldPath,
-  addDoc,
-  CollectionReference,
-  DocumentData
+  orderBy,
+  query,
+  where
 } from '@angular/fire/firestore';
 
 
