@@ -1,11 +1,9 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Auth, GoogleAuthProvider, User, authState, signInWithPopup, signOut } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { IonDatetime, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
 import { OrderByDirection, Timestamp } from 'firebase/firestore';
-import { padStart } from 'lodash';
 import { Observable } from 'rxjs';
 import { Calendario } from 'src/app/interfaces/calendario.interface';
 import { Cantico } from 'src/app/interfaces/cantico.interface';
@@ -34,13 +32,11 @@ export class InicioComponent implements OnInit {
   public pastorais$!: Observable<Pastoral[]>;
   public devocionais$!: Observable<Devocional[]>;
   public calendar$!: Observable<Calendario[]>;
-  public user$!:  Observable<User | null>;
 
   public cantico: Cantico[] = [];
   public hino: NovoCantico[] = [];
   public eventos: Calendario[] = [];
   public evento!: Calendario;
-  public user!: User | null;
 
   public biblia = BIBLIA;
   public tematicas: Tematica[] = TEMATICAS;
@@ -60,7 +56,6 @@ export class InicioComponent implements OnInit {
   public isSelected: boolean = false;
 
   constructor(
-    private auth: Auth,
     private datePipe: DatePipe,
     private firebaseService: FirebaseService,
     private youTubeService: YoutubeService,
@@ -71,8 +66,6 @@ export class InicioComponent implements OnInit {
   async ngOnInit() {
     await this.getStorage();
 
-    this.authState();
-
     this.getVideos();
 
     this.setFirebase('pastorais');
@@ -81,20 +74,15 @@ export class InicioComponent implements OnInit {
     this.setFirebase('devocionais');
     this.getAllDevocionais();
 
-    this.setFirebase('eventos', 'dataInicio', 'asc');
-    this.getAllCalendar();
-    this.setEventsCalendar(this.date.getMonth() + 1);
+    // this.setFirebase('eventos', 'dataInicio', 'asc');
+    // this.getAllCalendar();
+    // this.setEventsCalendar(this.date.getMonth() + 1);
 
     this.setFirebase('membros', 'nome', 'asc');
 
-    if (!this.inicialStorage.diaconos.length)
-      this.getWhereMembros('Diácono', 'diaconos');
-
-    if (!this.inicialStorage.pastores.length)
-      this.getWhereMembros('Pastor', 'pastores');
-
-    if (!this.inicialStorage.presbiteros.length)
-      this.getWhereMembros('Presbítero', 'presbiteros');
+    this.getWhereMembros('Diácono', 'diaconos');
+    this.getWhereMembros('Pastor', 'pastores');
+    this.getWhereMembros('Presbítero', 'presbiteros');
   }
 
   private setFirebase(path: string, fieldPath: string = 'data', orderByDirection: OrderByDirection = 'desc') {
@@ -264,15 +252,5 @@ export class InicioComponent implements OnInit {
         break;
     }
   }
-
-  public authState = () => authState(this.auth).subscribe(user => this.user = user);
-
-  public loginWithGoogle = () => signInWithPopup(this.auth, new GoogleAuthProvider())
-    .then(data => {
-      this.presentToast(`Bem vindo ${data.user?.displayName}`, 1000, 'bottom')
-      console.log(data);
-      })
-    .catch(() => this.presentToast('Ops, não foi possivel fazer o login, tente novamente mais tarde', 500, 'bottom'));
-
-  public logout = () => signOut(this.auth);
 }
+

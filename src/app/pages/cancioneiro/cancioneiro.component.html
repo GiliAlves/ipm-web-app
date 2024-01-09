@@ -1,16 +1,13 @@
-<ion-header [translucent]="false" class="ion-no-border">
+<ion-header [translucent]="false" class="ion-no-border" mode="ios">
 
   <ion-toolbar class="ion-no-border" color="secondary">
-
     <ion-buttons slot="start">
       <ion-menu-button color="light"></ion-menu-button>
     </ion-buttons>
-
     <ion-title color="light">cancioneiro</ion-title>
-
     <ion-buttons slot="end">
-      <ion-button id="open-favorites-modal" expand="block" color="danger">
-        <ion-icon slot="icon-only" name="heart-outline"></ion-icon>
+      <ion-button id="open-favorites-modalc" expand="block" color="danger">
+        <ion-icon slot="icon-only" [name]="modalFavorites.isCmpOpen ? 'heart' : 'heart-outline'"></ion-icon>
       </ion-button>
     </ion-buttons>
 
@@ -19,7 +16,8 @@
   <ion-toolbar color="secondary" class="ion-no-border grid-search">
     <ion-searchbar
       class="custom"
-      placeholder="procurar cântico"
+      color="light"
+      placeholder="procurar cantico"
       animated="true"
       [debounce]="1000"
       [(ngModel)]="searchBarTerm"
@@ -30,27 +28,21 @@
   <ion-toolbar color="secondary" class="ion-no-border grid-searchkeys">
     <ion-grid>
       <ion-row class="searchkeys">
-        <ng-container *ngIf="canticosStorage && canticosStorage.searchFilter.length; else noFilters">
-          <ion-col *ngFor="let keyword of canticosStorage.searchFilter; index as i" size="auto">
+        <ng-container *ngIf="canticosStorage && canticosStorage.searchFilter.length">
+          <ion-col class="ion-no-padding" *ngFor="let keyword of canticosStorage.searchFilter; index as i" size="auto">
             <ion-chip
-              (click)="searchFilter(keyword.name, i)"
-              button [color]="keyword.active ? 'primary' : 'light'" [outline]="true">
+              (click)="searchFilter(keyword.name, i)" class="ion-no-margin-top"
+              button [color]="keyword.active ? 'secondary' : 'light'" [outline]="true">
                 {{ keyword.name }}
             </ion-chip>
           </ion-col>
         </ng-container>
-        <ng-template #noFilters>
-          <ion-col *ngFor="let item of [0, 1, 2]">
-            <ion-thumbnail>
-              <ion-skeleton-text [animated]="true"></ion-skeleton-text>
-            </ion-thumbnail>
-              </ion-col>
-        </ng-template>
+
         <ion-col class="add-new-filter">
           <ion-chip
-            id="open-newFilter-dialog" expand="block"
+            id="open-newFilter-dialogc" expand="block"
             button color="light" [outline]="false">
-              <ion-icon color="light" name="funnel-outline"></ion-icon>
+              <ion-icon color="light" [name]="popoverFilters.isCmpOpen ? 'funnel' : 'funnel-outline'"></ion-icon>
           </ion-chip>
         </ion-col>
       </ion-row>
@@ -58,10 +50,10 @@
   </ion-toolbar>
 
   <ion-toolbar color="secondary" class="ion-no-border grid-recentes">
-    <ng-container *ngIf="canticosStorage && canticosStorage.recents.length; else noRecentes">
+    <ng-container *ngIf="canticosStorage && canticosStorage.recents.length">
       <ion-grid>
         <ion-row class="title-recentes">
-          <ion-note class="ion-padding" color="light">últimos visualizados</ion-note>
+          <ion-note class="ion-padding ion-font-small" color="light">últimos visualizados</ion-note>
         </ion-row>
         <ion-row class="recentes">
           <ion-col *ngFor="let cantico of canticosStorage.recents">
@@ -74,31 +66,21 @@
         </ion-row>
       </ion-grid>
     </ng-container>
-
-    <ng-template #noRecentes>
-      <ion-grid>
-        <ion-row class="title-recentes">
-          <ion-note class="ion-padding" color="light">últimos visualizados</ion-note>
-        </ion-row>
-        <ion-row class="recentes">
-          <ion-col *ngFor="let item of [0, 1, 2, 3]">
-            <ion-thumbnail>
-              <ion-skeleton-text [animated]="true"></ion-skeleton-text>
-            </ion-thumbnail>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ng-template>
   </ion-toolbar>
 
   <ion-toolbar color="secondary" class="ion-no-border grid-note">
-    <ion-note color="light" slot="end" class="ion-padding" *ngIf="canticosSearch$ | async">
-      {{ (canticosSearch$ | async)?.length + ' encontrado'}}{{ ((canticosSearch$ | async)?.length === 1) ? ''  : 's' }}
-    </ion-note>
+    <ng-container *ngIf="canticosSearch$ | async">
+      <ion-note color="light" slot="end" class="ion-no-padding">
+        {{ (canticosSearch$ | async)?.length + ' encontrado'}}{{ ((canticosSearch$ | async)?.length === 1) ? ''  : 's' }}
+      </ion-note>
+      <ion-button size="small" fill="clear" (click)="clearSearch()" slot="end">
+        <ion-icon size="small" name="trash-outline" slot="icon-only" color="danger"></ion-icon>
+      </ion-button>
+    </ng-container>
   </ion-toolbar>
 
   <svg
-    class="ion-no-border"
+    style="margin-top: -1px;"
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 1440 320">
     <path
@@ -110,29 +92,25 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ng-container *ngIf="canticosSearch$ | async; else noCantico">
+  <ng-container *ngIf="canticosSearch$ | async; else nocantico">
     <ion-virtual-scroll [items]="canticosSearch$ | async">
       <ion-item-sliding
           *virtualItem="let cantico"
           style="
             border-right: 5px solid var(--ion-color-success);
-            border-radius: 14px;
-            margin-bottom: 2px;
+            border-radius: 10px;
           "
           button
           (ionDrag)="addInArrayStorage('favorites', cantico, 'numero', $event)"
           (click)="selected(cantico)">
 
-        <ion-item
-          lines="inset"
-          detail="true"
-          detail-icon="add-outline">
+        <ion-item lines="inset" detail="true" detail-icon="add-outline">
           <ion-chip slot="start" color="success" [outline]="true">{{ cantico.numero }}</ion-chip>
           <ion-label>
-            <h2>{{ cantico.titulo }}</h2>
-            <div class="description"
+            <ion-text color="secondary"><h2>{{ cantico.titulo }}</h2></ion-text>
+            <ion-note class="ion-font-smaller"
               [innerHTML]="cantico.letra.slice(0, 60) + '...' | sanitizedHtml">
-            </div>
+            </ion-note>
           </ion-label>
         </ion-item>
 
@@ -146,13 +124,13 @@
     </ion-virtual-scroll>
   </ng-container>
 
-  <ng-template #noCantico>
+  <ng-template #nocantico>
     <ion-grid class="message-logo">
       <ion-row class="ion-padding">
         <img src="../../../assets/logo_lazy.png" alt="logo">
       </ion-row>
       <ion-row class="ion-padding">
-        <ion-text color="medium">
+        <ion-text color="medium-tint">
           <small>procure pelo <b>número</b>, <b>título</b> ou <b>letra</b> do cântico.</small>
         </ion-text>
       </ion-row>
@@ -163,25 +141,29 @@
 
 
 <!-- modais -->
-<ion-modal #modalFilters trigger="open-newFilter-dialog">
+<ion-popover #popoverFilters trigger="open-newFilter-dialogc" mode="ios"  class="popover-filter">
   <ng-template>
-    <ion-header class="ion-no-border">
-      <ion-toolbar color="secondary">
-        <ion-title slot="start" color="light">filtro de palavras</ion-title>
+    <ion-header class="ion-no-border" mode="ios">
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button size="small" fill="clear" (click)="popoverFilters.dismiss()">
+            <ion-icon name="arrow-back-outline" slot="icon-only" color="secondary"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-title color="secondary">palavras chaves</ion-title>
         <ion-buttons slot="end">
-          <ion-button (click)="modalFilters.dismiss()">
-            <ion-icon size="large" slot="end" color="light" name="close-outline"></ion-icon>
+          <ion-button size="small" fill="clear" (click)="removeAllInArrayStorage('searchFilter')">
+            <ion-icon name="trash-outline" slot="icon-only" color="danger"></ion-icon>
           </ion-button>
         </ion-buttons>
       </ion-toolbar>
-
-      <ion-toolbar color="secondary">
+      <ion-toolbar color="light">
         <ion-searchbar
           #ionInputEl
           class="custom"
-          color="light"
-          search-icon="add-outline"
-          clear-icon="trash-outline"
+          color="secondary-contrast"
+          search-icon="add-circle-outline"
+          clear-icon="close-circle-outline"
           placeholder="adicionar novo filtro"
           animated="true"
           autocomplete="on"
@@ -190,7 +172,7 @@
           [spellcheck]="true"
           [inputmode]="'text'"
           [enterkeyhint]="'enter'"
-          [debounce]="2000"
+          [debounce]="2500"
           [(ngModel)]="keyWordsName"
           (ionChange)="addInSearchFilter()"
           (ionInput)="onInputSearchFilter($event)"
@@ -209,7 +191,10 @@
             (ionDrag)="removeInArrayStorage('searchFilter', keyword, 'name', $event)">
 
             <ion-item
-              style="border-right: 5px solid var(--ion-color-danger)"
+              style="
+                border-right: 5px solid var(--ion-color-danger);
+                border-radius: 10px;
+              "
               lines="full"
               detail="true"
               detail-icon="add-outline">
@@ -240,89 +225,133 @@
       </ng-template>
     </ion-content>
   </ng-template>
-</ion-modal>
+</ion-popover>
 
 
-<ion-modal #modalDetails [isOpen]="isOpenDetailsModal" class="dark">
+<ion-modal #modalDetails [isOpen]="isOpenDetailsModal">
   <ng-template>
-    <ion-header [translucent]="true" class="ion-no-border">
-      <ion-toolbar color="secondary">
-        <ion-title slot="start" color="light">{{ cantico.numero + ' ∙ ' + cantico.titulo }}</ion-title>
-        <ion-buttons slot="end">
-          <ion-button fill="clear" (click)="modalDetails.dismiss()">
-            <ion-icon slot="icon-only" name="close-outline" color="light"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-      </ion-toolbar>
-      <ion-toolbar color="secondary">
+    <ion-header [translucent]="false" class="ion-no-border" mode="ios">
+      <ion-toolbar color="secondary" style="--min-height: 60px;">
         <ion-buttons slot="start">
-          <ion-button size="small" fill="clear" id="open-zoom-dialog" expand="block">
-            <ion-icon slot="icon-only" name="text-outline" color="light"></ion-icon>
-          </ion-button>
-          <ion-button size="small" fill="clear" id="open-color-dialog" expand="block">
-            <ion-icon slot="icon-only" name="color-palette-outline" color="light"></ion-icon>
-          </ion-button>
-          <ion-button size="small" fill="clear" (click)="clipboard(cantico)">
-            <ion-icon slot="icon-only" name="copy-outline" color="light"></ion-icon>
+          <ion-button fill="clear" (click)="modalDetails.dismiss(); isOpenDetailsModal = false">
+            <ion-icon slot="icon-only" name="arrow-back-outline" color="light"></ion-icon>
           </ion-button>
         </ion-buttons>
+        <ion-title color="light">{{ cantico.numero + ' ∙ ' + cantico.titulo }}</ion-title>
         <ion-buttons slot="end">
-          <!-- <ion-button size="small" fill="clear" (click)="changeBackground()">
-            <ion-icon slot="icon-only" [name]="isDarkColor ? 'moon-outline' : 'sunny-outline'" color="light"></ion-icon>
-          </ion-button> -->
-          <ion-button size="small" fill="clear" (click)="share(cantico)">
-            <ion-icon slot="icon-only" name="share-social" color="light"></ion-icon>
+          <ion-button fill="clear" (click)="changeBackgroundDarkColor()">
+            <ion-icon
+              slot="icon-only"
+              [name]="this.canticosStorage.formatacao.backgrond ? 'sunny' : 'moon'"
+              [color]="this.canticosStorage.formatacao.backgrond ? 'warning' : 'light'"></ion-icon>
+          </ion-button>
+          <ion-button fill="clear" (click)="presentActionSheet(cantico)">
+            <ion-icon slot="icon-only" name="ellipsis-vertical-outline" color="light"></ion-icon>
           </ion-button>
         </ion-buttons>
       </ion-toolbar>
+      <ion-toolbar color="primary-contrast" class="toolbar-fab"></ion-toolbar>
     </ion-header>
 
-    <ion-content [fullscreen]="true" class="ion-padding">
+    <ion-content [fullscreen]="true" class="ion-padding" [color]="this.canticosStorage.formatacao.backgrond ? 'dark' : 'light'">
+      <ion-fab slot="fixed" vertical="top" horizontal="end" [edge]="true">
+        <ion-fab-button size="small" color="danger" id="open-zoom-dialogc" expand="block">
+          <ion-icon size="small"  name="brush-outline" color="light"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
       <ion-text class="cantico-letra" [innerText]="cantico.letra"></ion-text>
     </ion-content>
 
-    <ion-modal id="modal-zoom" trigger="open-zoom-dialog">
+    <ion-popover trigger="open-zoom-dialogc" mode="ios" translucent="true">
       <ng-template>
-        <ion-text color="secondary">tamanho da fonte</ion-text>
-        <ion-range
-          (ionKnobMoveStart)="zooming($event)"
-          (ionKnobMoveEnd)="zooming($event)"
-          [min]="10" [max]="40" [value]="fontSize"
-          [pin]="true" [snaps]="true" [pinFormatter]="pinFormatter">
-          <ion-icon
-            slot="start"
-            size="small"
-            color="secondary"
-            name="text-outline">
-          </ion-icon>
-          <ion-icon
-            slot="end"
-            size="large"
-            color="primary"
-            name="text-outline">
-          </ion-icon>
-        </ion-range>
-      </ng-template>
-    </ion-modal>
+        <ion-content class="ion-padding">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-label class="ion-font-small" color="secondary">Fonte</ion-label>
+              </ion-col>
+              <ion-col size="auto">
+                <ion-label class="ion-font-small" color="secondary">{{ canticosStorage.formatacao.fonte }}</ion-label>
+              </ion-col>
+            </ion-row>
+            <ion-row class="fontes">
+              <ion-col *ngFor="let font of arrayFonts">
+                <ion-chip
+                  class="font-picker ion-align-items-start ion-no-margin"
+                  [color]="canticosStorage.formatacao.fonte === font.value ? 'secondary' : 'light'"
+                  button
+                  (click)="changeFontFamily(font.value)">
+                  <ion-text color="secondary" class="ion-font-small ion-margin-bottom">{{ font.title }}</ion-text>
+                  <ion-text color="dark" class="ion-no-padding ion-font-smaller" [style.font-family]="font.value">Cânticioneiro</ion-text>
+                </ion-chip>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="4">
+                <ion-chip color="light" class="font-weight-picker" (click)="changeFontWeight();">
+                  <ion-text color="dark" [style.font-weight]="canticosStorage.formatacao.weight ? 'bold' : 'normal'">Negrito</ion-text>
+                </ion-chip>
+              </ion-col>
+              <ion-col size="4">
+                <ion-chip color="light" class="font-weight-picker" (click)="changeFontStyle()">
+                  <ion-text color="dark" [style.font-style]="canticosStorage.formatacao.style ? 'italic' : 'normal'">Itálico</ion-text>
+                </ion-chip>
+              </ion-col>
+            </ion-row>
 
-    <ion-modal id="modal-color" trigger="open-color-dialog">
-      <ng-template>
-        <span [style.background]="'arrayColors[selectedColor]'"
-          [cpToggle]="true"
-          [cpDialogDisplay]="'inline'"
-          [(colorPicker)]="arrayColors[selectedColor]"
-          (colorPickerChange)="changeColor($event)">
-        </span>
+            <ion-row class="ion-margin-top">
+              <ion-col>
+                <ion-label class="ion-font-small" color="secondary">Tamanho da Fonte</ion-label>
+              </ion-col>
+              <ion-col size="auto">
+                <ion-label class="ion-font-small" color="secondary">{{ canticosStorage.formatacao.tamanhoFonte }}px</ion-label>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-range mode="md" class="ion-no-padding"
+                  (ionKnobMoveStart)="zooming($event)"
+                  (ionKnobMoveEnd)="zooming($event)"
+                  [min]="10" [max]="40"
+                  [value]="canticosStorage.formatacao.tamanhoFonte"
+                  [pin]="true"
+                  [snaps]="true"
+                  [pinFormatter]="pinFormatter">
+                  <ion-icon slot="start" size="small" color="secondary" name="text-outline"></ion-icon>
+                  <ion-icon slot="end"  color="secondary" name="text-outline"></ion-icon>
+                </ion-range>
+              </ion-col>
+            </ion-row>
+
+            <ion-row class="ion-margin-top">
+              <ion-col>
+                <ion-label class="ion-font-small" color="secondary">Cor da Fonte</ion-label>
+              </ion-col>
+              <ion-col size="auto">
+                <ion-icon size="small" color="secondary" name="color-palette-outline"></ion-icon>
+              </ion-col>
+            </ion-row>
+            <ion-row class="colors">
+              <ion-col *ngFor="let color of arrayColors">
+                <div button
+                  (click)="changeColor(color)"
+                  class="color-picker {{ canticosStorage.formatacao.corFonte === color ? 'active' : '' }}"
+                  [style.background-color]="color">
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-content>
       </ng-template>
-    </ion-modal>
+    </ion-popover>
   </ng-template>
 </ion-modal>
 
-<ion-modal
-  trigger="open-favorites-modal"
-  [initialBreakpoint]="0.25"
-  handleBehavior="cycle"
-  [breakpoints]="[0, 0.25, 0.5, 0.75]">
+<ion-modal #modalFavorites
+  trigger="open-favorites-modalc"
+  [initialBreakpoint]="1"
+  [breakpoints]="[0, 1]"
+  handleBehavior="cycle">
 
   <ng-template>
     <ion-header [translucent]="true" class="ion-no-border">
@@ -348,8 +377,8 @@
             <ion-item
               style="
                 border-right: 5px solid var(--ion-color-danger);
-                border-radius: 14px;
-                margin-bottom: 2px;"
+                border-radius: 10px;
+              "
               lines="inset"
               detail="true"
               detail-icon="add-outline">
@@ -362,11 +391,9 @@
               </ion-chip>
 
               <ion-label>
-                <h2>{{ cantico.titulo }}</h2>
-                <div
-                  class="description"
-                  [innerHTML]="cantico.letra.slice(0, 60) + '...' | sanitizedHtml">
-                </div>
+                <ion-text color="secondary"><h2>{{ cantico.titulo }}</h2></ion-text>
+                <ion-note class="ion-font-smaller"
+                  [innerHTML]="cantico.letra.slice(0, 60) + '...' | sanitizedHtml"></ion-note>
               </ion-label>
             </ion-item>
 
@@ -386,8 +413,8 @@
             <img class="no-img" src="../../../assets/eading_time.svg" alt="logo">
           </ion-row>
           <ion-row class="ion-padding">
-            <ion-text color="medium">
-              <small>ainda não foram adicionados cânticos aos favoritos</small>
+            <ion-text color="medium-tint">
+              <small>ainda não foram adicionados canticos aos favoritos</small>
             </ion-text>
           </ion-row>
         </ion-grid>

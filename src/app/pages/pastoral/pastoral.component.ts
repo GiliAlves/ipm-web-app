@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Clipboard } from '@capacitor/clipboard';
 import { Share } from '@capacitor/share';
 import { ActionSheetController, IonContent, ToastController } from '@ionic/angular';
@@ -18,7 +19,7 @@ export class PastoralComponent implements OnInit {
 
   public pastorais$!: Observable<Pastoral[]>;
   public pastoral!: Pastoral;
-  public isModalOpen = false;
+  public isModalOpen: boolean = false;
   public isScrollTop: boolean = true;
   public defaultImage = '../../../assets/logo_lazy.png';
 
@@ -26,6 +27,7 @@ export class PastoralComponent implements OnInit {
     private datePipe: DatePipe,
     private firebaseService: FirebaseService,
     private toastController: ToastController,
+    private activatedRoute: ActivatedRoute,
     private actionSheetCtrl: ActionSheetController) {
     this.firebaseService.fieldPath = 'data';
     this.firebaseService.path = 'pastorais';
@@ -33,11 +35,22 @@ export class PastoralComponent implements OnInit {
   }
 
   ngOnInit() {
+    let paramMap = this.activatedRoute.snapshot.paramMap.get('id');
+
+    if (paramMap) {
+      this.getPastoral(paramMap).subscribe({
+        next: (pastoral: Pastoral) => this.openModal(pastoral),
+        error: (err) => console.error(err)
+      });
+    }
+
     this.filterPastorais();
   }
 
   private filterPastorais = () =>
     this.pastorais$ = this.getAllPastorais();
+
+  private getPastoral = (id: string) => this.firebaseService.get(id) as Observable<Pastoral>;
 
   private getAllPastorais = () => this.firebaseService.getAll() as Observable<Pastoral[]>;
 
@@ -46,10 +59,10 @@ export class PastoralComponent implements OnInit {
     await toast.present();
   }
 
-  public toggleModal = () => this.isModalOpen = !this.isModalOpen;
+  public toggleModal = (value: boolean) => this.isModalOpen = value;
 
   public openModal(pastoral: Pastoral) {
-    this.toggleModal();
+    this.toggleModal(true);
     this.pastoral = pastoral;
   }
 

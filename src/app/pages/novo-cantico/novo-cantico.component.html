@@ -401,12 +401,11 @@
   </ng-template>
 </ion-modal>
 
-<ion-modal
+<ion-modal #modalFavorites
   trigger="open-favorites-modalh"
-  #modalFavorites
-  [initialBreakpoint]="0.25"
-  handleBehavior="cycle"
-  [breakpoints]="[0, 0.25, 0.5, 0.75]">
+  [initialBreakpoint]="1"
+  [breakpoints]="[0, 1]"
+  handleBehavior="cycle">
 
   <ng-template>
     <ion-header [translucent]="true" class="ion-no-border">
@@ -468,7 +467,7 @@
             <img class="no-img" src="../../../assets/eading_time.svg" alt="logo">
           </ion-row>
           <ion-row class="ion-padding">
-            <ion-text color="medium">
+            <ion-text color="medium-tint">
               <small>ainda não foram adicionados hinos aos favoritos</small>
             </ion-text>
           </ion-row>
@@ -479,15 +478,13 @@
   </ng-template>
 </ion-modal>
 
-<ion-modal
-  #modalPDF
-  [isOpen]="isOpenPDFModal">
+<ion-modal #modalPDF [isOpen]="isOpenPartituraPDFModal">
   <ng-template>
     <ion-header [translucent]="true" class="ion-no-border">
       <ion-toolbar>
         <ion-title color="primary">Partitura</ion-title>
         <ion-buttons slot="end">
-            <ion-button fill="clear" (click)="modalPDF.dismiss(); isOpenPDFModal = false">
+            <ion-button fill="clear" (click)="modalPDF.dismiss(); isOpenPartituraPDFModal = false">
               <ion-icon slot="icon-only" name="close-outline" color="primary"></ion-icon>
             </ion-button>
           </ion-buttons>
@@ -498,8 +495,9 @@
       <pdf-viewer
         [src]="partitura"
         [external-link-target]="'blank'"
-        [render-text]="false"
+        [render-text]="true"
         [autoresize]="true"
+        [show-all]="true"
         [original-size]="false">
       </pdf-viewer>
     </ion-content>

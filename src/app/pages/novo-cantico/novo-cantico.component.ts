@@ -5,22 +5,31 @@ import { Share } from '@capacitor/share';
 import { ActionSheetController, IonInput, IonModal, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
 import * as _ from 'lodash';
-import { distinctUntilChanged, first, Observable } from 'rxjs';
+import { Observable, distinctUntilChanged, first } from 'rxjs';
 import { TEMATICAS } from 'src/app/model/shared';
 
-import { ArrayName, Font, HinoStorage, Key, KeyWord, NovoCantico, Position, Tematica } from 'src/app/interfaces/novo-cantico.interface';
+import { NovoCantico, Tematica } from 'src/app/interfaces/novo-cantico.interface';
+import { ArrayName, Font, HStorage, Key, KeyWord, Position } from 'src/app/interfaces/share.interface';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import {
+  BTN_ACTION,
+  COLORS,
+  COLORS_DARK,
+  COLOR_LIGHT,
   DECODE_HTML_CHAR_CODES,
+  FILTERS,
   FILTER_IN_ARRAY,
   FIND_IN_ARRAY,
+  FONTS,
+  MSG_STORAGE_ERROR,
   NORMALIZE_HTML,
+  NOT_NUMBER,
   REMOVE_FIRST_FROM_ARRAY,
   REMOVE_ITEM_ARRAY,
   SIZE_ARRAY,
+  STORAGE,
   UNIQUE_ARRAY
 } from 'src/utils/utils';
-import { COLORS, COLORS_DARK, COLOR_LIGHT, FILTERS, FONTS, PARTITURA, STORAGE } from './novo-cantico';
 
 @Component({
   selector: 'app-novo-cantico',
@@ -32,24 +41,25 @@ export class NovoCanticoComponent implements OnInit {
   @ViewChild('letra') letra!: ElementRef;
   @ViewChild('ionInputEl') ionInputEl!: IonInput;
 
-  private messageGetStorageError: string = 'Erro ao obter dados armazenados: ';
+  private messageGetStorageError: string = MSG_STORAGE_ERROR;
 
   public hinos$: Observable<NovoCantico[]> = new Observable<NovoCantico[]>;
   public hinosSearch$!: Observable<NovoCantico[]>;
   public hino!: NovoCantico;
 
-  public hinosStorage: HinoStorage = STORAGE;
+  public hinosStorage: HStorage = STORAGE;
   public initialSearchFilter: KeyWord[] = FILTERS;
-  public tematicas: Tematica[] = TEMATICAS;
-  public arrayColors: string[] = COLORS;
   public arrayFonts: Font[] = FONTS;
+  public arrayColors: string[] = COLORS;
+
+  public tematicas: Tematica[] = TEMATICAS;
   public partitura: string = '';
 
   public searchBarTerm: string = '';
   public keyWordsName: string = '';
 
   public isOpenDetailsModal: boolean = false;
-  public isOpenPDFModal: boolean = false;
+  public isOpenPartituraPDFModal: boolean = false;
   public isOpenColorModal: boolean = false;
 
   public indice: boolean = false;
@@ -141,7 +151,7 @@ export class NovoCanticoComponent implements OnInit {
         first())
       .subscribe((hinos: NovoCantico[]) => {
         this.hinosSearch$ = new Observable(observer =>
-          observer.next(this.filterInArray(term, hinos, indice)))
+          observer.next(this.filterInArray(term, hinos, indice)));
         })
 
   private filterInArray(term: any, hinos: NovoCantico[], indice: boolean = false) {
@@ -166,21 +176,19 @@ export class NovoCanticoComponent implements OnInit {
   }
 
   public searchBar() {
-    if (this.searchBarTerm) {
-      this.desactiveAllSearchFilter();
-      this.search(this.searchBarTerm.toLowerCase());
-    } else {
-      this.clearSearch();
-    }
+    this.desactiveAllSearchFilter();
+
+    (this.searchBarTerm)
+      ? this.search(this.searchBarTerm.toLowerCase())
+      : this.clearSearch();
   }
 
   public searchFilter(term: string, index: number) {
-    if (!this.hinosStorage.searchFilter[index].active) {
-      this.searchBarTerm = '';
-      this.search(term.toLowerCase());
-    } else {
-      this.clearSearch();
-    }
+    this.searchBarTerm = '';
+
+    !this.hinosStorage.searchFilter[index].active
+      ? this.search(term.toLowerCase())
+      : this.clearSearch();
 
     this.toggleActiveSearchFilter(index);
   }
@@ -197,15 +205,14 @@ export class NovoCanticoComponent implements OnInit {
   }
 
   public onInputSearchFilter(event: CustomEvent | any) {
-    const value = event.target!.value;
-    const filteredValue = value.replace(/[0-9]/,'');
-    this.ionInputEl.value = this.keyWordsName = filteredValue;
+    const filteredValue = NOT_NUMBER(event.target!.value);
+    this.keyWordsName = filteredValue;
+    this.ionInputEl.value = filteredValue;
   }
 
   public addInSearchFilter() {
-    if (this.keyWordsName) {
+    if (this.keyWordsName)
       this.addInArrayStorage('searchFilter', { name: this.keyWordsName, active: false }, 'name');
-    }
 
     this.keyWordsName = '';
   }
@@ -308,25 +315,25 @@ export class NovoCanticoComponent implements OnInit {
 
   public setPartitura = (partitura: any) => {
     this.partitura = partitura;
-    this.isOpenPDFModal = true;
+    this.isOpenPartituraPDFModal = true;
   };
 
   public async presentActionSheet(hino: NovoCantico) {
-    PARTITURA[0].handler = () => this.setPartitura(hino.partitura);
-    PARTITURA[1].handler = () => {};
-    PARTITURA[2].handler = () => {
+    BTN_ACTION[0].handler = () => this.setPartitura(hino.partitura);
+    BTN_ACTION[1].handler = () => {};
+    BTN_ACTION[2].handler = () => {
       this.clipboard(hino);
       this.dismissActionSheet()
     }
-    PARTITURA[3].handler = () => {
+    BTN_ACTION[3].handler = () => {
       this.share(hino);
       this.dismissActionSheet();
     }
     let buttons = [];
 
     buttons = hino.partitura
-      ? PARTITURA
-      : PARTITURA.filter((a) => a.text !== 'Partitura')
+      ? BTN_ACTION
+      : BTN_ACTION.filter((a) => a.text !== 'Partitura')
 
     // buttons = hino.audios
     //   ? buttons

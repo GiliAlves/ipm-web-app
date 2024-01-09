@@ -2,27 +2,14 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Clipboard } from '@capacitor/clipboard';
 import { Share } from '@capacitor/share';
-import { IonInput, IonModal, ToastController } from '@ionic/angular';
+import { ActionSheetController, IonInput, IonModal, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
-import { distinctUntilChanged, first, Observable } from 'rxjs';
+import { Observable, distinctUntilChanged, first } from 'rxjs';
 import { Cantico } from 'src/app/interfaces/cantico.interface';
+import { CStorage, Font } from 'src/app/interfaces/share.interface';
 import { FirebaseService } from 'src/app/services/firebase.service';
-import { FIND_IN_ARRAY, DECODE_HTML_CHAR_CODES, NORMALIZE_HTML, REMOVE_FIRST_FROM_ARRAY, REMOVE_ITEM_ARRAY, SIZE_ARRAY, UNIQUE_ARRAY } from 'src/utils/utils';
-
-export interface KeyWord {
-  name: string;
-  active: boolean
-}
-
-export interface CanticoStorage {
-  searchFilter: KeyWord[],
-  recents: Cantico[],
-  favorites: Cantico[]
-}
-
-export type ArrayName = 'searchFilter' | 'recents' | 'favorites';
-export type Key = 'name' | 'numero';
-export type Position = 'top' | 'middle' | 'bottom'
+import { BTN_ACTION, COLORS, COLORS_DARK, COLOR_LIGHT, DECODE_HTML_CHAR_CODES, FILTERS, FIND_IN_ARRAY, FONTS, MSG_STORAGE_ERROR, NORMALIZE_HTML, NOT_NUMBER, REMOVE_FIRST_FROM_ARRAY, REMOVE_ITEM_ARRAY, SIZE_ARRAY, STORAGE, UNIQUE_ARRAY } from 'src/utils/utils';
+import { ArrayName, Key, KeyWord, Position } from './cancioneiro';
 
 @Component({
   selector: 'app-cancioneiro',
@@ -34,51 +21,34 @@ export class CancioneiroComponent implements OnInit {
   @ViewChild('letra') letra!: ElementRef;
   @ViewChild('ionInputEl') ionInputEl!: IonInput;
 
-  private messageGetStorageError: string = 'Erro ao obter dados armazenados: ';
+  private messageGetStorageError: string = MSG_STORAGE_ERROR;
 
   public canticos$: Observable<Cantico[]> = new Observable<Cantico[]>;
   public canticosSearch$!: Observable<Cantico[]>;
   public cantico!: Cantico;
-  public canticosStorage: CanticoStorage = {
-    searchFilter: [],
-    recents: [],
-    favorites: [],
-  };
 
-  public initialSearchFilter: KeyWord[] = [
-    {
-      name: 'Jesus',
-      active: false
-    },
-    {
-      name: 'Amor',
-      active: false
-    },
-    {
-      name: 'Alegria',
-      active: false
-    }
-  ];
-
-  public arrayColors: any = { color1: '#005B40' };
-  public selectedColor: string = 'color1';
-  public fontSize: number = 12;
+  public canticosStorage: CStorage = STORAGE;
+  public initialSearchFilter: KeyWord[] = FILTERS;
+  public arrayFonts: Font[] = FONTS;
+  public arrayColors: string[] = COLORS;
 
   public searchBarTerm: string = '';
   public keyWordsName: string = '';
 
   public isOpenDetailsModal: boolean = false;
-  public isDarkColor: boolean = false;
-  public isSpinner: boolean = false;
+  public isOpenColorModal: boolean = false;
+  public indice: boolean = false;
 
   constructor(
+    private actionSheetCtrl: ActionSheetController,
     private toastController: ToastController,
     private firebaseService: FirebaseService,
     private activatedRoute: ActivatedRoute,
-    private storage: Storage) {
-      this.firebaseService.fieldPath = 'id';
-      this.firebaseService.path = 'canticos';
-      this.firebaseService.orderByDirection = 'asc';
+    private storage: Storage,
+  ) {
+    this.firebaseService.fieldPath = 'id';
+    this.firebaseService.path = 'canticos';
+    this.firebaseService.orderByDirection = 'asc';
   }
 
   ngOnInit() {
@@ -152,7 +122,7 @@ export class CancioneiroComponent implements OnInit {
         first())
       .subscribe(cantico =>
           this.canticosSearch$ = new Observable(observer =>
-            observer.next(this.filterInArray(term, cantico))))
+            observer.next(this.filterInArray(term, cantico))));
 
   private filterInArray(term: any, cantico: Cantico[]) {
     if (!isNaN(term)) {
@@ -165,35 +135,38 @@ export class CancioneiroComponent implements OnInit {
   }
 
   public searchBar() {
-    if (this.searchBarTerm) {
-      this.desactiveAllSearchFilter();
-      this.search(this.searchBarTerm.toLowerCase());
-    } else {
-      this.canticosSearch$ = new Observable;
-    }
+    this.desactiveAllSearchFilter();
+
+    (this.searchBarTerm)
+      ? this.search(this.searchBarTerm.toLowerCase())
+      : this.clearSearch();
   }
 
   public searchFilter(term: string, index: number) {
-    if (!this.canticosStorage.searchFilter[index].active) {
-      this.searchBarTerm = '';
-      this.search(term.toLowerCase());
-    } else {
-      this.canticosSearch$ = new Observable;
-    }
+    this.searchBarTerm = '';
+
+    !this.canticosStorage.searchFilter[index].active
+      ? this.search(term.toLowerCase())
+      : this.canticosSearch$ = new Observable;
 
     this.toggleActiveSearchFilter(index);
   }
 
+  public clearSearch = () => {
+    this.searchBarTerm = '';
+    this.desactiveAllSearchFilter();
+    this.canticosSearch$ = new Observable;
+  }
+
   public onInputSearchFilter(event: CustomEvent | any) {
-    const value = event.target!.value;
-    const filteredValue = value.replace(/[0-9]/,'');
-    this.ionInputEl.value = this.keyWordsName = filteredValue;
+    const filteredValue = NOT_NUMBER(event.target!.value);
+    this.keyWordsName = filteredValue;
+    this.ionInputEl.value = filteredValue;
   }
 
   public addInSearchFilter() {
-    if (this.keyWordsName) {
+    if (this.keyWordsName)
       this.addInArrayStorage('searchFilter', { name: this.keyWordsName, active: false }, 'name');
-    }
 
     this.keyWordsName = '';
   }
@@ -212,11 +185,15 @@ export class CancioneiroComponent implements OnInit {
     }
   }
 
-  public toggleDetailsModal = () => this.isOpenDetailsModal = !this.isOpenDetailsModal;
+  public removeAllInArrayStorage(arrayName: ArrayName) {
+    this.canticosStorage[arrayName] = [];
+    this.setStorage();
+  }
 
-  public toggleBackground = () => this.isDarkColor = !this.isDarkColor;
+  public toggleDetailsModal = () =>
+    this.isOpenDetailsModal = !this.isOpenDetailsModal;
 
-  public selected = (cantico: Cantico) => {
+  public selected(cantico: Cantico) {
     cantico.letra = DECODE_HTML_CHAR_CODES(NORMALIZE_HTML(cantico.letra));
     this.cantico = cantico;
     this.toggleDetailsModal();
@@ -230,6 +207,7 @@ export class CancioneiroComponent implements OnInit {
 
   public clipboard = async (cantico: Cantico) => await Clipboard
     .write({ string: cantico.titulo.toUpperCase() + '\n\n' + this.cantico.letra })
+    .then(() => this.presentToast(`${cantico.titulo} copiado`))
 
   public share = async (cantico: Cantico) => await Share
     .share({
@@ -239,30 +217,85 @@ export class CancioneiroComponent implements OnInit {
     })
 
   public zooming(event: CustomEvent | any) {
-    this.fontSize = event.detail.value;
-    document.documentElement.style.setProperty('--letra-font-size', event.detail.value + 'px');
-    document.documentElement.style.setProperty('--letra-line-height', event.detail.value * 1.5 + 'px');
+    this.canticosStorage.formatacao.tamanhoFonte = event.detail.value;
+    this.setProperty('--letra-font-size', event.detail.value + 'px');
+    this.setProperty('--letra-line-height', event.detail.value * 1.5 + 'px');
   }
 
-  public changeColor(color: any) {
-    document.documentElement.style.setProperty('--letra-color', color);
+  public changeColor(color: string) {
+    this.canticosStorage.formatacao.corFonte = color;
+    this.setStorage();
+    this.setProperty('--letra-color', color);
+    this.checkColors(color);
   }
 
-  public changeBackground(){
-    this.toggleBackground();
-    let systemDark = window.matchMedia("(prefers-color-scheme: dark)");
-    // systemDark.addListener(this.colorTest(systemDark));
-
-    (this.isDarkColor)
-      ? document.body.setAttribute('data-theme', 'dark')
-      : document.body.setAttribute('data-theme', 'light');
+  public changeBackgroundDarkColor = () => {
+    this.canticosStorage.formatacao.backgrond = !this.canticosStorage.formatacao.backgrond;
+    this.setStorage();
   }
 
-  public colorTest(systemInitiatedDark: any) {
-    (systemInitiatedDark.matches)
-      ? document.body.setAttribute('data-theme', 'dark')
-      : document.body.setAttribute('data-theme', 'light');
+  public changeFontFamily = (font: string) => {
+    this.canticosStorage.formatacao.fonte = font;
+    this.setStorage();
+    this.setProperty('--letra-font-family', font);
+  }
+
+  public changeFontWeight = () => {
+    this.canticosStorage.formatacao.weight = !this.canticosStorage.formatacao.weight;
+    this.setStorage();
+    this.setProperty('--letra-font-weight', this.canticosStorage.formatacao.weight ? 'bold' : 'normal');
+  }
+
+  public changeFontStyle = () => {
+    this.canticosStorage.formatacao.style = !this.canticosStorage.formatacao.style;
+    this.setStorage();
+    this.setProperty('--letra-font-style', this.canticosStorage.formatacao.style ? 'italic' : 'normal');
+  }
+
+  private setProperty = (property: string, value: string) =>
+    document.documentElement.style.setProperty(property, value);
+
+  private checkColors(color: string) {
+    if (COLOR_LIGHT.find(c => c === color)) {
+      this.canticosStorage.formatacao.backgrond = true;
+    }
+
+    if (COLORS_DARK.find(c => c === color)) {
+      this.canticosStorage.formatacao.backgrond = false;
+    }
+    this.setStorage();
   }
 
   public pinFormatter = (value: number) => `${value}px`;
+
+  public async presentActionSheet(cantico: Cantico) {
+    BTN_ACTION[1].handler = () => {};
+    BTN_ACTION[2].handler = () => {
+      this.clipboard(cantico);
+      this.dismissActionSheet()
+    }
+    BTN_ACTION[3].handler = () => {
+      this.share(cantico);
+      this.dismissActionSheet();
+    }
+    let buttons = [];
+
+    buttons = BTN_ACTION.filter((a) => a.text !== 'Partitura');
+
+    const actionSheet = await this.actionSheetCtrl.create({
+      header: cantico.titulo,
+      subHeader: cantico.numero,
+      translucent: true,
+      mode: 'ios',
+      buttons
+    });
+
+    await actionSheet.present();
+  }
+
+  public selectedIndice = () => this.indice = !this.indice;
+
+  public dismissActionSheet = async () => await this.actionSheetCtrl.dismiss();
+
+  public uniqueArray = (arr: any) => UNIQUE_ARRAY(arr);
 }

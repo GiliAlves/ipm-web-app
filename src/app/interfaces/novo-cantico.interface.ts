@@ -20,32 +20,6 @@ export interface Audio {
   path?: string;
 }
 
-export interface KeyWord {
-  name: string;
-  active: boolean
-}
-
-export interface Font {
-  title: string;
-  value: string;
-}
-
-export interface Formatacao {
-  fonte: string;
-  style: boolean;
-  weight: boolean;
-  corFonte: string;
-  tamanhoFonte: number;
-  backgrond: boolean;
-}
-
-export interface HinoStorage {
-  searchFilter: KeyWord[],
-  recents: NovoCantico[],
-  favorites: NovoCantico[],
-  formatacao: Formatacao,
-}
-
 export interface Tematica {
   title: string;
   quantity: number;
@@ -60,6 +34,3 @@ export interface Assunto {
   range: string;
 }
 
-export type ArrayName = 'searchFilter' | 'recents' | 'favorites';
-export type Key = 'name' | 'numero';
-export type Position = 'top' | 'middle' | 'bottom'

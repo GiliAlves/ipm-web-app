@@ -19,7 +19,7 @@
 
     <ion-grid class="ion-no-padding">
       <ion-row class="pastoral-row">
-        <ion-col *ngFor="let pastoral of (pastorais$ | async)" size="4">
+        <ion-col *ngFor="let pastoral of (pastorais$ | async)" size="6">
           <ion-card lines="none" class="ion-no-padding" button (click)="openModal(pastoral)">
             <img [src]="pastoral.imgURL">
 
@@ -48,7 +48,7 @@
       <div id="grad1"></div>
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-button size="small" fill="clear" (click)="toggleModal()">
+          <ion-button size="small" fill="clear" (click)="toggleModal(false)">
             <ion-icon color="light" name="arrow-back-outline" slot="icon-only"></ion-icon>
           </ion-button>
         </ion-buttons>
