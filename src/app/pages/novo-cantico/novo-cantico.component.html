@@ -43,7 +43,7 @@
     [(ngModel)]="searchBarTerm"
     (ionClear)="clearSearch()"
     (ionCancel)="clearSearch()"
-    (ionChange)="searchBar($event)">
+    (ionInput)="searchBar($event)">
   </ion-searchbar>
 
   <ng-container *ngIf="hinosSearch$ | async; else noHino">
