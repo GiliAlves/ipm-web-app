@@ -1,19 +1,15 @@
 <ion-header [translucent]="false" class="ion-no-border" mode="ios">
 
-  <ion-toolbar class="ion-no-border" color="primary">
-    <ion-buttons slot="start">
-      <ion-menu-button color="light"></ion-menu-button>
-    </ion-buttons>
-    <ion-title color="light">novo cântico</ion-title>
+  <ion-toolbar class="ion-no-border" color="light">
+    <ion-title>novo cântico</ion-title>
     <ion-buttons slot="end">
       <ion-button id="open-favorites-modalh" expand="block" color="danger">
         <ion-icon slot="icon-only" [name]="modalFavorites.isCmpOpen ? 'heart' : 'heart-outline'"></ion-icon>
       </ion-button>
     </ion-buttons>
-
   </ion-toolbar>
 
-  <ion-toolbar color="primary" class="ion-no-border grid-search">
+  <!-- <ion-toolbar color="primary" class="ion-no-border grid-search">
     <ion-searchbar
       class="custom"
       color="light"
@@ -23,51 +19,9 @@
       [(ngModel)]="searchBarTerm"
       (ionChange)="searchBar()">
     </ion-searchbar>
+  </ion-toolbar> -->
 
-    <ion-modal #modalIndice class="modal-indice" trigger="open-indice-modalh">
-      <ng-template>
-        <ion-header class="ion-no-border" mode="ios">
-          <ion-toolbar>
-            <ion-buttons slot="start">
-              <ion-button size="small" fill="clear" (click)="modalIndice.dismiss()">
-                <ion-icon name="arrow-back-outline" slot="icon-only" color="primary"></ion-icon>
-              </ion-button>
-            </ion-buttons>
-            <ion-title color="primary">Temáticas e Assuntos</ion-title>
-          </ion-toolbar>
-        </ion-header>
-
-        <ion-content [fullscreen]="true" class="ion-padding">
-          <ion-accordion-group>
-            <ion-accordion *ngFor="let tematica of tematicas" [value]="tematica.title">
-              <ion-item slot="header" color="light">
-                <ion-label color="primary">
-                  <h2>{{ tematica.title }}</h2>
-                  <ion-note>Total de {{ tematica.quantity === 1 ? 'apenas' : '' }} <ion-text color="tertiary">{{ tematica.quantity }}</ion-text> {{ tematica.quantity === 1 ? 'hino o ' : tematica.quantity === 2 ? 'hinos': 'hinos do' }} {{ tematica.range }}</ion-note>
-                </ion-label>
-              </ion-item>
-              <ion-item *ngFor="let assunto of tematica.assunto"
-                class="ion-padding-start" button detail="true" slot="content" color="light"
-                (click)="searchFilterTematicaAndAssunto(assunto.title); modalIndice.dismiss()">
-                <ion-label color="secondary">
-                  <p>{{ assunto.title }}</p>
-                  <ion-note>Total de {{ assunto.quantity === 1 ? 'apenas' : '' }} <ion-text color="tertiary">{{ assunto.quantity }}</ion-text> {{ assunto.quantity === 1 ? 'hino o ' : assunto.quantity === 2 ? 'hinos': 'hinos do' }} {{ assunto.range }}</ion-note>
-                </ion-label>
-              </ion-item>
-            </ion-accordion>
-          </ion-accordion-group>
-        </ion-content>
-
-        <ion-footer class="ion-no-border" mode="ios">
-          <ion-toolbar class="ion-text-center">
-            <ion-note>Hinário Novo Cântico</ion-note>
-          </ion-toolbar>
-        </ion-footer>
-      </ng-template>
-    </ion-modal>
-  </ion-toolbar>
-
-  <ion-toolbar color="primary" class="ion-no-border grid-searchkeys">
+  <!-- <ion-toolbar color="primary" class="ion-no-border grid-searchkeys">
     <ion-grid>
       <ion-row class="searchkeys">
         <ng-container *ngIf="hinosStorage && hinosStorage.searchFilter.length">
@@ -89,9 +43,9 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-  </ion-toolbar>
+  </ion-toolbar> -->
 
-  <ion-toolbar color="primary" class="ion-no-border grid-recentes">
+  <!-- <ion-toolbar color="primary" class="ion-no-border grid-recentes">
     <ng-container *ngIf="hinosStorage && hinosStorage.recents.length">
       <ion-grid>
         <ion-row class="title-recentes">
@@ -108,9 +62,9 @@
         </ion-row>
       </ion-grid>
     </ng-container>
-  </ion-toolbar>
+  </ion-toolbar> -->
 
-  <ion-toolbar color="primary" class="ion-no-border grid-note">
+  <!-- <ion-toolbar color="primary" class="ion-no-border grid-note">
     <ng-container *ngIf="hinosSearch$ | async">
       <ion-note color="light" slot="end" class="ion-no-padding">
         {{ (hinosSearch$ | async)?.length + ' encontrado'}}{{ ((hinosSearch$ | async)?.length === 1) ? ''  : 's' }}
@@ -119,25 +73,22 @@
         <ion-icon size="small" name="trash-outline" slot="icon-only" color="danger"></ion-icon>
       </ion-button>
     </ng-container>
-  </ion-toolbar>
-
-  <svg
-    style="margin-top: -1px;"
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 1440 320">
-    <path
-      fill="#005B40"
-      fill-opacity="1"
-      d="M0,32L20,32C40,32,80,32,120,48C160,64,200,96,240,106.7C280,117,320,107,360,117.3C400,128,440,160,480,197.3C520,235,560,277,600,256C640,235,680,149,720,133.3C760,117,800,171,840,165.3C880,160,920,96,960,69.3C1000,43,1040,53,1080,80C1120,107,1160,149,1200,149.3C1240,149,1280,107,1320,85.3C1360,64,1400,64,1420,64L1440,64L1440,0L1420,0C1400,0,1360,0,1320,0C1280,0,1240,0,1200,0C1160,0,1120,0,1080,0C1040,0,1000,0,960,0C920,0,880,0,840,0C800,0,760,0,720,0C680,0,640,0,600,0C560,0,520,0,480,0C440,0,400,0,360,0C320,0,280,0,240,0C200,0,160,0,120,0C80,0,40,0,20,0L0,0Z">
-    </path>
-  </svg>
+  </ion-toolbar> -->
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" [scrollY]="false">
+  <ion-searchbar class="custom ion-margin-bottom ion-margin-top"
+    placeholder="procurar hino"
+    animated="true"
+    [debounce]="1000"
+    [(ngModel)]="searchBarTerm"
+    (ionChange)="searchBar()">
+  </ion-searchbar>
+
   <ng-container *ngIf="hinosSearch$ | async; else noHino">
-    <ion-virtual-scroll [items]="hinosSearch$ | async">
+    <cdk-virtual-scroll-viewport itemSize="56" minBufferPx="900" maxBufferPx="1350">
       <ion-item-sliding
-          *virtualItem="let hino"
+          *cdkVirtualFor="let hino of hinosSearch$ | async"
           style="
             border-right: 5px solid var(--ion-color-success);
             border-radius: 10px;
@@ -145,7 +96,7 @@
           button
           (ionDrag)="addInArrayStorage('favorites', hino, 'numero', $event)"
           (click)="selected(hino)">
-
+  
         <ion-item
           lines="inset"
           detail="true"
@@ -157,7 +108,7 @@
             <ion-note>{{ hino.autor }}</ion-note>
           </ion-label>
         </ion-item>
-
+  
         <ion-item-options side="end">
           <ion-item-option color="success" expandable>
             <ion-text color="light">favoritar</ion-text>
@@ -165,7 +116,7 @@
           </ion-item-option>
         </ion-item-options>
       </ion-item-sliding>
-    </ion-virtual-scroll>
+    </cdk-virtual-scroll-viewport>
   </ng-container>
 
   <ng-template #noHino>
@@ -187,8 +138,6 @@
     </ion-fab-button>
   </ion-fab>
 </ion-content>
-
-
 
 <!-- modais -->
 <ion-popover #popoverFilters trigger="open-newFilter-dialogh" mode="ios"  class="popover-filter">
@@ -414,7 +363,7 @@
       </ion-toolbar>
     </ion-header>
 
-    <ion-content>
+    <ion-content [scrollY]="false">
       <ion-header collapse="condense">
         <ion-toolbar>
           <ion-title size="large">Favoritos</ion-title>
@@ -422,12 +371,12 @@
       </ion-header>
 
       <ng-container *ngIf="hinosStorage && hinosStorage.favorites.length; else noFavoritos">
-        <ion-virtual-scroll [items]="hinosStorage.favorites">
+        <cdk-virtual-scroll-viewport itemSize="56" minBufferPx="900" maxBufferPx="1350">
           <ion-item-sliding
-            *virtualItem="let hino"
+            *cdkVirtualFor="let hino of hinosStorage.favorites"
             (ionDrag)="removeInArrayStorage('favorites', hino, 'numero', $event)"
             (click)="selected(hino)">
-
+  
             <ion-item
               style="
                 border-right: 5px solid var(--ion-color-danger);
@@ -436,21 +385,21 @@
               lines="inset"
               detail="true"
               detail-icon="add-outline">
-
+  
               <ion-chip
                 slot="start"
                 color="success"
                 [outline]="true">
                   {{ hino.numero }}
               </ion-chip>
-
+  
               <ion-label>
                 <ion-note class="ion-font-smaller">{{hino.tematica + " ・ " + hino.assunto}}</ion-note>
                 <ion-text color="primary"><h2>{{ hino.titulo }}</h2></ion-text>
                 <ion-note>{{ hino.autor }}</ion-note>
               </ion-label>
             </ion-item>
-
+  
             <ion-item-options side="end">
               <ion-item-option color="danger" expandable>
                 <ion-text color="light">desfavoritar</ion-text>
@@ -458,7 +407,9 @@
               </ion-item-option>
             </ion-item-options>
           </ion-item-sliding>
-        </ion-virtual-scroll>
+        </cdk-virtual-scroll-viewport>
+        <!-- <ion-virtual-scroll [items]="hinosStorage.favorites">
+        </ion-virtual-scroll> -->
       </ng-container>
 
       <ng-template #noFavoritos>
@@ -501,5 +452,47 @@
         [original-size]="false">
       </pdf-viewer>
     </ion-content>
+  </ng-template>
+</ion-modal>
+
+<ion-modal #modalIndice class="modal-indice" trigger="open-indice-modalh">
+  <ng-template>
+    <ion-header class="ion-no-border" mode="ios">
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button size="small" fill="clear" (click)="modalIndice.dismiss()">
+            <ion-icon name="arrow-back-outline" slot="icon-only" color="primary"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-title color="primary">Temáticas e Assuntos</ion-title>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content [fullscreen]="true" class="ion-padding">
+      <ion-accordion-group>
+        <ion-accordion *ngFor="let tematica of tematicas" [value]="tematica.title">
+          <ion-item slot="header" color="light">
+            <ion-label color="primary">
+              <h2>{{ tematica.title }}</h2>
+              <ion-note>Total de {{ tematica.quantity === 1 ? 'apenas' : '' }} <ion-text color="tertiary">{{ tematica.quantity }}</ion-text> {{ tematica.quantity === 1 ? 'hino o ' : tematica.quantity === 2 ? 'hinos': 'hinos do' }} {{ tematica.range }}</ion-note>
+            </ion-label>
+          </ion-item>
+          <ion-item *ngFor="let assunto of tematica.assunto"
+            class="ion-padding-start" button detail="true" slot="content" color="light"
+            (click)="searchFilterTematicaAndAssunto(assunto.title); modalIndice.dismiss()">
+            <ion-label color="secondary">
+              <p>{{ assunto.title }}</p>
+              <ion-note>Total de {{ assunto.quantity === 1 ? 'apenas' : '' }} <ion-text color="tertiary">{{ assunto.quantity }}</ion-text> {{ assunto.quantity === 1 ? 'hino o ' : assunto.quantity === 2 ? 'hinos': 'hinos do' }} {{ assunto.range }}</ion-note>
+            </ion-label>
+          </ion-item>
+        </ion-accordion>
+      </ion-accordion-group>
+    </ion-content>
+
+    <ion-footer class="ion-no-border" mode="ios">
+      <ion-toolbar class="ion-text-center">
+        <ion-note>Hinário Novo Cântico</ion-note>
+      </ion-toolbar>
+    </ion-footer>
   </ng-template>
 </ion-modal>

@@ -22,6 +22,7 @@ ion-content ion-virtual-scroll ion-item ion-label p {
 ion-content ion-virtual-scroll h2 {
   font-size: 18px;
 }
+
 ion-toolbar {
   --border: none;
   --border-width: 0;
@@ -30,6 +31,8 @@ ion-toolbar {
 
 ion-toolbar.grid-note {
   --min-height: 41px;
+  border-bottom-right-radius: 30px;
+  border-bottom-left-radius: 30px;
 
   ion-note {
     padding-top: 5px;
@@ -39,7 +42,7 @@ ion-toolbar.grid-note {
 }
 
 ion-searchbar.md.custom {
-    --box-shadow: none;
+    // --box-shadow: none;
     --border-radius: 14px;
 }
 

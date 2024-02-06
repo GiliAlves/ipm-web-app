@@ -35,3 +35,12 @@ a {
 ion-tab-bar  {
   border: none !important;
 }
+
+cdk-virtual-scroll-viewport {
+  height: 100%;
+  width: 100%;
+}
+
+ion-icon.fa-solid, ion-icon.fa-regular {
+  width: 1.3em;
+}

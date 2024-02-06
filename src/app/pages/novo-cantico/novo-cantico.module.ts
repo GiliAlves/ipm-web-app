@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
@@ -9,7 +10,6 @@ import { PipesModule } from 'src/app/pipes/pipes.module';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { NovoCanticoRoutingModule } from './novo-cantico-routing.module';
 import { NovoCanticoComponent } from './novo-cantico.component';
-
 
 @NgModule({
   declarations: [
@@ -22,7 +22,8 @@ import { NovoCanticoComponent } from './novo-cantico.component';
     NovoCanticoRoutingModule,
     SharedModule,
     PipesModule,
-    PdfViewerModule
+    PdfViewerModule,
+    ScrollingModule
   ],
   providers: [ FirebaseService ]
 })
