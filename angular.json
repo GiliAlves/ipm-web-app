@@ -22,6 +22,7 @@
             "allowedCommonJsDependencies": [
               "lodash",
               "pdfjs-dist/web/pdf_viewer",
+              "pdfjs-dist/build/pdf",
               "localforage"
             ],
             "assets": [
@@ -55,7 +56,7 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
+                  "maximumWarning": "8kb",
                   "maximumError": "10kb"
                 }
               ],

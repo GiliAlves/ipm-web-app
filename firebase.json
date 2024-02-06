@@ -1,6 +1,5 @@
 {
-  "hosting": [
-    {
+  "hosting": {
       "site": "ipm-web-app",
       "public": "www",
       "ignore": [
@@ -14,11 +13,5 @@
           "destination": "/index.html"
         }
       ]
-    },
-    {
-      "target": "app",
-      "source": ".",
-      "frameworksBackend": {}
     }
-  ]
 }
