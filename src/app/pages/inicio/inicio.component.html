@@ -111,7 +111,7 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-grid class="ion-no-padding">
+  <ion-grid class="ion-no-padding" [fixed]="true">
     <ng-container *ngIf="inicialStorage.videosStorage.items.length">
       <ion-row class="second-row ion-padding ion-no-margin ion-no-border">
         <span class="yt-logo">
@@ -281,7 +281,7 @@
       <ion-row class="ion-margin">
         <iframe style="border-radius:12px"
           src="https://open.spotify.com/embed/show/6jlk2yic6T4bQAFFDHl6H5?utm_source=generator"
-          width="100%" height="152" frameBorder="0" allowfullscreen=""
+          width="100%" height="152" frameBorder="0"
           allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
         </iframe>
       </ion-row>

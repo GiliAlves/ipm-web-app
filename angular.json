@@ -19,6 +19,11 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
+            "allowedCommonJsDependencies": [
+              "lodash",
+              "pdfjs-dist/web/pdf_viewer",
+              "localforage"
+            ],
             "assets": [
               {
                 "glob": "**/*",

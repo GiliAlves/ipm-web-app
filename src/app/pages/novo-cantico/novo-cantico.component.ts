@@ -84,7 +84,7 @@ export class NovoCanticoComponent implements OnInit {
 
     if (paramMap) {
       isNaN(Number(paramMap))
-        ? this.searchFilterTematicaAndAssunto(this.activatedRoute.snapshot.paramMap.get('id') as string)
+        ? this.searchFilterTematicaAndAssunto(paramMap as string)
         : this.getStorageHino();
     }
   }
