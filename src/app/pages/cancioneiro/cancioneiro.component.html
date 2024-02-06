@@ -1,31 +1,14 @@
-<ion-header [translucent]="false" class="ion-no-border" mode="ios">
-
-  <ion-toolbar class="ion-no-border" color="secondary">
-    <ion-buttons slot="start">
-      <ion-menu-button color="light"></ion-menu-button>
-    </ion-buttons>
-    <ion-title color="light">cancioneiro</ion-title>
+<ion-header [translucent]="false" class="ion-no-border">
+  <ion-toolbar class="ion-no-border" color="primary">
+    <ion-title>cancioneiro</ion-title>
     <ion-buttons slot="end">
       <ion-button id="open-favorites-modalc" expand="block" color="danger">
         <ion-icon slot="icon-only" [name]="modalFavorites.isCmpOpen ? 'heart' : 'heart-outline'"></ion-icon>
       </ion-button>
     </ion-buttons>
-
   </ion-toolbar>
 
-  <ion-toolbar color="secondary" class="ion-no-border grid-search">
-    <ion-searchbar
-      class="custom"
-      color="light"
-      placeholder="procurar cantico"
-      animated="true"
-      [debounce]="1000"
-      [(ngModel)]="searchBarTerm"
-      (ionChange)="searchBar()">
-    </ion-searchbar>
-  </ion-toolbar>
-
-  <ion-toolbar color="secondary" class="ion-no-border grid-searchkeys">
+  <!-- <ion-toolbar color="secondary" class="ion-no-border grid-searchkeys">
     <ion-grid>
       <ion-row class="searchkeys">
         <ng-container *ngIf="canticosStorage && canticosStorage.searchFilter.length">
@@ -47,55 +30,34 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-  </ion-toolbar>
-
-  <ion-toolbar color="secondary" class="ion-no-border grid-recentes">
-    <ng-container *ngIf="canticosStorage && canticosStorage.recents.length">
-      <ion-grid>
-        <ion-row class="title-recentes">
-          <ion-note class="ion-padding ion-font-small" color="light">últimos visualizados</ion-note>
-        </ion-row>
-        <ion-row class="recentes">
-          <ion-col *ngFor="let cantico of canticosStorage.recents">
-            <ion-chip
-              (click)="selected(cantico)"
-              button color="light" [outline]="false">
-                {{ cantico.numero }}
-            </ion-chip>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ng-container>
-  </ion-toolbar>
-
-  <ion-toolbar color="secondary" class="ion-no-border grid-note">
-    <ng-container *ngIf="canticosSearch$ | async">
-      <ion-note color="light" slot="end" class="ion-no-padding">
-        {{ (canticosSearch$ | async)?.length + ' encontrado'}}{{ ((canticosSearch$ | async)?.length === 1) ? ''  : 's' }}
-      </ion-note>
-      <ion-button size="small" fill="clear" (click)="clearSearch()" slot="end">
-        <ion-icon size="small" name="trash-outline" slot="icon-only" color="danger"></ion-icon>
-      </ion-button>
-    </ng-container>
-  </ion-toolbar>
-
-  <svg
-    style="margin-top: -1px;"
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 1440 320">
-    <path
-      fill="#4DA186"
-      fill-opacity="1"
-      d="M0,32L30,53.3C60,75,120,117,180,117.3C240,117,300,75,360,74.7C420,75,480,117,540,154.7C600,192,660,224,720,234.7C780,245,840,235,900,218.7C960,203,1020,181,1080,181.3C1140,181,1200,203,1260,208C1320,213,1380,203,1410,197.3L1440,192L1440,0L1410,0C1380,0,1320,0,1260,0C1200,0,1140,0,1080,0C1020,0,960,0,900,0C840,0,780,0,720,0C660,0,600,0,540,0C480,0,420,0,360,0C300,0,240,0,180,0C120,0,60,0,30,0L0,0Z">
-      </path>
-  </svg>
+  </ion-toolbar> -->
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" [scrollY]="false">
+  <ion-searchbar
+    placeholder="procurar cântico"
+    animated="true"
+    show-clear-button="always" 
+    mode="ios"
+    [debounce]="500"
+    [(ngModel)]="searchBarTerm"
+    (ionClear)="clearSearch()"
+    (ionCancel)="clearSearch()"
+    (ionChange)="searchBar($event)">
+  </ion-searchbar>
+
   <ng-container *ngIf="canticosSearch$ | async; else nocantico">
-    <ion-virtual-scroll [items]="canticosSearch$ | async">
+    <ion-item lines="none">
+      <ion-label color="primary" slot="start" class="ion-no-padding">
+        {{ (canticosSearch$ | async)?.length + ' encontrado'}}{{ ((canticosSearch$ | async)?.length === 1) ? ''  : 's' }}
+      </ion-label>
+      <ion-button fill="clear" (click)="clearSearch()" slot="end">
+        <ion-icon size="small" name="trash-outline" slot="icon-only" color="danger"></ion-icon>
+      </ion-button>
+    </ion-item>
+    <cdk-virtual-scroll-viewport appendOnly itemSize="100">
       <ion-item-sliding
-          *virtualItem="let cantico"
+          *cdkVirtualFor="let cantico of canticosSearch$ | async"
           style="
             border-right: 5px solid var(--ion-color-success);
             border-radius: 10px;
@@ -103,7 +65,7 @@
           button
           (ionDrag)="addInArrayStorage('favorites', cantico, 'numero', $event)"
           (click)="selected(cantico)">
-
+  
         <ion-item lines="inset" detail="true" detail-icon="add-outline">
           <ion-chip slot="start" color="success" [outline]="true">{{ cantico.numero }}</ion-chip>
           <ion-label>
@@ -113,7 +75,7 @@
             </ion-note>
           </ion-label>
         </ion-item>
-
+  
         <ion-item-options side="end">
           <ion-item-option color="success" expandable>
             <ion-text color="light">favoritar</ion-text>
@@ -121,27 +83,44 @@
           </ion-item-option>
         </ion-item-options>
       </ion-item-sliding>
-    </ion-virtual-scroll>
+    </cdk-virtual-scroll-viewport>
   </ng-container>
 
   <ng-template #nocantico>
     <ion-grid class="message-logo">
+      <ng-container *ngIf="canticosStorage && canticosStorage.recents.length">
+        <ion-row class="title-recentes">
+          <ion-note class="ion-padding ion-font-small" color="primary">últimos visualizados</ion-note>
+        </ion-row>
+        <ion-row class="recentes">
+          <ion-col *ngFor="let cantico of canticosStorage.recents">
+            <ion-chip
+              (click)="selected(cantico)"
+              button color="primary" [outline]="false">
+                {{ cantico.numero }}
+            </ion-chip>
+          </ion-col>
+        </ion-row>
+      </ng-container>
+
       <ion-row class="ion-padding">
-        <img src="../../../assets/logo_lazy.png" alt="logo">
+        <ion-col>
+          <ion-img src="../../../assets/logo_lazy.png" alt="logo"></ion-img>
+        </ion-col>
       </ion-row>
       <ion-row class="ion-padding">
-        <ion-text color="medium-tint">
-          <small>procure pelo <b>número</b>, <b>título</b> ou <b>letra</b> do cântico.</small>
-        </ion-text>
+        <ion-col>
+          <ion-text color="medium-tint">
+            <small>procure pelo <b>número</b>, <b>título</b> ou <b>letra</b> do cântico.</small>
+          </ion-text>
+        </ion-col>
       </ion-row>
     </ion-grid>
   </ng-template>
 </ion-content>
 
-
-
 <!-- modais -->
-<ion-popover #popoverFilters trigger="open-newFilter-dialogc" mode="ios"  class="popover-filter">
+<!-- <ion-popover #popoverFilters trigger="open-newFilter-dialogc" mode="ios"  class="popover-filter">
   <ng-template>
     <ion-header class="ion-no-border" mode="ios">
       <ion-toolbar>
@@ -225,7 +204,7 @@
       </ng-template>
     </ion-content>
   </ng-template>
-</ion-popover>
+</ion-popover> -->
 
 
 <ion-modal #modalDetails [isOpen]="isOpenDetailsModal">
@@ -360,7 +339,7 @@
       </ion-toolbar>
     </ion-header>
 
-    <ion-content>
+    <ion-content [scrollY]="false">
       <ion-header collapse="condense">
         <ion-toolbar>
           <ion-title size="large">Favoritos</ion-title>
@@ -368,12 +347,12 @@
       </ion-header>
 
       <ng-container *ngIf="canticosStorage && canticosStorage.favorites.length; else noFavoritos">
-        <ion-virtual-scroll [items]="canticosStorage.favorites">
+        <cdk-virtual-scroll-viewport appendOnly itemSize="100">
           <ion-item-sliding
-            *virtualItem="let cantico"
+            *cdkVirtualFor="let cantico of canticosStorage.favorites"
             (ionDrag)="removeInArrayStorage('favorites', cantico, 'numero', $event)"
             (click)="selected(cantico)">
-
+  
             <ion-item
               style="
                 border-right: 5px solid var(--ion-color-danger);
@@ -382,21 +361,21 @@
               lines="inset"
               detail="true"
               detail-icon="add-outline">
-
+  
               <ion-chip
                 slot="start"
                 color="success"
                 [outline]="true">
                   {{ cantico.numero }}
               </ion-chip>
-
+  
               <ion-label>
                 <ion-text color="secondary"><h2>{{ cantico.titulo }}</h2></ion-text>
                 <ion-note class="ion-font-smaller"
                   [innerHTML]="cantico.letra.slice(0, 60) + '...' | sanitizedHtml"></ion-note>
               </ion-label>
             </ion-item>
-
+  
             <ion-item-options side="end">
               <ion-item-option color="danger" expandable>
                 <ion-text color="light">desfavoritar</ion-text>
@@ -404,22 +383,25 @@
               </ion-item-option>
             </ion-item-options>
           </ion-item-sliding>
-        </ion-virtual-scroll>
+        </cdk-virtual-scroll-viewport>
       </ng-container>
 
       <ng-template #noFavoritos>
         <ion-grid class="message-logo">
           <ion-row class="ion-padding">
-            <img class="no-img" src="../../../assets/eading_time.svg" alt="logo">
+            <ion-col>
+              <ion-img class="no-img" src="../../../assets/eading_time.svg" alt="logo"></ion-img>
+            </ion-col>
           </ion-row>
           <ion-row class="ion-padding">
-            <ion-text color="medium-tint">
-              <small>ainda não foram adicionados canticos aos favoritos</small>
-            </ion-text>
+            <ion-col>
+              <ion-text color="medium-tint" class="ion-font-small">
+                ainda não foram adicionados canticos aos favoritos
+              </ion-text>
+            </ion-col>
           </ion-row>
         </ion-grid>
       </ng-template>
-
     </ion-content>
   </ng-template>
 </ion-modal>

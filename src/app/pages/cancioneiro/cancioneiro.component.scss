@@ -14,14 +14,20 @@ ion-content ion-virtual-scroll ion-item ion-chip {
   margin-right: 10px;
 }
 
-ion-content ion-virtual-scroll ion-item ion-label p {
-  font-size: 12px !important;
-  line-height: 14px !important;
+ion-content cdk-virtual-scroll-viewport ion-item ion-label p {
+  font-size: small !important;
+  line-height: small !important;
 }
 
-ion-content ion-virtual-scroll h2 {
-  font-size: 18px;
+ion-content cdk-virtual-scroll-viewport ion-item ion-label ion-note {
+  font-size: small !important;
+  line-height: small !important;
 }
+
+ion-content cdk-virtual-scroll-viewport h2 {
+  font-size: large;
+}
+
 ion-toolbar {
   --border: none;
   --border-width: 0;
@@ -182,10 +188,10 @@ ion-row.colors {
 ion-grid.message-logo {
   text-align: center;
   ion-row {
-    justify-content: center;
 
-    img {
+    ion-img {
       width: 100px;
+      margin: auto;
       filter: opacity(0.6);
     }
 

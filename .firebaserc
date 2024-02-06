@@ -9,6 +9,6 @@
     }
   },
   "projects": {
-    "default": "ipm-web-app"
+    "default": "ipm-task-app"
   }
 }

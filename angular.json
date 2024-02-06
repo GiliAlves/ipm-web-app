@@ -22,6 +22,7 @@
             "allowedCommonJsDependencies": [
               "lodash",
               "pdfjs-dist/web/pdf_viewer",
+              "pdfjs-dist/build/pdf",
               "localforage"
             ],
             "assets": [
@@ -55,7 +56,7 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
+                  "maximumWarning": "8kb",
                   "maximumError": "10kb"
                 }
               ],
@@ -85,10 +86,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "app:build:production"
+              "buildTarget": "app:build:production"
             },
             "development": {
-              "browserTarget": "app:build:development"
+              "buildTarget": "app:build:development"
             },
             "ci": {
               "progress": false
@@ -99,7 +100,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "app:build"
+            "buildTarget": "app:build"
           }
         },
         "test": {
@@ -148,12 +149,19 @@
         "deploy": {
           "builder": "@angular/fire:deploy",
           "options": {
-            "prerender": false,
-            "ssr": false,
-            "browserTarget": "app:build:production",
-            "firebaseProject": "ipm-task-app",
-            "firebaseHostingSite": "ipm-web-app"
-          }
+            "version": 2
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "app:build:production",
+              "serveTarget": "app:serve:production"
+            },
+            "development": {
+              "buildTarget": "app:build:development",
+              "serveTarget": "app:serve:development"
+            }
+          },
+          "defaultConfiguration": "production"
         }
       }
     }

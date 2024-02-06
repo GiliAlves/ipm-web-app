@@ -175,11 +175,11 @@ export class NovoCanticoComponent implements OnInit {
     return UNIQUE_ARRAY(hinos);
   }
 
-  public searchBar() {
+  public searchBar(event: any) {
     this.desactiveAllSearchFilter();
 
-    (this.searchBarTerm)
-      ? this.search(this.searchBarTerm.toLowerCase())
+    (event.target.value.toLowerCase())
+      ? this.search(event.target.value.toLowerCase())
       : this.clearSearch();
   }
 
