@@ -18,7 +18,6 @@ import { InicioComponent } from './inicio.component';
     IonicModule,
     InicioRoutingModule,
     SharedModule,
-    
   ],
   providers: [
     YoutubeService,

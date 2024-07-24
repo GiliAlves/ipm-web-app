@@ -11,14 +11,22 @@ import { getApp, initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, provideFirestore } from '@angular/fire/firestore';
 import { getFunctions, provideFunctions } from '@angular/fire/functions';
 import { getStorage, provideStorage } from '@angular/fire/storage';
+import { getMessaging, provideMessaging } from '@angular/fire/messaging';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { Drivers } from '@ionic/storage';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { environment } from 'src/environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { DBConfig, NgxIndexedDBModule } from 'ngx-indexed-db';
 
 registerLocaleData(localePt, 'pt-BR');
+
+const dbConfig: DBConfig  = {
+  name: 'bibliaARA',
+  version: 1,
+  objectStoresMeta: []
+};
 
 @NgModule({
   declarations: [AppComponent],
@@ -27,6 +35,7 @@ registerLocaleData(localePt, 'pt-BR');
     IonicModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
+    NgxIndexedDBModule.forRoot(dbConfig),
     
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() =>
@@ -36,6 +45,7 @@ registerLocaleData(localePt, 'pt-BR');
         }) 
       })
     ),
+    provideMessaging(() => getMessaging()),
     provideFunctions(() => getFunctions()),
     provideStorage(() => getStorage()),
     ServiceWorkerModule.register('ngsw-worker.js', {

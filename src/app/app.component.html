@@ -1,28 +1,165 @@
-<ion-app>
-  <ion-router-outlet id="main-content"></ion-router-outlet>
+<ion-menu contentId="main-content" #menu [disabled]="!isTab">
+  <ion-header class="ion-no-border">
+    <ion-toolbar color="medium">
+      <ion-item button lines="none" color="medium" detail="true" detailIcon="settings-outline" 
+        [routerLink]="['/perfil']" (click)="menu.close()">
+        <ion-avatar aria-hidden="true" slot="start">
+          <img alt="" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+        </ion-avatar>
+        <ion-label>
+          <ion-note color="tertiary">{{ greetingMessage() }},</ion-note>
+          <h2>Giliard Alves da Silva</h2>
+          <ion-note color="primary">7gili.alves&#64;gmail.com</ion-note>
+        </ion-label>
+      </ion-item>
+    </ion-toolbar>
+  </ion-header>
 
-  <ion-tabs>
-    <ion-tab-bar slot="bottom" >
-      <ion-tab-button tab="novo-cantico">
-        <ion-icon size="small" class="fa-brands fa-itunes-note"></ion-icon>
-        Novo Cântico
-      </ion-tab-button>
-      <ion-tab-button tab="cancioneiro">
-        <ion-icon size="small" class="fa-solid fa-guitar"></ion-icon>
-        Cancioneiro
-      </ion-tab-button>
-      <ion-tab-button tab="inicio">
-        <ion-icon size="small" class="fa-solid fa-church"></ion-icon>
-        Inicio
-      </ion-tab-button>
-      <ion-tab-button tab="pastoral">
-        <ion-icon size="small" class="fa-solid fa-book-open"></ion-icon>
-        Pastorais
-      </ion-tab-button>
-      <ion-tab-button tab="sobre">
-        <ion-icon size="small" class="fa-solid fa-fingerprint"></ion-icon>
-        Sobre
-      </ion-tab-button>
-    </ion-tab-bar>
-  </ion-tabs>
-</ion-app>
+  <ion-content class="ion-no-padding" color="medium">
+    <ion-grid class="ion-justify-content-between">
+      <!-- <ion-row>
+        <ion-col>
+          <ion-card color="medium" class="tema">
+            <ion-card-content>
+              <h5>{{ tema.titulo }}</h5>
+              <ion-note>{{ tema.descricao }}</ion-note>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row> -->
+      <ion-row>
+        <ion-col>
+          <ion-list lines="none" class="list-menu">
+            <ion-item button detail="true" [routerLink]="['/biblia']" (click)="menu.close()"> 
+              <ion-icon slot="start" size="small" class="fa-solid fa-book-bible"></ion-icon>
+              <ion-label>
+                <h3>Bíblia</h3>
+                <ion-note>Bíblia na versão ARA</ion-note>
+              </ion-label>
+            </ion-item>
+            <ion-item button detail="true" [routerLink]="['/boletim']" (click)="menu.close()"> 
+              <ion-icon slot="start" size="small" class="fa-solid fa-book-open"></ion-icon>
+              <ion-label>
+                <h3>Boletim</h3>
+                <ion-note>Pastorais e ordem do culto</ion-note>
+              </ion-label>
+            </ion-item>
+
+            <ion-item button detail="true" [routerLink]="['/novo-cantico']" (click)="menu.close()"> 
+              <ion-icon slot="start" size="small" class="fa-brands fa-itunes-note"></ion-icon>
+              <ion-label>
+                <h3>Novo Cântico</h3>
+                <ion-note>Hinário novo cântico</ion-note>
+              </ion-label>
+            </ion-item>
+            <ion-item button detail="true" [routerLink]="['/cancioneiro']" (click)="menu.close()"> 
+              <ion-icon slot="start" size="small" class="fa-solid fa-guitar"></ion-icon>
+              <ion-label>
+                <h3>Cancioneiro</h3>
+                <ion-note>Cânticos da Igreja</ion-note>
+              </ion-label>
+            </ion-item>
+            
+            <ion-item button detail="true" [routerLink]="['/lideranca']" (click)="menu.close()"> 
+              <ion-icon slot="start" size="small" class="fa-solid fa-user-tie"></ion-icon>
+              <ion-label>
+                <h3>Lideranca</h3>
+                <ion-note>Conheça a liderença da IPM</ion-note>
+              </ion-label>
+            </ion-item>
+            <ion-item button detail="true" [routerLink]="['/sobre']" (click)="menu.close()"> 
+              <ion-icon slot="start" size="small" class="fa-solid fa-fingerprint"></ion-icon>
+              <ion-label>
+                <h3>Nossa história</h3>
+                <ion-note>Conheça um pouco da nossa história</ion-note>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-col>
+      </ion-row>
+
+      <!-- <ion-row>
+        <ion-col size="12">
+          <ion-card class="ion-no-margin" color="medium">
+            <ion-card-header>
+              <ion-card-subtitle></ion-card-subtitle>
+              <ion-card-title>Nossos Horários</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-item-group>
+                <ion-item-divider>quinta-feira</ion-item-divider>
+                <ion-item lines="none" color="medium">
+                  <ion-label>Estudo Bíblico</ion-label>
+                  <ion-note slot="end" color="primary">19h</ion-note>
+                </ion-item>
+                <ion-item-divider>domingo</ion-item-divider>
+                <ion-item lines="none" color="medium">
+                  <ion-label>Escola Dominical</ion-label>
+                  <ion-note slot="end" color="primary">09h</ion-note>
+                </ion-item>
+                <ion-item lines="none" color="medium">
+                  <ion-label>Culto Público</ion-label>
+                  <ion-note slot="end" color="primary">18h</ion-note>
+                </ion-item>
+              </ion-item-group>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row> -->
+
+      <ion-row>
+        <ion-col class="proposito">
+          <ion-note>{{ proposito }}</ion-note>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-content>
+  <ion-footer class="ion-no-border">
+    <ion-toolbar>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            <ion-button fill="outline" expand="block" color="danger" shape="round">
+              sair
+              <ion-icon slot="end" name="log-out-outline"></ion-icon>
+            </ion-button>
+          </ion-col>
+          <ion-col size="12" class="ion-text-center">
+            <ion-note>versão 1.0.0</ion-note>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-toolbar>
+  </ion-footer>
+</ion-menu>
+<div class="ion-page" id="main-content">
+  <ion-app>
+    <!-- <ion-router-outlet></ion-router-outlet> -->
+    <ion-nav></ion-nav>
+
+    <ion-tabs *ngIf="isTab">
+      <ion-tab-bar slot="bottom">
+        <ion-tab-button tab="biblia">
+          <ion-icon size="small" class="fa-solid fa-book-bible"></ion-icon>
+          Biblia
+        </ion-tab-button>
+        <ion-tab-button tab="boletim">
+          <ion-icon size="small" class="fa-solid fa-book-open"></ion-icon>
+          Boletim
+        </ion-tab-button>
+        <ion-tab-button tab="inicio">
+          <ion-icon size="small" class="fa-solid fa-church"></ion-icon>
+          Inicio
+        </ion-tab-button>
+        <ion-tab-button tab="novo-cantico">
+          <ion-icon size="small" class="fa-brands fa-itunes-note"></ion-icon>
+          Novo Cântico
+        </ion-tab-button>
+        <ion-tab-button tab="cancioneiro">
+          <ion-icon size="small" class="fa-solid fa-guitar"></ion-icon>
+          Cancioneiro
+        </ion-tab-button>
+      </ion-tab-bar>
+    </ion-tabs>
+  </ion-app>
+</div>

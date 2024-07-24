@@ -1,5 +1,5 @@
 import { Cantico } from './cantico.interface';
-import { Membro } from "./membros.interface";
+import { Membro } from "./membro.interface";
 import { NovoCantico } from './novo-cantico.interface';
 import { YouTube } from "./youTube.interface";
 

@@ -1,0 +1,23 @@
+ion-grid {
+    align-content: center;
+    height: 100%;
+}
+
+ion-avatar {
+    margin: auto;
+}
+
+ion-item {
+    border-radius: 14px;
+}
+
+ion-button {
+    height: 48px;
+    --border-radius: 14px;
+}
+
+ion-card {
+    height: 50vh;
+    margin-top: 40vh;
+    border-radius: 14px;
+}

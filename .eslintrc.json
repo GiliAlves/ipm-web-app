@@ -5,15 +5,27 @@
     {
       "files": ["*.ts"],
       "parserOptions": {
-        "project": ["tsconfig.json"],
+        "project": ["**/tsconfig.json"],
         "createDefaultProgram": true
       },
       "extends": [
         "plugin:@angular-eslint/recommended",
-        "@typescript-eslint/parser",
+        "plugin:@typescript-eslint/recommended",
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
       "rules": {
+        "no-empty-function": "off",
+        "no-inferrable-types": "off",
+        "@typescript-eslint/no-inferrable-types": [ 
+          "error", {
+            "ignoreParameters": true
+          }
+        ],
+        "@typescript-eslint/no-empty-function": [ 
+          "error", {
+            "ignoreParameters": true
+          }
+        ],
         "@angular-eslint/component-class-suffix": [
           "error",
           {

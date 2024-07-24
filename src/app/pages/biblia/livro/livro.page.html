@@ -1,0 +1,255 @@
+<ion-menu contentId="biblia-menu" #menuBiblia>
+  <ion-header>
+    <ion-toolbar color="medium">
+      <ion-title size="large">Bíblia</ion-title>
+      <ion-buttons [collapse]="true" slot="end">
+        <ion-button color="primary" (click)="getOldTestament(!isOldTestamet)" class="ion-text-capitalize" shape="round">
+          {{ isOldTestamet ? 'Antigo Testamento' : 'Novo Testamento' }}
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content color="medium">
+    <ion-grid fixed="false">
+      <ion-row *ngIf="grupos && grupos.length">
+        <ng-container *ngFor="let group of grupos">
+          <ion-col size="12">
+            <ion-item lines="none" color="medium">
+              <ion-label>{{ group }}</ion-label>
+              <ion-note slot="end">{{ livros[group].length }} livros</ion-note>
+            </ion-item>
+          </ion-col>
+  
+          <ion-col size="12" *ngFor="let livro of livros[group]">
+            <ion-accordion-group>
+              <ion-accordion toggleIcon="caret-down-circle-outline">
+                <ion-item slot="header" color="light" class="accordion-title">
+                  <ion-label>{{ livro.name }}</ion-label>
+                </ion-item>
+                <div class="ion-no-padding" slot="content">
+                  <ion-grid>
+                    <ion-row>
+                      <ion-col size="3" *ngFor="let capitulo of getCapitulos(livro.chapters)">
+                        <ion-card button class="ion-no-margin" (click)="menuBiblia.close()" color="medium"
+                          [routerLink]="['/biblia/' + livro.book_number]" 
+                          [queryParams]="{ capitulo: capitulo }">
+                          <ion-card-content class="ion-text-center">
+                            {{ capitulo }}
+                          </ion-card-content>
+                        </ion-card>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </div>
+              </ion-accordion>
+            </ion-accordion-group>
+          </ion-col>
+        </ng-container>
+      </ion-row>
+    </ion-grid>
+  </ion-content>
+</ion-menu>
+
+<div class="ion-page" id="biblia-menu">
+  <ion-app>
+    <ion-header [translucent]="false" class="ion-no-border">
+      <ion-toolbar [ngStyle]="{ '--background': selectedBackground, '--color': selectedColor }">
+        <ion-title>{{ livro.name }} {{ capitulo > 0 ? capitulo : null }}</ion-title>
+        <ion-buttons slot="end">
+          <ion-button color="primary" (click)="openEditModal(true)" *ngIf="capitulo">
+            <ion-icon size="small" name="text-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+          <ion-menu-button>
+            <ion-icon size="small" name="search-outline" color="primary"></ion-icon>
+          </ion-menu-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    
+    <ion-content [fullscreen]="true" [ngStyle]="{ '--background': selectedBackground, '--color': selectedColor }">
+      <ion-header collapse="condense">
+        <ion-toolbar>
+          <ion-title size="large">{{ livro.name }} {{  capitulo > 0 ? capitulo : null }}</ion-title>
+        </ion-toolbar>
+      </ion-header>
+    
+      <ion-grid fixed="true">
+        <ng-container *ngTemplateOutlet="versiculos.length ? templateVersiculos : templateCapitulos"></ng-container>
+      </ion-grid>
+    </ion-content>
+    
+    <ng-template #templateCapitulos>
+      <ion-row>
+        <ion-col>
+          <ion-card class="ion-no-margin br-2r" color="medium">
+            <ion-card-header>
+              <ion-card-subtitle>{{ livro.testament === 'old' ? 'Antigo Testamento' : 'Novo Testamento' }}</ion-card-subtitle>
+              <ion-card-title>
+                {{ livro.group }} 
+                <ion-button class="resume" size="small" fill="clear" (click)="resume()">
+                  <ion-icon slot="start" [name]="isResume ? 'add-outline' : 'remove-outline'"></ion-icon>
+                  ver {{ isResume ? 'mais' : 'menos'}}
+                </ion-button>
+              </ion-card-title>
+              <ion-card-subtitle>{{ livro.long_name }}</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content [ngClass]="{'display-none': isResume}">
+              <p>{{ livro.resume }}</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-label class="ion-margin">
+          <h2>{{ livro.chapters }} Capítulos</h2>
+        </ion-label>
+      </ion-row>
+      <ion-row class="mgb-80">
+        <ion-col size-xs="3" size-xl="1" *ngFor="let capitulo of capitulosNumero">
+          <ion-card button class="ion-no-margin" color="medium"
+            [routerLink]="['/biblia/' + livro.book_number]" 
+            [queryParams]="{ capitulo: capitulo }">
+            <ion-card-content class="ion-text-center">
+              {{ capitulo }}
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ng-template>
+    
+    <ng-template #templateVersiculos>
+      <ion-row class="ion-margin-bottom">
+        <ion-col>
+          <div class="versiculo" 
+            [ngStyle]="{'font-size': fontSize + 'px', 'line-height': lineHeight + 'px'}" 
+            [innerHTML]="generateHTML(livro.book_number, capitulo) | sanitizedHtml" 
+            (click)="innerHTMLClick($event)">
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row class="mgb-80">
+        <ion-col>
+          <p class="ion-no-margin">Referências</p>
+        </ion-col>
+        <ion-col size="12" *ngFor="let comentario of getComentarios()">
+          <ion-note>{{ comentario.marker + ' ' + livro.short_name + ' ' + capitulo + ':' + comentario.verse_number_from }} - {{ formataComentario(comentario.text) }}</ion-note>
+        </ion-col>
+      </ion-row>
+    
+      <section class="button-actions">
+        <ion-button color="primary" size="small" shape="round" (click)="prevCapitulo(capitulo)">
+          <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+        </ion-button>
+        <ion-button color="primary" size="small" shape="round" (click)="nextCapitulo(capitulo)">
+          <ion-icon slot="icon-only" name="chevron-forward-outline"></ion-icon>
+        </ion-button>
+      </section>
+    </ng-template>
+    
+    <ion-modal
+      #modal
+      [backdropDismiss]="false"
+      [backdropBreakpoint]="0.12"
+      [showBackdrop]="false"
+      [isOpen]="isOpenModal"
+      [initialBreakpoint]="0.12"
+      [breakpoints]="[0, 0.12]"
+      handleBehavior="cycle">
+      <ng-template>
+        <ion-content class="ion-no-padding ion-padding-top" color="medium">
+          <ion-grid>
+            <ion-row class="row-modal">
+              <ion-col>
+                <ion-item lines="none" color="medium" class="btn-modal color">
+                  <div style="background-color: #FFFF00;" (click)="selectColor('#FFFF00')"></div>
+                  <div style="background-color: #FAEBD7;" (click)="selectColor('#FAEBD7')"></div>
+                  <div style="background-color: #00FFFF;" (click)="selectColor('#00FFFF')"></div>
+    
+                  <ng-container *ngIf="isOpenColor">
+                    <div style="background-color: #7FFFD4;" (click)="selectColor('#7FFFD4')"></div>
+                    <div style="background-color: #F0FFFF;" (click)="selectColor('#F0FFFF')"></div>
+                    <div style="background-color: #FF69B4;" (click)="selectColor('#FF69B4')"></div>
+                    <div style="background-color: #FFE4C4;" (click)="selectColor('#FFE4C4')"></div>
+                  </ng-container>
+    
+                  <ion-button shape="round" fill="clear" (click)="isOpenColor = !isOpenColor">
+                    <ion-icon [name]="!isOpenColor ? 'add-outline' : 'remove-outline'"></ion-icon>
+                  </ion-button>
+                </ion-item>
+              </ion-col>
+              <ion-col>
+                <ion-item button detail="false" lines="none" color="medium" class="btn-modal" (click)="clipboard()">
+                  <ion-label class="ion-text-center">
+                    <ion-icon name="copy-outline"></ion-icon>
+                    <p>Copiar</p>
+                  </ion-label>
+                </ion-item>
+              </ion-col>
+              <ion-col>
+                <ion-item button detail="false" lines="none" color="medium" class="btn-modal" (click)="share()">
+                  <ion-label class="ion-text-center">
+                    <ion-icon name="share-outline"></ion-icon>
+                    <p>Compartilhar</p>
+                  </ion-label>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+    
+    <ion-modal
+      #modal (didDismiss)="openEditModal(false)"
+      [isOpen]="isEditModal"
+      [initialBreakpoint]="0.4"
+      [breakpoints]="[0, 0.4]"
+      handleBehavior="cycle">
+      <ng-template>
+        <ion-content class="ion-no-padding ion-padding-top" color="medium">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="4">
+                <ion-item button detail="false" lines="none" color="medium" class="btn-modal ion-text-center" (click)="setFontSize(false)">
+                  <ion-icon size="small" class="fa-solid fa-a"></ion-icon>
+                </ion-item>
+              </ion-col>
+              <ion-col size="4">
+                <ion-item button detail="false" lines="none" color="medium" class="btn-modal ion-text-center" (click)="setFontSize(true)">
+                  <ion-icon size="large" class="fa-solid fa-a"></ion-icon>
+                </ion-item>
+              </ion-col>
+              <ion-col size="2" offset="2">
+                <ion-item button detail="false" lines="none" color="medium" class="btn-modal ion-text-center">
+                  <ion-label>
+                    <ion-icon class="fa-solid fa-a"></ion-icon>
+                  </ion-label>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-item button detail="true" lines="none" color="medium" class="btn-modal">
+                  <ion-label>
+                    <ion-note>Fonte</ion-note>
+                    <p class="ion-no-margin">Baskerville</p>
+                  </ion-label>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+            <ion-row class="row-modal">
+              <ion-col size="2" *ngFor="let color of background">
+                <ion-item button detail="false" lines="none" class="btn-modal-background" 
+                  [ngStyle]="{ 'background-color': color.b}" 
+                  (click)="selectBackgroundColor(color)">
+                  <ion-icon size="large" class="fa-solid fa-align-left" [ngStyle]="{ 'color': color.c }"></ion-icon>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+  </ion-app>
+</div>

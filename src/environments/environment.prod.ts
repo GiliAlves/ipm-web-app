@@ -10,5 +10,6 @@ export const environment = {
     authDomain: 'ipm-task-app.firebaseapp.com',
     messagingSenderId: '272319172615',
     measurementId: 'G-X2XG1027PH',
-  }
+  },
+  vapidKey: 'BD7nAV748Cu-sfk5ONXoEc51UbL3G76fc0Z3Ju57_YdakgBax-mhWInzsr9EDjnI9ADRYHWl_vphc4SuTUBJfio',
 };

@@ -1,17 +1,34 @@
 {
   "hosting": {
-      "site": "ipm-web-app",
-      "public": "www",
+    "site": "ipm-web-app",
+    "public": "www",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
       "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
       ],
-      "rewrites": [
-        {
-          "source": "**",
-          "destination": "/index.html"
-        }
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run lint",
+        "npm --prefix \"$RESOURCE_DIR\" run build"
       ]
     }
+  ]
 }

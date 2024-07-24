@@ -1,0 +1,29 @@
+<ion-header [translucent]="false">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>boletins</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">boletins</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-grid fixed="true">
+    <ion-row>
+      <ion-col size="4" *ngFor="let boletim of boletins">
+        <ion-card button class="card-bol ion-no-margin" [routerLink]="['/boletim/' + boletim.id]">
+          <ion-card-content class="ion-no-padding ion-text-center">
+            <img src="../../../assets/bol.jpeg">
+            <ion-note>{{ boletim.data.toDate() | date: 'dd MMMM yyyy' }}</ion-note>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

@@ -32,7 +32,7 @@ export class StorageService {
       this.presentToast(`Error storing data: ${err}`);
       return false;
     }
-  };
+  }
 
   public clear = async () => (await this._storage?.clear());
 
@@ -42,7 +42,7 @@ export class StorageService {
 
   private unEncryptedValue = (value: any) => JSON.parse(unescape(atob(value)));
 
-  private async presentToast(message: string, duration: number = 200, position: 'top' | 'middle' | 'bottom' = 'top') {
+  private async presentToast(message: string, duration = 200, position: 'top' | 'middle' | 'bottom' = 'top') {
     const toast = await this.toastController.create({ message, duration, position });
     await toast.present();
   }

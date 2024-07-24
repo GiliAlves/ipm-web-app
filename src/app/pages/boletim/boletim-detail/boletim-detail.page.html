@@ -1,0 +1,58 @@
+<ion-header [translucent]="false">
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>boletim</ion-title>
+        <ion-buttons [collapse]="true" slot="end">
+            <ion-button class="ion-text-capitalize" color="primary" (click)="getOrder()">
+                {{ !isOrder ? 'Orderm do Culto' : 'Pastoral' }}
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+    <ion-header collapse="condense">
+        <ion-toolbar>
+            <ion-title size="large">boletim</ion-title>
+            <ion-buttons [collapse]="true" slot="end">
+                <ion-button class="ion-text-capitalize" color="primary" (click)="getOrder()">
+                    {{ !isOrder ? 'Orderm do Culto' : 'Pastoral' }}
+                </ion-button>
+            </ion-buttons>
+        </ion-toolbar>
+    </ion-header>
+
+    <ion-grid fixed="true">
+        <ng-container *ngTemplateOutlet="isOrder ? templateOrdemCulto : templatePastoral"></ng-container>
+    </ion-grid>
+</ion-content>
+
+<ng-template #templatePastoral>
+    <ion-row>
+        <ion-col>
+            <h4 class="ion-no-margin">{{ boletim.pastoral.titulo }}</h4>
+            <ion-note>{{ boletim.pastoral.autor }}</ion-note>
+        </ion-col>
+    </ion-row>
+    <ion-row>
+        <ion-col>
+            <div [innerHTML]="boletim.pastoral.descricao"></div>
+        </ion-col>
+    </ion-row>
+</ng-template>
+
+<ng-template #templateOrdemCulto>
+    <ion-row>
+        <ion-col class="ion-text-center">
+            <h4 class="ion-no-margin">{{ boletim.liturgia.titulo }}</h4>
+            <ion-note>{{ boletim.liturgia.subtitulo }}</ion-note>
+        </ion-col>
+    </ion-row>
+    <ion-row>
+        <ion-col>
+            <div [innerHTML]="formatDescricao(boletim.liturgia.descricao) | sanitizedHtml" (click)="innerHTMLClick($event)"></div>
+        </ion-col>
+    </ion-row>
+</ng-template>

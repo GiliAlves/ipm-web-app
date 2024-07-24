@@ -1,0 +1,14 @@
+.card-bol {
+    box-shadow: none;
+}
+
+ion-card {
+    border-radius: 0;
+    
+    img {
+        border-radius: 10px;
+        border: 1px solid #ececec;
+        box-shadow: 3px 1px 6px 0px rgba(0, 0, 0, 0.12);
+        width: 88%;
+    }
+}

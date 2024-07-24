@@ -1,0 +1,60 @@
+ion-img {
+    width: 170px;
+    margin: auto;
+}
+
+.background {
+    position: absolute;
+    bottom: 0;
+    left: 1%;
+    width: 98%;
+    height: 52vh;
+    background-color: var(--ion-color-light);
+    border-top-right-radius: 1.5rem;
+    border-top-left-radius: 1.5rem;
+}
+
+section {
+    display: flex;
+    align-items: center;
+    height: 100%;
+
+    ion-grid {
+        height: 50vh;
+        display: grid;
+        grid-template-rows: 230px auto;
+
+        .title {
+            h2 {
+                font: 400 2rem/2.2rem 'Baskerville', serif;
+            }
+            p {
+                font: 400 1.3rem/1.4rem 'Baskerville', serif;
+            }
+        }
+    }
+}
+
+ion-progress-bar {
+    border-radius: 50%;
+}
+
+ion-item {
+    border: 1px solid var(--ion-color-cinza);
+    border-radius: 1rem;
+    padding: .5rem 0;
+}
+
+ion-footer {
+    ion-button {
+        height: 50px;
+        width: 50px;
+    }
+
+    ion-label {
+        font-size: 1.5rem;
+    }
+    ion-note {
+        font-size: 1rem;
+    }
+}

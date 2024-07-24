@@ -19,10 +19,17 @@
     "target": "es2015",
     "module": "es2020",
     "lib": [
+      "ES2021.String",
       "es2018",
       "dom"
     ],
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
+    "paths": {
+      "path": [
+        "./node_modules/path-browserify",
+        "./node_modules/crypto-browserify"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

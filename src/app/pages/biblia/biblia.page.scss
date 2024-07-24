@@ -1,0 +1,26 @@
+ion-card {
+    margin: 0;
+    border: 1px solid var(--ion-color-cinza);
+    box-shadow: none;
+    border-radius: 10px;
+
+    ion-card-title {
+        margin: 0;
+        font: 400 18px/32px 'Baskerville', serif;
+    }
+
+    ion-card-subtitle {
+        margin: 0;
+        font: 400 14px/16px 'Baskerville', serif;
+    }
+}
+
+ion-item {
+    ion-label {
+        font: 400 22px/24px 'Baskerville', serif;
+    }
+
+    ion-note {
+        font: 400 16px/18px 'Baskerville', serif;
+    }
+}

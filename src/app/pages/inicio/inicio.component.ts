@@ -8,8 +8,7 @@ import { Observable } from 'rxjs';
 import { Calendario } from 'src/app/interfaces/calendario.interface';
 import { Cantico } from 'src/app/interfaces/cantico.interface';
 import { Devocional, Position } from 'src/app/interfaces/devocional.interface';
-import { Cargo, Cargos, InicialStorage } from 'src/app/interfaces/inicial.interface';
-import { Membro } from 'src/app/interfaces/membros.interface';
+import { InicialStorage } from 'src/app/interfaces/inicial.interface';
 import { NovoCantico, Tematica } from 'src/app/interfaces/novo-cantico.interface';
 import { Pastoral } from 'src/app/interfaces/pastoral.interface';
 import { YouTube } from 'src/app/interfaces/youTube.interface';
@@ -79,10 +78,6 @@ export class InicioComponent implements OnInit {
     // this.setEventsCalendar(this.date.getMonth() + 1);
 
     this.setFirebase('membros', 'nome', 'asc');
-
-    this.getWhereMembros('Diácono', 'diaconos');
-    this.getWhereMembros('Pastor', 'pastores');
-    this.getWhereMembros('Presbítero', 'presbiteros');
   }
 
   private setFirebase(path: string, fieldPath: string = 'data', orderByDirection: OrderByDirection = 'desc') {
@@ -108,12 +103,6 @@ export class InicioComponent implements OnInit {
 
   private getAllCalendar  = () =>
       this.calendar$ = this.firebaseService.getWhere('dataInicio', '>=', Timestamp.now()) as Observable<Calendario[]>;
-
-  private getWhereMembros = (cargo: Cargo, key: Cargos) =>
-    this.firebaseService.getWhere('cargo', '==', cargo).subscribe(membro => {
-      this.inicialStorage[key] = membro as Membro[];
-      this.setStorage();
-    });
 
   private getStorage = async () =>
     await this.storage.get('inicialStorage')
@@ -158,16 +147,6 @@ export class InicioComponent implements OnInit {
 
   public handleScroll = ($event: CustomEvent) =>
     this.scrollTop = ($event.detail.scrollTop === 0) ? true : false;
-
-  public greetingMessage = () => {
-    const tempo = new Date().getHours();
-
-    if (tempo <= 5) return 'Boa madrugada';
-    if (tempo < 12) return 'Bom dia';
-    if (tempo < 18) return 'Boa tarde';
-
-    return 'Boa noite';
-  }
 
   public resetSearch = () => this.searchBarTerm = '';
 

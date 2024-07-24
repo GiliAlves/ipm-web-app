@@ -46,7 +46,7 @@
 	--ion-color-danger-tint: #ed576b;
 
 	--ion-color-medium: #f4f5f8;
-	--ion-color-medium-rgb: 146,148,156;
+	--ion-color-medium-rgb: 146,148,156,.4;
 	--ion-color-medium-contrast: #000000;
 	--ion-color-medium-contrast-rgb: 0,0,0;
 	--ion-color-medium-shade: #808289;
@@ -58,7 +58,11 @@
 	--ion-color-light-contrast-rgb: 0,0,0;
 	--ion-color-light-shade: #d7d8da;
 	--ion-color-light-tint: #f5f6f9;
-
+  
+  --ion-color-black: #000000;
+  --ion-color-cinza: #d3d3d6;
+  --ion-color-star: #808080;
+  --ion-color-cinza-rgba: #fcf9f990;
 }
 
 .ion-font-smaller {

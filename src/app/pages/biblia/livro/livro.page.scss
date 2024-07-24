@@ -1,0 +1,153 @@
+::ng-deep {
+    .versiculo {
+        font-size: 1rem;
+        line-height: 1.2rem;
+        margin: 0;
+    }
+
+    h5 {
+        font-size: 1.2em;
+    }
+
+    .mgl-1r {
+        margin-left: 1rem;
+    }
+
+    strong {
+        margin: .2rem;
+        line-height: 1.3em;
+        font-size: 0.7em;
+        vertical-align: text-bottom;
+    }
+}
+
+.row-modal {
+    flex-wrap: nowrap;
+    overflow-y: hidden;
+    overflow-x: auto;
+}
+
+.color {
+    div {
+        border: 1px solid var(--ion-color-cinza);
+        width: 40px;
+        height: 40px;
+        border-radius: 100%;
+        margin: 10px .2rem;
+
+        ion-label {
+            margin: 10px 0;
+        }
+    }
+
+    ion-button {
+        border: 1px solid var(--ion-color-cinza);
+        width: 40px;
+        height: 40px;
+        border-radius: 100%;
+    }
+}
+
+.btn-modal {
+    border-radius: 10px;
+    border: 1px solid var(--ion-color-cinza);
+
+    ion-icon.fa-solid {
+        width: 100%;
+    }
+}
+
+.btn-modal-background {
+    border-radius: 10px;
+    border: 1px solid var(--ion-color-cinza);
+    height: 100px;
+
+}
+.btn-modal-background::part(native) {
+    background-color: transparent;
+    height: 100%;
+}
+
+ion-title {
+    font-family: 'Baskerville', serif;
+}
+
+h2 {
+    font: 400 1.5rem/1.8rem 'Baskerville', serif;
+    background: linear-gradient(to right, var(--ion-color-primary), var(--ion-color-secondary));
+    background-clip: text;
+    color: transparent;
+}
+
+.selected {
+    font-weight: 700;
+}
+
+ion-accordion {
+    border: 1px solid var(--ion-color-cinza);
+    border-radius: 14px;
+}
+
+ion-card {
+    margin: 0;
+    background: linear-gradient(var(--ion-color-medium), var(--ion-color-medium)) padding-box,
+        linear-gradient(to right bottom, var(--ion-color-medium), var(--ion-color-cinza)) border-box;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    box-shadow: none;
+
+    ion-card-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 0;
+        font: 400 32px/42px 'Baskerville', serif;
+    }
+
+    ion-card-subtitle {
+        margin: 0;
+        font: 400 14px/16px 'Baskerville', serif;
+    }
+
+    ion-card-content {
+        p {
+            text-align: justify;
+            font: 200 1rem/1.2rem 'Baskerville', serif;
+        }
+    }
+}
+
+.button-actions {
+    position: fixed;
+    bottom: 1%;
+    left: 1%;
+    width: 98%;
+    display: flex;
+    justify-content: space-between;
+
+    ion-button {
+        width: 40px;
+        height: 40px;
+        --border-radius: 100%;
+        --padding-top: 0;
+        --padding-start: 0;
+        --padding-end: 0;
+        --padding-bottom: 0;
+    }
+}
+
+.resume {
+    font-size: .7rem;
+}
+
+.display-none {
+    display: none;
+}
+
+.mgb-80 {
+    margin-bottom: 80px;
+}
+
+.br-2r {
+    border-radius: 2rem;
+}

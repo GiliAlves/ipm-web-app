@@ -3,112 +3,12 @@
     <ion-buttons slot="start">
       <ion-menu-button color="primary"></ion-menu-button>
     </ion-buttons>
-    <ion-title color="primary">{{ greetingMessage() }}</ion-title>
-    <ion-buttons slot="end">
-      <ion-button id="lideranca-trigger">
-        <ion-icon class="fa-solid fa-user-tie" color="primary"></ion-icon>
-      </ion-button>
-      <ion-button id="timer-trigger">
-        <ion-icon class="fa-solid fa-clock" color="primary"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+    <ion-title color="primary">Igreja Presbiteriana de Mauá</ion-title>
   </ion-toolbar>
-
-  <ion-popover trigger="lideranca-trigger" size="auto" class="timer-grid" mode="ios">
-    <ng-template>
-      <ion-content>
-        <ion-list [inset]="true" class="ion-no-padding">
-          <ng-container *ngIf="inicialStorage.pastores.length">
-            <ion-list-header class="ion-no-padding">
-              <ion-label>Pastores</ion-label>
-            </ion-list-header>
-            <ion-item *ngFor="let pastor of inicialStorage.pastores; last as isLast">
-              <ion-avatar slot="start">
-                <img alt="pastores" [src]="'../../../assets/pastores/' + pastor.nome + '.jpeg'" />
-              </ion-avatar>
-              <ion-label>
-                <ion-text [color]="isLast ? 'secondary' : 'primary'">
-                  <p>{{ isLast ? 'Pastor Emerito' : 'Pastor Títular'}}</p>
-                </ion-text>
-                <h3>{{ pastor.nome }}</h3>
-                <p><a [href]="'mailto:' + pastor.email">{{ pastor.email }}</a></p>
-              </ion-label>
-            </ion-item>
-          </ng-container>
-
-          <ng-container *ngIf="inicialStorage.presbiteros.length">
-            <ion-list-header class="ion-no-padding">
-              <ion-label>Presbíteros</ion-label>
-            </ion-list-header>
-            <ion-item *ngFor="let presbitero of inicialStorage.presbiteros">
-              <ion-label>
-                <h3>{{ presbitero.nome }}</h3>
-                <p><a [href]="'mailto:' + presbitero.email">{{ presbitero.email }}</a></p>
-              </ion-label>
-            </ion-item>
-          </ng-container>
-
-          <ng-container *ngIf="inicialStorage.diaconos.length">
-            <ion-list-header class="ion-no-padding">
-              <ion-label>Diáconos</ion-label>
-            </ion-list-header>
-            <ion-item *ngFor="let diacono of inicialStorage.diaconos">
-              <ion-label>
-                <p color="primary">
-                  residente na {{ diacono.residente === 'Sede' ? '' : 'congregação Jd. '}}
-                  {{ diacono.residente }}
-                </p>
-                <h3>{{ diacono.nome }}</h3>
-              </ion-label>
-            </ion-item>
-          </ng-container>
-        </ion-list>
-      </ion-content>
-    </ng-template>
-  </ion-popover>
-
-  <ion-popover trigger="timer-trigger" size="auto" class="timer-grid" mode="ios">
-    <ng-template>
-      <ion-content class="ion-padding">
-        <ion-grid>
-          <ion-row>
-            <ion-text>
-              <h5>Horários</h5>
-            </ion-text>
-          </ion-row>
-
-          <ng-container *ngFor="let horario of horarios; index as i; last as isLast">
-            <ion-row class="ion-justify-content-end" [ngStyle]="{ 'display' : i === 1 ? 'none' : 'flex' }">
-              <ion-text color="secondary" class="ion-no-padding">
-                <h5 class="ion-no-margin">{{ isLast ? '...as quintas-feiras' : '...aos domingos' }}</h5>
-              </ion-text>
-            </ion-row>
-
-            <ion-row>
-              <ion-col>
-                  <ion-note color="primary">{{ horario.title }}</ion-note>
-              </ion-col>
-              <ion-col size="auto">
-                <ion-text color="danger">
-                  <ion-icon name="alarm-outline"></ion-icon> {{ horario.time }}
-                </ion-text>
-              </ion-col>
-            </ion-row>
-          </ng-container>
-        </ion-grid>
-      </ion-content>
-    </ng-template>
-  </ion-popover>
 </ion-header>
 
 <ion-content [fullscreen]="true" [scrollEvents]="true" (ionScroll)="handleScroll($any($event))" color="medium">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large" color="primary">{{ greetingMessage() }}</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <ion-grid class="ion-no-padding" [fixed]="true">
+  <ion-grid class="ion-no-padding" [fixed]="false">
     <ng-container *ngIf="inicialStorage.videosStorage.items.length">
       <ion-row class="second-row ion-padding ion-no-margin ion-no-border">
         <span class="yt-logo">
@@ -288,7 +188,7 @@
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" style="margin-bottom: -6px;"><path fill="#fff" fill-opacity="1" d="M0,224L12.6,197.3C25.3,171,51,117,76,85.3C101.1,53,126,43,152,48C176.8,53,202,75,227,90.7C252.6,107,278,117,303,106.7C328.4,96,354,64,379,80C404.2,96,429,160,455,176C480,192,505,160,531,133.3C555.8,107,581,85,606,80C631.6,75,657,85,682,101.3C707.4,117,733,139,758,138.7C783.2,139,808,117,834,101.3C858.9,85,884,75,909,101.3C934.7,128,960,192,985,218.7C1010.5,245,1036,235,1061,224C1086.3,213,1112,203,1137,176C1162.1,149,1187,107,1213,85.3C1237.9,64,1263,64,1288,96C1313.7,128,1339,192,1364,186.7C1389.5,181,1415,107,1427,69.3L1440,32L1440,320L1427.4,320C1414.7,320,1389,320,1364,320C1338.9,320,1314,320,1288,320C1263.2,320,1238,320,1213,320C1187.4,320,1162,320,1137,320C1111.6,320,1086,320,1061,320C1035.8,320,1011,320,985,320C960,320,935,320,909,320C884.2,320,859,320,834,320C808.4,320,783,320,758,320C732.6,320,707,320,682,320C656.8,320,632,320,606,320C581.1,320,556,320,531,320C505.3,320,480,320,455,320C429.5,320,404,320,379,320C353.7,320,328,320,303,320C277.9,320,253,320,227,320C202.1,320,177,320,152,320C126.3,320,101,320,76,320C50.5,320,25,320,13,320L0,320Z"></path></svg>
       <ion-row class="tematica-row-title ion-padding ion-no-border" color="light">
         <ion-text class="ion-no-padding ion-text-end" color="tertiary">
-          <h2>Novo Cântico</h2>
+          <h2 class="ion-no-margin">Novo Cântico</h2>
         </ion-text>
         <ion-text class="terc-ver ion-text-end">
           <ion-note color="danger" class="ion-text-italic">Temáticas</ion-note>
@@ -328,6 +228,24 @@
             </ion-col>
           </ion-row>
         </ion-row>
+      </ion-row>
+    </ng-container>
+
+    <ng-container>
+      <ion-row class="tematica-row-title ion-padding ion-no-border" color="light">
+        <ion-text class="ion-no-padding ion-text-start" color="tertiary">
+          <h2 class="ion-no-margin">Leitura</h2>
+        </ion-text>
+        <ion-text class="terc-ver ion-text-start">
+          <ion-note color="danger" class="ion-text-italic">sugestão de leitura</ion-note>
+        </ion-text>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <a href="https://www.amazon.com.br/Casados-Para-Deus-Tornando-Casamento/dp/6559672638" target="_blank">
+            <ion-img src="../../../assets/livros/casados-para-deus/sugestao_livro3.jpeg"></ion-img>
+          </a>
+        </ion-col>
       </ion-row>
     </ng-container>
 
