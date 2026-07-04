@@ -1,57 +1,50 @@
-import { Component, OnInit } from '@angular/core';
-import { ToastController } from '@ionic/angular';
-import { Storage } from '@ionic/storage-angular';
-import { Cargo, Cargos, InicialStorage } from 'src/app/interfaces/inicial.interface';
-import { Membro } from 'src/app/interfaces/membro.interface';
-import { INICIAL_STORAGE, MESSAGE_GET_STORAGE_ERROR } from 'src/app/model/shared';
-import { FirebaseService } from 'src/app/services/firebase.service';
-import { Position } from '../cancioneiro/cancioneiro';
+import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import {
+  IonAvatar,
+  IonCol,
+  IonContent,
+  IonGrid,
+  IonHeader,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonListHeader,
+  IonMenuButton,
+  IonRow,
+  IonTitle,
+  IonToolbar,
+  IonButtons,
+  IonText
+} from '@ionic/angular/standalone';
+import { UseLeadershipStore } from '../../presentation/signals/use-leadership.store';
 
 @Component({
   selector: 'app-lideranca',
   templateUrl: './lideranca.page.html',
   styleUrls: ['./lideranca.page.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    IonHeader,
+    IonToolbar,
+    IonButtons,
+    IonMenuButton,
+    IonTitle,
+    IonContent,
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonList,
+    IonListHeader,
+    IonItem,
+    IonAvatar,
+    IonLabel,
+    IonText,
+  ],
 })
-export class LiderancaPage implements OnInit {
-  public inicialStorage: InicialStorage = INICIAL_STORAGE;
-  private messageGetStorageError: string = MESSAGE_GET_STORAGE_ERROR;
-  
-  constructor(
-    private firebaseService: FirebaseService, 
-    private toastController: ToastController,
-    private storage: Storage
-  ) { }
+export class LiderancaPage {
+  private readonly store = inject(UseLeadershipStore);
 
-  async ngOnInit() {
-    await this.getStorage();
-
-    this.getWhereMembros('Diácono', 'diaconos');
-    this.getWhereMembros('Pastor', 'pastores');
-    this.getWhereMembros('Presbítero', 'presbiteros');
-  }
-
-  private getWhereMembros = (cargo: Cargo, key: Cargos) =>
-    this.firebaseService.getWhere('cargo', '==', cargo).subscribe(membro => {
-      this.inicialStorage[key] = membro as Membro[];
-      this.setStorage();
-    });
-
-  private getStorage = async () =>
-    await this.storage.get('inicialStorage')
-      .then(storage => storage !== null ? this.inicialStorage = storage : this.setStorage())
-      .catch(err => this.messageErrorStorage(err)); 
-
-  private setStorage = async () =>
-    await this.storage.set('inicialStorage', this.inicialStorage)
-      .then(storage => this.inicialStorage = storage)
-      .catch(err => this.messageErrorStorage(err));
-
-  private messageErrorStorage = (err: any) =>
-    this.presentToast(this.messageGetStorageError, err);
-
-  private async presentToast(message: string, duration: number = 200, position: Position = 'top') {
-    const toast = await this.toastController.create({ message, duration, position });
-    await toast.present();
-  }
-
+  readonly leadership = this.store.leadership;
 }

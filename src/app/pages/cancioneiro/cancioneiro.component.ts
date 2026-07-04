@@ -1,29 +1,178 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { CommonModule } from '@angular/common';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Clipboard } from '@capacitor/clipboard';
 import { Share } from '@capacitor/share';
-import { ActionSheetController, IonInput, IonModal, ToastController } from '@ionic/angular';
+import { ActionSheetController, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
 import { Observable, distinctUntilChanged, first } from 'rxjs';
 import { Cantico } from 'src/app/interfaces/cantico.interface';
 import { CStorage, Font } from 'src/app/interfaces/share.interface';
-import { FirebaseService } from 'src/app/services/firebase.service';
+import { UseCancioneiroStore } from '../../presentation/signals/use-cancioneiro.store';
+import {
+  IonAccordion,
+  IonAccordionGroup,
+  IonAvatar,
+  IonBadge,
+  IonBackButton,
+  IonButton,
+  IonButtons,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+  IonChip,
+  IonCol,
+  IonContent,
+  IonFab,
+  IonFabButton,
+  IonFabList,
+  IonFooter,
+  IonGrid,
+  IonHeader,
+  IonIcon,
+  IonImg,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
+  IonInput,
+  IonItem,
+  IonItemOption,
+  IonItemOptions,
+  IonItemSliding,
+  IonLabel,
+  IonList,
+  IonListHeader,
+  IonMenu,
+  IonMenuButton,
+  IonModal,
+  IonNav,
+  IonNote,
+  IonPopover,
+  IonProgressBar,
+  IonRadio,
+  IonRadioGroup,
+  IonRange,
+  IonRefresher,
+  IonRefresherContent,
+  IonReorder,
+  IonReorderGroup,
+  IonRow,
+  IonSearchbar,
+  IonSegment,
+  IonSegmentButton,
+  IonSelect,
+  IonSelectOption,
+  IonSkeletonText,
+  IonSpinner,
+  IonSplitPane,
+  IonTabBar,
+  IonTabButton,
+  IonText,
+  IonTitle,
+  IonToggle,
+  IonToolbar,
+} from '@ionic/angular/standalone';
+import { SanitizedHtmlPipe } from 'src/app/pipes/sanitized-html.pipe';
 import { BTN_ACTION, COLORS, COLORS_DARK, COLOR_LIGHT, DECODE_HTML_CHAR_CODES, FILTERS, FIND_IN_ARRAY, FONTS, MSG_STORAGE_ERROR, NORMALIZE_HTML, NOT_NUMBER, REMOVE_FIRST_FROM_ARRAY, REMOVE_ITEM_ARRAY, SIZE_ARRAY, STORAGE, UNIQUE_ARRAY } from 'src/utils/utils';
-import { ArrayName, Key, KeyWord, Position } from './cancioneiro';
+import { ArrayName, KeyWord, Position } from './cancioneiro';
 
 @Component({
   selector: 'app-cancioneiro',
   templateUrl: './cancioneiro.component.html',
   styleUrls: ['./cancioneiro.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    SanitizedHtmlPipe,
+    ScrollingModule,
+    IonAccordion,
+    IonAccordionGroup,
+    IonHeader,
+    IonToolbar,
+    IonButtons,
+    IonMenuButton,
+    IonTitle,
+    IonButton,
+    IonIcon,
+    IonContent,
+    IonSearchbar,
+    IonItem,
+    IonLabel,
+    IonNote,
+    IonChip,
+    IonText,
+    IonItemSliding,
+    IonItemOptions,
+    IonItemOption,
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonImg,
+    IonFab,
+    IonFabButton,
+    IonModal,
+    IonRange,
+    IonList,
+    IonListHeader,
+    IonRadio,
+    IonRadioGroup,
+    IonFooter,
+    IonProgressBar,
+    IonSelect,
+    IonSelectOption,
+    IonInput,
+    IonCard,
+    IonCardContent,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardSubtitle,
+    IonAvatar,
+    IonBadge,
+    IonFabList,
+    IonPopover,
+    IonToggle,
+    IonSegment,
+    IonSegmentButton,
+    IonReorder,
+    IonReorderGroup,
+    IonNav,
+    IonBackButton,
+    IonRefresher,
+    IonRefresherContent,
+    IonInfiniteScroll,
+    IonInfiniteScrollContent,
+    IonSkeletonText,
+    IonSpinner,
+    IonSplitPane,
+    IonMenu,
+    IonTabBar,
+    IonTabButton,
+  ],
 })
-export class CancioneiroComponent implements OnInit {
+/**
+ * Página do Cancioneiro.
+ *
+ * Lista cânticos do hinário, permite busca por número ou texto, filtros temáticos,
+ * favoritos, histórico e personalização da exibição da letra.
+ */
+export class CancioneiroComponent implements OnInit, OnDestroy {
   @ViewChild(IonModal) modal!: IonModal;
   @ViewChild('letra') letra!: ElementRef;
   @ViewChild('ionInputEl') ionInputEl!: IonInput;
 
-  private messageGetStorageError: string = MSG_STORAGE_ERROR;
+  private readonly store = inject(UseCancioneiroStore);
+  private readonly actionSheetCtrl = inject(ActionSheetController);
+  private readonly toastController = inject(ToastController);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly storage = inject(Storage);
 
-  public canticos$: Observable<Cantico[]> = new Observable<Cantico[]>;
+  private messageGetStorageError = MSG_STORAGE_ERROR;
+
+  public canticos$ = this.store.canticos$;
   public canticosSearch$!: Observable<Cantico[]>;
   public cantico!: Cantico;
 
@@ -32,30 +181,17 @@ export class CancioneiroComponent implements OnInit {
   public arrayFonts: Font[] = FONTS;
   public arrayColors: string[] = COLORS;
 
-  public searchBarTerm: string = '';
-  public keyWordsName: string = '';
+  public searchBarTerm = '';
+  public keyWordsName = '';
 
-  public isOpenDetailsModal: boolean = false;
-  public isOpenColorModal: boolean = false;
-  public indice: boolean = false;
-
-  constructor(
-    private actionSheetCtrl: ActionSheetController,
-    private toastController: ToastController,
-    private firebaseService: FirebaseService,
-    private activatedRoute: ActivatedRoute,
-    private storage: Storage,
-  ) {
-    this.firebaseService.fieldPath = 'id';
-    this.firebaseService.path = 'canticos';
-    this.firebaseService.orderByDirection = 'asc';
-  }
+  public isOpenDetailsModal = false;
+  public isOpenColorModal = false;
+  public indice = false;
 
   ngOnInit() {
-    this.getAll();
     this.getStorage();
 
-    let paramMap = this.activatedRoute.snapshot.paramMap.get('id');
+    const paramMap = this.activatedRoute.snapshot.paramMap.get('id');
 
     if (paramMap) {
       this.getStorageCantico();
@@ -67,9 +203,6 @@ export class CancioneiroComponent implements OnInit {
     this.canticos$.subscribe().unsubscribe();
   }
 
-  private getAll = () =>
-    this.canticos$ = this.firebaseService.getAll() as Observable<Cantico[]>;
-
   private getStorage = async () =>
     await this.storage.get('canticosStorage')
       .then(storage => storage !== null ? this.getInitialSearchFilter(storage) : this.setStorage())
@@ -77,11 +210,11 @@ export class CancioneiroComponent implements OnInit {
 
   private getStorageCantico = async () =>
     await this.storage.get('inicialStorage')
-      .then(storage => this.selected(storage.cantico))
+      .then(storage => this.selected((storage as { cantico: Cantico }).cantico))
       .catch(err => this.messageErrorStorage(err));
 
-  private getInitialSearchFilter(storage: any) {
-    this.canticosStorage = storage;
+  private getInitialSearchFilter(storage: unknown) {
+    this.canticosStorage = storage as CStorage;
 
     this.initialSearchFilter.forEach(key =>
       this.addInArrayStorage('searchFilter', key, 'name'));
@@ -91,11 +224,11 @@ export class CancioneiroComponent implements OnInit {
 
   private setStorage = () =>
     this.storage.set('canticosStorage', this.canticosStorage)
-      .then(storage => this.canticosStorage = storage)
+      .then(storage => this.canticosStorage = storage as CStorage)
       .catch(err => this.messageErrorStorage(err));
 
-  private messageErrorStorage = (err: any) =>
-    this.presentToast(this.messageGetStorageError, err);
+  private messageErrorStorage = (err: unknown) =>
+    this.presentToast(`${this.messageGetStorageError}${err}`);
 
   private async presentToast(message: string, duration: number = 200, position: Position = 'top') {
     const toast = await this.toastController.create({ message, duration, position });
@@ -121,11 +254,11 @@ export class CancioneiroComponent implements OnInit {
         distinctUntilChanged(),
         first())
       .subscribe(cantico =>
-          this.canticosSearch$ = new Observable(observer =>
+          this.canticosSearch$ = new Observable<Cantico[]>(observer =>
             observer.next(this.filterInArray(term, cantico))));
 
-  private filterInArray(term: any, cantico: Cantico[]) {
-    if (!isNaN(term)) {
+  private filterInArray(term: string, cantico: Cantico[]) {
+    if (!Number.isNaN(Number(term))) {
       cantico = cantico.filter(({ numero }) => numero === term)
     } else {
       cantico = cantico.filter(({ letra }) => letra.toLowerCase().indexOf(term) > -1);
@@ -134,11 +267,12 @@ export class CancioneiroComponent implements OnInit {
     return UNIQUE_ARRAY(cantico);
   }
 
-  public searchBar(event: any) {
+  public searchBar(event: Event) {
     this.desactiveAllSearchFilter();
 
-    (event.target.value.toLowerCase())
-      ? this.search(event.target.value.toLowerCase())
+    const value = (event.target as HTMLInputElement).value.toLowerCase();
+    value
+      ? this.search(value)
       : this.clearSearch();
   }
 
@@ -147,7 +281,7 @@ export class CancioneiroComponent implements OnInit {
 
     !this.canticosStorage.searchFilter[index].active
       ? this.search(term.toLowerCase())
-      : this.canticosSearch$ = new Observable;
+      : this.canticosSearch$ = new Observable<Cantico[]>();
 
     this.toggleActiveSearchFilter(index);
   }
@@ -155,11 +289,11 @@ export class CancioneiroComponent implements OnInit {
   public clearSearch = () => {
     this.searchBarTerm = '';
     this.desactiveAllSearchFilter();
-    this.canticosSearch$ = new Observable;
+    this.canticosSearch$ = new Observable<Cantico[]>();
   }
 
-  public onInputSearchFilter(event: CustomEvent | any) {
-    const filteredValue = NOT_NUMBER(event.target!.value);
+  public onInputSearchFilter(event: CustomEvent) {
+    const filteredValue = NOT_NUMBER((event.target as HTMLInputElement).value);
     this.keyWordsName = filteredValue;
     this.ionInputEl.value = filteredValue;
   }
@@ -171,16 +305,19 @@ export class CancioneiroComponent implements OnInit {
     this.keyWordsName = '';
   }
 
-  public addInArrayStorage(arrayName: ArrayName, item: any, key: Key, event?: CustomEvent | any) {
-    if ((arrayName !== 'favorites' || event.detail.ratio === 1) && !FIND_IN_ARRAY(this.canticosStorage[arrayName], item, key)) {
-      this.canticosStorage[arrayName].unshift(item);
+  public addInArrayStorage(arrayName: ArrayName, item: unknown, key: string, event?: CustomEvent) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if ((arrayName !== 'favorites' || (event?.detail?.ratio ?? 1) === 1) && !FIND_IN_ARRAY(this.canticosStorage[arrayName] as any[], item, key)) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      this.canticosStorage[arrayName].unshift(item as any);
       this.setStorage();
     }
   }
 
-  public removeInArrayStorage(arrayName: ArrayName, item: any, key: Key, event?: CustomEvent | any) {
-    if (arrayName === 'recents' || event.detail.ratio === 1) {
-      this.canticosStorage[arrayName] = REMOVE_ITEM_ARRAY(this.canticosStorage[arrayName], item, key);
+  public removeInArrayStorage(arrayName: ArrayName, item: unknown, key: string, event?: CustomEvent) {
+    if (arrayName === 'recents' || (event?.detail?.ratio ?? 1) === 1) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      this.canticosStorage[arrayName] = REMOVE_ITEM_ARRAY(this.canticosStorage[arrayName] as any[], item, key) as any;
       this.setStorage();
     }
   }
@@ -216,10 +353,11 @@ export class CancioneiroComponent implements OnInit {
       dialogTitle: cantico.titulo
     })
 
-  public zooming(event: CustomEvent | any) {
-    this.canticosStorage.formatacao.tamanhoFonte = event.detail.value;
-    this.setProperty('--letra-font-size', event.detail.value + 'px');
-    this.setProperty('--letra-line-height', event.detail.value * 1.5 + 'px');
+  public zooming(event: CustomEvent) {
+    const value = event.detail.value as number;
+    this.canticosStorage.formatacao.tamanhoFonte = value;
+    this.setProperty('--letra-font-size', `${value}px`);
+    this.setProperty('--letra-line-height', `${value * 1.5}px`);
   }
 
   public changeColor(color: string) {
@@ -297,5 +435,5 @@ export class CancioneiroComponent implements OnInit {
 
   public dismissActionSheet = async () => await this.actionSheetCtrl.dismiss();
 
-  public uniqueArray = (arr: any) => UNIQUE_ARRAY(arr);
+  public uniqueArray = <T>(arr: T[]) => UNIQUE_ARRAY(arr);
 }

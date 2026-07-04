@@ -1,16 +1,47 @@
+import { CommonModule, NgTemplateOutlet } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Data } from '@angular/router';
-import { log } from 'console';
+import {
+  IonButton,
+  IonButtons,
+  IonCol,
+  IonContent,
+  IonGrid,
+  IonHeader,
+  IonMenuButton,
+  IonNote,
+  IonRow,
+  IonTitle,
+  IonToolbar,
+} from '@ionic/angular/standalone';
+import { SanitizedHtmlPipe } from 'src/app/pipes/sanitized-html.pipe';
 import { Boletim } from 'src/app/interfaces/boletim.interface';
 
 @Component({
   selector: 'app-boletim-detail',
   templateUrl: './boletim-detail.page.html',
   styleUrls: ['./boletim-detail.page.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    NgTemplateOutlet,
+    SanitizedHtmlPipe,
+    IonHeader,
+    IonToolbar,
+    IonButtons,
+    IonMenuButton,
+    IonTitle,
+    IonButton,
+    IonContent,
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonNote,
+  ],
 })
 export class BoletimDetailPage implements OnInit {
   public boletim!: Boletim;
-  public isOrder: boolean = false;
+  public isOrder = false;
 
   constructor(private activatedRoute: ActivatedRoute) { }
 

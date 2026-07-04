@@ -1,21 +1,73 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { Messaging, getToken, onMessage } from '@angular/fire/messaging';
+import {
+  IonApp,
+  IonAvatar,
+  IonButton,
+  IonCol,
+  IonContent,
+  IonFooter,
+  IonGrid,
+  IonHeader,
+  IonIcon,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonMenu,
+  IonNav,
+  IonNote,
+  IonRow,
+  IonTabBar,
+  IonTabButton,
+  IonTabs,
+  IonToolbar,
+} from '@ionic/angular/standalone';
+import { environment } from 'src/environments/environment.prod';
 import { StorageService } from 'src/app/services/storage.service';
 import { IGREJA, PAGES_LIST, PAGES_TAB, PROPOSITO, SOCIAL, TEMA } from './model/shared';
-import { Messaging, getToken, onMessage  } from '@angular/fire/messaging';
-import { environment } from 'src/environments/environment.prod';
-import { InicioComponent } from './pages/inicio/inicio.component';
-import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterLink,
+    IonApp,
+    IonNav,
+    IonTabs,
+    IonTabBar,
+    IonTabButton,
+    IonMenu,
+    IonHeader,
+    IonToolbar,
+    IonItem,
+    IonAvatar,
+    IonLabel,
+    IonNote,
+    IonContent,
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonList,
+    IonIcon,
+    IonFooter,
+    IonButton,
+  ],
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
 })
+/**
+ * Componente raiz do aplicativo.
+ *
+ * Responsável por configurar a navegação, as informações institucionais,
+ * o registro do service worker de mensagens e a obtenção do token FCM.
+ */
 export class AppComponent implements OnInit {
-  component = InicioComponent;
-
   private readonly _env = environment;
   
+  /** Indica se a navegação em abas deve ser exibida. */
   public isTab = true;
   public igreja = IGREJA;
   public pagesList = PAGES_LIST;
@@ -40,6 +92,9 @@ export class AppComponent implements OnInit {
     this.storageService.clear();
   }
 
+  /**
+   * Inicializa o registro do service worker de mensagens e solicita o token FCM.
+   */
   ngOnInit() {
     // console.log(location.pathname !== '/login');
     
@@ -57,12 +112,18 @@ export class AppComponent implements OnInit {
     this._onMessage();
   }
 
+  /**
+   * Solicita o token de dispositivo para notificações push.
+   */
   private _getDeviceToken(): void {
     getToken(this._messaging, { vapidKey: this._env.vapidKey })
       .then((token) => console.log(token))
       .catch((error) => console.log('Token error', error));
   }
 
+  /**
+   * Escuta mensagens push recebidas em primeiro plano.
+   */
   private _onMessage(): void {
     onMessage(this._messaging, {
       next: (payload) => console.log('Message', payload),
@@ -71,6 +132,10 @@ export class AppComponent implements OnInit {
     });
   }
 
+  /**
+   * Retorna uma saudação de acordo com o horário atual.
+   * @returns Saudação em português (`Bom dia`, `Boa tarde`, etc.).
+   */
   public greetingMessage = () => {
     const tempo = new Date().getHours();
 

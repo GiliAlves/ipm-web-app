@@ -1,20 +1,60 @@
-import { Component, OnInit } from '@angular/core';
-import * as _ from 'lodash';
+import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import {
+  IonButton,
+  IonButtons,
+  IonCard,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+  IonCol,
+  IonContent,
+  IonGrid,
+  IonHeader,
+  IonItem,
+  IonLabel,
+  IonMenuButton,
+  IonNote,
+  IonRow,
+  IonTitle,
+  IonToolbar,
+} from '@ionic/angular/standalone';
+import { groupBy } from 'lodash';
 import { Bible, Books } from 'src/app/interfaces/biblia.interface';
 import { BOOKS } from 'src/app/model/db-biblia/books';
 import { COMMENTARIES } from 'src/app/model/db-biblia/commentaries';
 import { STORIES } from 'src/app/model/db-biblia/stories';
 import { VERSES } from 'src/app/model/db-biblia/verses';
-import { LivroPage } from './livro/livro.page';
 
 @Component({
   selector: 'app-biblia',
   templateUrl: './biblia.page.html',
   styleUrls: ['./biblia.page.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterLink,
+    IonHeader,
+    IonToolbar,
+    IonButtons,
+    IonMenuButton,
+    IonTitle,
+    IonButton,
+    IonContent,
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonItem,
+    IonLabel,
+    IonNote,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardSubtitle,
+  ],
 })
-export class BibliaPage implements OnInit {
-  component = {LivroPage};
-  
+export class BibliaPage {
   public biblia: Bible = {
     livro: BOOKS[0],
     livros: BOOKS,
@@ -23,26 +63,24 @@ export class BibliaPage implements OnInit {
     comentarios: COMMENTARIES
   }
 
-  public livros!: _.Dictionary<Books[]>;
-  public oldTestament!: _.Dictionary<Books[]>;
-  public newTestament!: _.Dictionary<Books[]>;
+  public livros!: Record<string, Books[]>;
+  public oldTestament!: Record<string, Books[]>;
+  public newTestament!: Record<string, Books[]>;
 
   public oldSubgroupos = ['Pentateuco', 'Históricos', 'Poéticos', 'Profetas Maiores', 'Profetas Menores']
   public newSubgrupos = ['Evangelhos', 'Histórico', 'Epístolas', 'Revelação'];
 
   public grupos: string[] = [];
   public isOldTestamet = true;
-  
-  constructor() { }
 
-  async ngOnInit() {
+  constructor() {
     this.groupByLivro(this.biblia);
   }
 
   public groupByLivro = (biblia: Bible) => {
-    const grupo = _.groupBy(biblia.livros, 'testament');
-    this.oldTestament = _.groupBy(grupo['old'], 'group');
-    this.newTestament = _.groupBy(grupo['new'], 'group');
+    const grupo = groupBy(biblia.livros, 'testament');
+    this.oldTestament = groupBy(grupo['old'], 'group');
+    this.newTestament = groupBy(grupo['new'], 'group');
 
     this.getOldTestament(true);
   };

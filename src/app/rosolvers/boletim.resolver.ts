@@ -1,16 +1,19 @@
-import { Injectable } from "@angular/core";
-import { Firestore, doc, docData } from "@angular/fire/firestore";
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from "@angular/router";
-import { Observable } from "rxjs";
-import { Boletim } from "../interfaces/boletim.interface";
+import { inject } from '@angular/core';
+import { ActivatedRouteSnapshot, ResolveFn } from '@angular/router';
+import { Observable, filter } from 'rxjs';
+import { BOLETIM_REPOSITORY_TOKEN } from '../core/application/tokens';
+import { Boletim } from '../core/domain/entities';
+import { IBoletimRepository } from '../core/domain/ports/boletim.repository';
 
-@Injectable({
-    providedIn: 'root'
-})
-export class BoletimResolver implements Resolve<Boletim> {
-
-    constructor(private readonly firestore: Firestore)  { }
-
-    resolve = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Boletim> =>
-        docData(doc(this.firestore, `boletins/${route.paramMap.get('id')}`)) as Observable<Boletim>;
-}
+/**
+ * Resolver que carrega um boletim específico do repositório antes de ativar a rota.
+ */
+export const boletimResolver: ResolveFn<Boletim> = (
+  route: ActivatedRouteSnapshot
+): Observable<Boletim> => {
+  const repository = inject<IBoletimRepository>(BOLETIM_REPOSITORY_TOKEN);
+  const id = route.paramMap.get('id') ?? '';
+  return repository.getById(id).pipe(
+    filter((boletim): boletim is Boletim => boletim !== undefined)
+  );
+};

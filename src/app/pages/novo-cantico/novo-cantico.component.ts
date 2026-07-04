@@ -1,16 +1,85 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { CommonModule } from '@angular/common';
+import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { ActivatedRoute } from '@angular/router';
 import { Clipboard } from '@capacitor/clipboard';
 import { Share } from '@capacitor/share';
-import { ActionSheetController, IonInput, IonModal, ToastController } from '@ionic/angular';
+import { ActionSheetController, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
 import * as _ from 'lodash';
 import { Observable, distinctUntilChanged, first } from 'rxjs';
 import { TEMATICAS } from 'src/app/model/shared';
+import {
+  IonAccordion,
+  IonAccordionGroup,
+  IonAvatar,
+  IonBadge,
+  IonBackButton,
+  IonButton,
+  IonButtons,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+  IonChip,
+  IonCol,
+  IonContent,
+  IonFab,
+  IonFabButton,
+  IonFabList,
+  IonFooter,
+  IonGrid,
+  IonHeader,
+  IonIcon,
+  IonImg,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
+  IonInput,
+  IonItem,
+  IonItemOption,
+  IonItemOptions,
+  IonItemSliding,
+  IonLabel,
+  IonList,
+  IonListHeader,
+  IonMenu,
+  IonMenuButton,
+  IonModal,
+  IonNav,
+  IonNote,
+  IonPopover,
+  IonProgressBar,
+  IonRadio,
+  IonRadioGroup,
+  IonRange,
+  IonRefresher,
+  IonRefresherContent,
+  IonReorder,
+  IonReorderGroup,
+  IonRow,
+  IonSearchbar,
+  IonSegment,
+  IonSegmentButton,
+  IonSelect,
+  IonSelectOption,
+  IonSkeletonText,
+  IonSpinner,
+  IonSplitPane,
+  IonTabBar,
+  IonTabButton,
+  IonText,
+  IonTitle,
+  IonToast,
+  IonToggle,
+  IonToolbar,
+} from '@ionic/angular/standalone';
 
 import { NovoCantico, Tematica } from 'src/app/interfaces/novo-cantico.interface';
-import { ArrayName, Font, HStorage, Key, KeyWord, Position } from 'src/app/interfaces/share.interface';
-import { FirebaseService } from 'src/app/services/firebase.service';
+import { ArrayName, Font, HStorage, KeyWord, Position } from 'src/app/interfaces/share.interface';
+import { UseNovoCanticoStore } from '../../presentation/signals/use-novo-cantico.store';
 import {
   BTN_ACTION,
   COLORS,
@@ -35,15 +104,97 @@ import {
   selector: 'app-novo-cantico',
   templateUrl: './novo-cantico.component.html',
   styleUrls: ['./novo-cantico.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    PdfViewerModule,
+    ScrollingModule,
+    IonAccordion,
+    IonAccordionGroup,
+    IonHeader,
+    IonToolbar,
+    IonButtons,
+    IonMenuButton,
+    IonTitle,
+    IonButton,
+    IonIcon,
+    IonContent,
+    IonSearchbar,
+    IonItem,
+    IonLabel,
+    IonNote,
+    IonChip,
+    IonText,
+    IonItemSliding,
+    IonItemOptions,
+    IonItemOption,
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonImg,
+    IonFab,
+    IonFabButton,
+    IonModal,
+    IonRange,
+    IonList,
+    IonListHeader,
+    IonRadio,
+    IonRadioGroup,
+    IonFooter,
+    IonProgressBar,
+    IonSelect,
+    IonSelectOption,
+    IonInput,
+    IonCard,
+    IonCardContent,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardSubtitle,
+    IonAvatar,
+    IonBadge,
+    IonFabList,
+    IonToast,
+    IonPopover,
+    IonToggle,
+    IonSegment,
+    IonSegmentButton,
+    IonReorder,
+    IonReorderGroup,
+    IonNav,
+    IonBackButton,
+    IonRefresher,
+    IonRefresherContent,
+    IonInfiniteScroll,
+    IonInfiniteScrollContent,
+    IonSkeletonText,
+    IonSpinner,
+    IonSplitPane,
+    IonMenu,
+    IonTabBar,
+    IonTabButton,
+  ],
 })
+/**
+ * Página de Hinos Novos (Novo Cântico).
+ *
+ * Lista hinos com temática e assunto, permite busca, filtros, favoritos,
+ * personalização da letra e exibição de partituras em PDF.
+ */
 export class NovoCanticoComponent implements OnInit {
   @ViewChild(IonModal) modal!: IonModal;
   @ViewChild('letra') letra!: ElementRef;
   @ViewChild('ionInputEl') ionInputEl!: IonInput;
 
-  private messageGetStorageError: string = MSG_STORAGE_ERROR;
+  private readonly store = inject(UseNovoCanticoStore);
+  private readonly actionSheetCtrl = inject(ActionSheetController);
+  private readonly toastController = inject(ToastController);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly storage = inject(Storage);
 
-  public hinos$: Observable<NovoCantico[]> = new Observable<NovoCantico[]>;
+  private messageGetStorageError = MSG_STORAGE_ERROR;
+
+  public hinos$ = this.store.hinos$;
   public hinosSearch$!: Observable<NovoCantico[]>;
   public hino!: NovoCantico;
 
@@ -53,34 +204,21 @@ export class NovoCanticoComponent implements OnInit {
   public arrayColors: string[] = COLORS;
 
   public tematicas: Tematica[] = TEMATICAS;
-  public partitura: string = '';
+  public partitura = '';
 
-  public searchBarTerm: string = '';
-  public keyWordsName: string = '';
+  public searchBarTerm = '';
+  public keyWordsName = '';
 
-  public isOpenDetailsModal: boolean = false;
-  public isOpenPartituraPDFModal: boolean = false;
-  public isOpenColorModal: boolean = false;
+  public isOpenDetailsModal = false;
+  public isOpenPartituraPDFModal = false;
+  public isOpenColorModal = false;
 
-  public indice: boolean = false;
-
-  constructor(
-    private actionSheetCtrl: ActionSheetController,
-    private toastController: ToastController,
-    private firebaseService: FirebaseService,
-    private activatedRoute: ActivatedRoute,
-    private storage: Storage,
-    ) {
-      this.firebaseService.fieldPath = 'indice';
-      this.firebaseService.path = 'hinos';
-      this.firebaseService.orderByDirection = 'asc';
-  }
+  public indice = false;
 
   ngOnInit() {
-    this.getAll();
     this.getStorage();
 
-    let paramMap = this.activatedRoute.snapshot.paramMap.get('id');
+    const paramMap = this.activatedRoute.snapshot.paramMap.get('id');
 
     if (paramMap) {
       isNaN(Number(paramMap))
@@ -89,9 +227,6 @@ export class NovoCanticoComponent implements OnInit {
     }
   }
 
-  private getAll = () =>
-    this.hinos$ = this.firebaseService.getAll() as Observable<NovoCantico[]>;
-
   private getStorage = async () =>
     await this.storage.get('hinosStorage')
       .then(storage => storage !== null ? this.getInitialSearchFilter(storage) : this.setStorage())
@@ -99,10 +234,10 @@ export class NovoCanticoComponent implements OnInit {
 
   private getStorageHino = async () =>
     await this.storage.get('inicialStorage')
-      .then(storage => this.selected(storage.hino))
+      .then(storage => this.selected((storage as { hino: NovoCantico }).hino))
       .catch(err => this.messageErrorStorage(err));
 
-  private REDUCE_ARRAY = (arr: any) => Object.values(_.reduce(arr, (acc: any, val: any) => {
+  private REDUCE_ARRAY = (arr: string[]) => Object.values(_.reduce(arr, (acc: Record<string, { title: string; quantity: number }>, val: string) => {
     (!acc[val])
       ? acc[val] = { "title": val, "quantity": 1 }
       : acc[val]["quantity"]++;
@@ -110,8 +245,8 @@ export class NovoCanticoComponent implements OnInit {
     return acc;
   }, {}))
 
-  private async getInitialSearchFilter(storage: any) {
-    this.hinosStorage = storage;
+  private async getInitialSearchFilter(storage: unknown) {
+    this.hinosStorage = storage as HStorage;
 
     this.initialSearchFilter.forEach(key =>
       this.addInArrayStorage('searchFilter', key, 'name'));
@@ -124,8 +259,8 @@ export class NovoCanticoComponent implements OnInit {
       .then(storage => this.hinosStorage = storage)
       .catch(err => this.messageErrorStorage(err));
 
-  private messageErrorStorage = (err: any) =>
-    this.presentToast(this.messageGetStorageError, err);
+  private messageErrorStorage = (err: unknown) =>
+    this.presentToast(`${this.messageGetStorageError}${err}`);
 
   private async presentToast(message: string, duration: number = 200, position: Position = 'top') {
     const toast = await this.toastController.create({ message, duration, position });
@@ -150,17 +285,17 @@ export class NovoCanticoComponent implements OnInit {
         distinctUntilChanged(),
         first())
       .subscribe((hinos: NovoCantico[]) => {
-        this.hinosSearch$ = new Observable(observer =>
+        this.hinosSearch$ = new Observable<NovoCantico[]>(observer =>
           observer.next(this.filterInArray(term, hinos, indice)));
         })
 
-  private filterInArray(term: any, hinos: NovoCantico[], indice: boolean = false) {
+  private filterInArray(term: string, hinos: NovoCantico[], indice: boolean = false) {
     hinos.forEach((hino, index) => hinos[index].letra = DECODE_HTML_CHAR_CODES(NORMALIZE_HTML(hino.letra)));
 
-    let arr1 = [];
-    let arr2 = [];
+    let arr1: NovoCantico[] = [];
+    let arr2: NovoCantico[] = [];
 
-    if (!isNaN(term) && !indice) {
+    if (!Number.isNaN(Number(term)) && !indice) {
       hinos = hinos.filter(({ numero }) => numero === term);
     } else if (!indice) {
       arr1 = FILTER_IN_ARRAY(hinos, 'letra', term);
@@ -175,11 +310,12 @@ export class NovoCanticoComponent implements OnInit {
     return UNIQUE_ARRAY(hinos);
   }
 
-  public searchBar(event: any) {
+  public searchBar(event: Event) {
     this.desactiveAllSearchFilter();
 
-    (event.target.value.toLowerCase())
-      ? this.search(event.target.value.toLowerCase())
+    const value = (event.target as HTMLInputElement).value.toLowerCase();
+    value
+      ? this.search(value)
       : this.clearSearch();
   }
 
@@ -201,11 +337,11 @@ export class NovoCanticoComponent implements OnInit {
   public clearSearch = () => {
     this.searchBarTerm = '';
     this.desactiveAllSearchFilter();
-    this.hinosSearch$ = new Observable;
+    this.hinosSearch$ = new Observable<NovoCantico[]>();
   }
 
-  public onInputSearchFilter(event: CustomEvent | any) {
-    const filteredValue = NOT_NUMBER(event.target!.value);
+  public onInputSearchFilter(event: CustomEvent) {
+    const filteredValue = NOT_NUMBER((event.target as HTMLInputElement).value);
     this.keyWordsName = filteredValue;
     this.ionInputEl.value = filteredValue;
   }
@@ -217,16 +353,19 @@ export class NovoCanticoComponent implements OnInit {
     this.keyWordsName = '';
   }
 
-  public addInArrayStorage(arrayName: ArrayName, item: any, key: Key, event?: CustomEvent | any) {
-    if ((arrayName !== 'favorites' || event.detail.ratio === 1) && !FIND_IN_ARRAY(this.hinosStorage[arrayName], item, key)) {
-      this.hinosStorage[arrayName].unshift(item);
+  public addInArrayStorage(arrayName: ArrayName, item: unknown, key: string, event?: CustomEvent) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if ((arrayName !== 'favorites' || (event?.detail?.ratio ?? 1) === 1) && !FIND_IN_ARRAY(this.hinosStorage[arrayName] as any[], item, key)) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      this.hinosStorage[arrayName].unshift(item as any);
       this.setStorage();
     }
   }
 
-  public removeInArrayStorage(arrayName: ArrayName, item: any, key: Key, event?: CustomEvent | any) {
-    if (arrayName === 'recents' || event.detail.ratio === 1) {
-      this.hinosStorage[arrayName] = REMOVE_ITEM_ARRAY(this.hinosStorage[arrayName], item, key);
+  public removeInArrayStorage(arrayName: ArrayName, item: unknown, key: string, event?: CustomEvent) {
+    if (arrayName === 'recents' || (event?.detail?.ratio ?? 1) === 1) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      this.hinosStorage[arrayName] = REMOVE_ITEM_ARRAY(this.hinosStorage[arrayName] as any[], item, key) as any;
       this.setStorage();
     }
   }
@@ -261,10 +400,11 @@ export class NovoCanticoComponent implements OnInit {
       dialogTitle: hino.titulo
     })
 
-  public zooming(event: CustomEvent | any) {
-    this.hinosStorage.formatacao.tamanhoFonte = event.detail.value;
-    this.setProperty('--letra-font-size', event.detail.value + 'px');
-    this.setProperty('--letra-line-height', event.detail.value * 1.5 + 'px');
+  public zooming(event: CustomEvent) {
+    const value = event.detail.value as number;
+    this.hinosStorage.formatacao.tamanhoFonte = value;
+    this.setProperty('--letra-font-size', `${value}px`);
+    this.setProperty('--letra-line-height', `${value * 1.5}px`);
   }
 
   public changeColor(color: string) {
@@ -313,13 +453,13 @@ export class NovoCanticoComponent implements OnInit {
 
   public pinFormatter = (value: number) => `${value}px`;
 
-  public setPartitura = (partitura: any) => {
+  public setPartitura = (partitura: string) => {
     this.partitura = partitura;
     this.isOpenPartituraPDFModal = true;
   };
 
   public async presentActionSheet(hino: NovoCantico) {
-    BTN_ACTION[0].handler = () => this.setPartitura(hino.partitura);
+    BTN_ACTION[0].handler = () => this.setPartitura(hino.partitura ?? '');
     BTN_ACTION[1].handler = () => {};
     BTN_ACTION[2].handler = () => {
       this.clipboard(hino);
@@ -354,5 +494,5 @@ export class NovoCanticoComponent implements OnInit {
 
   public dismissActionSheet = async () => await this.actionSheetCtrl.dismiss();
 
-  public uniqueArray = (arr: any) => UNIQUE_ARRAY(arr);
+  public uniqueArray = <T>(arr: T[]) => UNIQUE_ARRAY(arr);
 }

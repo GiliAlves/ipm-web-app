@@ -1,23 +1,99 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Data, Router } from '@angular/router';
+import { ActivatedRoute, Data, Router, RouterLink } from '@angular/router';
 import { Clipboard } from '@capacitor/clipboard';
 import { Share } from '@capacitor/share';
-import * as _ from 'lodash';
+import { groupBy, keys, sortBy, Dictionary } from 'lodash';
+import {
+  IonAccordion,
+  IonAccordionGroup,
+  IonBackButton,
+  IonButton,
+  IonButtons,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+  IonCol,
+  IonContent,
+  IonGrid,
+  IonApp,
+  IonHeader,
+  IonIcon,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonMenu,
+  IonMenuButton,
+  IonModal,
+  IonNote,
+  IonRadio,
+  IonRadioGroup,
+  IonRange,
+  IonRow,
+  IonSegment,
+  IonSegmentButton,
+  IonSelect,
+  IonSelectOption,
+  IonTitle,
+  IonToolbar,
+} from '@ionic/angular/standalone';
+import { SanitizedHtmlPipe } from 'src/app/pipes/sanitized-html.pipe';
 import { Bible, Books, Commentaries, Stories, Verses } from 'src/app/interfaces/biblia.interface';
 
 @Component({
   selector: 'app-livro',
   templateUrl: './livro.page.html',
   styleUrls: ['./livro.page.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    SanitizedHtmlPipe,
+    RouterLink,
+    IonApp,
+    IonHeader,
+    IonToolbar,
+    IonButtons,
+    IonBackButton,
+    IonMenu,
+    IonMenuButton,
+    IonTitle,
+    IonContent,
+    IonSegment,
+    IonSegmentButton,
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonButton,
+    IonIcon,
+    IonModal,
+    IonList,
+    IonItem,
+    IonLabel,
+    IonNote,
+    IonCard,
+    IonCardContent,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardSubtitle,
+    IonRadio,
+    IonRadioGroup,
+    IonRange,
+    IonSelect,
+    IonSelectOption,
+    IonAccordion,
+    IonAccordionGroup,
+  ],
 })
 export class LivroPage implements OnInit {
   
   public biblia: Bible = {} as Bible;
   public livro: Books = {} as Books;
 
-  public livros!: _.Dictionary<Books[]>;
-  public oldTestament!: _.Dictionary<Books[]>;
-  public newTestament!: _.Dictionary<Books[]>;
+  public livros!: Dictionary<Books[]>;
+  public oldTestament!: Dictionary<Books[]>;
+  public newTestament!: Dictionary<Books[]>;
 
   public oldSubgroupos = ['Pentateuco', 'Históricos', 'Poéticos', 'Profetas Maiores', 'Profetas Menores']
   public newSubgrupos = ['Evangelhos', 'Histórico', 'Epístolas', 'Revelação'];
@@ -71,15 +147,15 @@ export class LivroPage implements OnInit {
     })
     
     this.livro = this.biblia.livro;
-    this.capitulos = _.groupBy(this.biblia.versos, 'chapter');
-    this.capitulosNumero = _.keys(this.capitulos);
+    this.capitulos = groupBy(this.biblia.versos, 'chapter');
+    this.capitulosNumero = keys(this.capitulos);
     this.groupByLivro(this.biblia);
   }
 
   public groupByLivro = (biblia: Bible) => {
-    const grupo = _.groupBy(biblia.livros, 'testament');
-    this.oldTestament = _.groupBy(grupo['old'], 'group');
-    this.newTestament = _.groupBy(grupo['new'], 'group');
+    const grupo = groupBy(biblia.livros, 'testament');
+    this.oldTestament = groupBy(grupo['old'], 'group');
+    this.newTestament = groupBy(grupo['new'], 'group');
 
     this.getOldTestament(true);
   };
@@ -111,8 +187,8 @@ export class LivroPage implements OnInit {
       this.capitulo = capitulo - 1;
       this.router.navigate([], { queryParams: { capitulo: this.capitulo } });
     } else {
-      let index = (this.biblia.livros.findIndex(livro => livro.book_number === this.livro.book_number));
-      let livro = this.biblia.livros[index === 0 ?  65 : index - 1];    
+      const index = (this.biblia.livros.findIndex(livro => livro.book_number === this.livro.book_number));
+      const livro = this.biblia.livros[index === 0 ?  65 : index - 1];    
       this.capitulo = livro.chapters;      
       this.router.navigate([`/biblia/${livro.book_number}`], { queryParams: { capitulo: livro.chapters }});
     }
@@ -123,8 +199,8 @@ export class LivroPage implements OnInit {
       this.capitulo = capitulo + 1;
       this.router.navigate([], { queryParams: { capitulo: this.capitulo } });
     } else {
-      let index = (this.biblia.livros.findIndex(livro => livro.book_number === this.livro.book_number));
-      let livro = this.biblia.livros[index === 65 ?  0 : index + 1];
+      const index = (this.biblia.livros.findIndex(livro => livro.book_number === this.livro.book_number));
+      const livro = this.biblia.livros[index === 65 ?  0 : index + 1];
       this.capitulo = 1; 
       this.router.navigate([`/biblia/${livro.book_number}`], { queryParams: { capitulo: 1 }});
     } 
@@ -155,7 +231,7 @@ export class LivroPage implements OnInit {
           const index = this.versiculoSelected.findIndex(({id}) => id === element.id)
           this.versiculoSelected[index].style.borderBottomStyle = 'dashed';
         }
-        this.versiculoSelected = _.sortBy(this.versiculoSelected, 'id');
+        this.versiculoSelected = sortBy(this.versiculoSelected, 'id');
         this.isOpenModal = this.versiculoSelected.length ? true : false;
       }
     }
