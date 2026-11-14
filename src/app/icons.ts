@@ -5,9 +5,13 @@ import {
   arrowForwardOutline,
   brushOutline,
   caretDownCircleOutline,
+  checkmarkCircle,
   chevronBackOutline,
   chevronForwardOutline,
+  closeCircle,
   closeOutline,
+  createOutline,
+  flame,
   colorPaletteOutline,
   copyOutline,
   ellipsisVerticalOutline,
@@ -33,6 +37,7 @@ import {
   textOutline,
   trashBinOutline,
   trashOutline,
+  trophy,
 } from 'ionicons/icons';
 
 export function registerAppIcons(): void {
@@ -42,9 +47,13 @@ export function registerAppIcons(): void {
     'arrow-forward-outline': arrowForwardOutline,
     'brush-outline': brushOutline,
     'caret-down-circle-outline': caretDownCircleOutline,
+    'checkmark-circle': checkmarkCircle,
     'chevron-back-outline': chevronBackOutline,
     'chevron-forward-outline': chevronForwardOutline,
+    'close-circle': closeCircle,
     'close-outline': closeOutline,
+    'create-outline': createOutline,
+    flame,
     'color-palette-outline': colorPaletteOutline,
     'copy-outline': copyOutline,
     'ellipsis-vertical-outline': ellipsisVerticalOutline,
@@ -70,5 +79,6 @@ export function registerAppIcons(): void {
     'text-outline': textOutline,
     'trash-bin-outline': trashBinOutline,
     'trash-outline': trashOutline,
+    trophy,
   });
 }

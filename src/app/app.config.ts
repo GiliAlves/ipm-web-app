@@ -3,8 +3,9 @@ import localePt from '@angular/common/locales/pt';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ApplicationConfig, importProvidersFrom, isDevMode, LOCALE_ID } from '@angular/core';
 import { provideFirebaseApp, initializeApp, getApp } from '@angular/fire/app';
-import { provideFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from '@angular/fire/firestore';
-import { provideFunctions, getFunctions } from '@angular/fire/functions';
+import { provideAuth, getAuth, connectAuthEmulator } from '@angular/fire/auth';
+import { provideFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager, connectFirestoreEmulator } from '@angular/fire/firestore';
+import { provideFunctions, getFunctions, connectFunctionsEmulator } from '@angular/fire/functions';
 import { provideMessaging, getMessaging } from '@angular/fire/messaging';
 import { provideStorage, getStorage } from '@angular/fire/storage';
 import { provideRouter, PreloadAllModules, RouteReuseStrategy, withPreloading } from '@angular/router';
@@ -33,15 +34,32 @@ export const appConfig: ApplicationConfig = {
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: LOCALE_ID, useValue: 'pt-BR' },
     provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideFirestore(() =>
-      initializeFirestore(getApp(), {
+    provideFirestore(() => {
+      const firestore = initializeFirestore(getApp(), {
         localCache: persistentLocalCache({
           tabManager: persistentMultipleTabManager()
         })
-      })
-    ),
+      });
+      if (environment.useEmulators) {
+        connectFirestoreEmulator(firestore, 'localhost', 8080);
+      }
+      return firestore;
+    }),
+    provideAuth(() => {
+      const auth = getAuth();
+      if (environment.useEmulators) {
+        connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true });
+      }
+      return auth;
+    }),
     provideMessaging(() => getMessaging()),
-    provideFunctions(() => getFunctions()),
+    provideFunctions(() => {
+      const functions = getFunctions();
+      if (environment.useEmulators) {
+        connectFunctionsEmulator(functions, 'localhost', 5001);
+      }
+      return functions;
+    }),
     provideStorage(() => getStorage()),
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),

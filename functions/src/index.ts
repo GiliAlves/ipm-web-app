@@ -16,3 +16,7 @@ export const sendNewBoletimNotification = functions.firestore.document('/boletin
 
         return admin.messaging().sendToTopic('all', payload);
     });
+
+// Funções do game bíblico. admin.initializeApp() acima serve para todas.
+export { iniciarSessao, finalizarSessao } from './game/quiz.functions';
+export { definirApelido } from './game/perfil.functions';

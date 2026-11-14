@@ -9,3 +9,6 @@ export * from './livro.repository';
 export * from './video.repository';
 export * from './storage.service';
 export * from './youtube.service';
+export * from './quiz.repository';
+export * from './auth.service';
+export * from './jogador.repository';

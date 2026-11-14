@@ -1,0 +1,25 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "gamePerguntas",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "ativo", "order": "ASCENDING" },
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "trilhas", "arrayConfig": "CONTAINS" },
+        { "fieldPath": "sorteio", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "gamePerguntas",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "ativo", "order": "ASCENDING" },
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "trilhas", "arrayConfig": "CONTAINS" },
+        { "fieldPath": "sorteio", "order": "DESCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

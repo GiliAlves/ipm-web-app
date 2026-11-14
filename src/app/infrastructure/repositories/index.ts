@@ -7,3 +7,7 @@ export * from './calendario.repository';
 export * from './lider.repository';
 export * from './livro.repository';
 export * from './video.repository';
+export * from './functions-quiz.repository';
+export * from './firestore-ranking.repository';
+export * from './firestore-perfil-jogador.repository';
+export * from './functions-jogador.repository';

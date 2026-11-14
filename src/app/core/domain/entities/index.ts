@@ -7,3 +7,4 @@ export * from './calendario.entity';
 export * from './lider.entity';
 export * from './livro.entity';
 export * from './video.entity';
+export * from './game.entity';

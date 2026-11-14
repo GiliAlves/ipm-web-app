@@ -1,0 +1,40 @@
+rules_version = '2';
+
+// Regras do game bíblico. Princípio: TODA escrita de pontuação e leitura de
+// gabarito passa pelas Cloud Functions (Admin SDK ignora estas regras).
+// O cliente nunca escreve pontos nem lê a resposta correta.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---- Coleções já existentes do app: ajuste conforme suas regras atuais. ----
+    // (Este arquivo cobre apenas o game; mescle com as regras do restante do app.)
+
+    // Perguntas COM gabarito: cliente nunca lê nem escreve (só Admin SDK/Functions).
+    match /gamePerguntas/{id} {
+      allow read, write: if false;
+    }
+
+    // Config de níveis: leitura pública; escrita só via console/admin.
+    match /gameNiveis/{trilha} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Perfil do jogador: o dono lê o próprio; escrita só pelas Functions.
+    match /gameJogadores/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow write: if false;
+    }
+
+    // Ranking mensal: autenticados leem; escrita só pelas Functions.
+    match /gameRankingMensal/{periodo}/jogadores/{uid} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+
+    // Sessões (contêm gabarito e ordem): cliente nunca acessa.
+    match /gameSessoes/{uid}/sessoes/{sessionId} {
+      allow read, write: if false;
+    }
+  }
+}

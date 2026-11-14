@@ -9,7 +9,7 @@ import { IPastoralRepository } from '../../core/domain/ports';
  */
 @Injectable({ providedIn: 'root' })
 export class FirebasePastoralRepository implements IPastoralRepository {
-  private readonly path = 'pastoral';
+  private readonly path = 'pastorais';
 
   constructor(private readonly firestore: Firestore) {}
 

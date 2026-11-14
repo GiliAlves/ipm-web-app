@@ -5,9 +5,14 @@ import {
   CANTICO_REPOSITORY_TOKEN,
   DEVOCIONAL_REPOSITORY_TOKEN,
   LIDER_REPOSITORY_TOKEN,
+  AUTH_SERVICE_TOKEN,
+  JOGADOR_REPOSITORY_TOKEN,
   LIVRO_REPOSITORY_TOKEN,
   NOVO_CANTICO_REPOSITORY_TOKEN,
   PASTORAL_REPOSITORY_TOKEN,
+  PERFIL_JOGADOR_REPOSITORY_TOKEN,
+  QUIZ_REPOSITORY_TOKEN,
+  RANKING_REPOSITORY_TOKEN,
   STORAGE_SERVICE_TOKEN,
   VIDEO_REPOSITORY_TOKEN,
   YOUTUBE_SERVICE_TOKEN,
@@ -21,9 +26,13 @@ import {
   FirebaseLivroRepository,
   FirebaseNovoCanticoRepository,
   FirebasePastoralRepository,
+  FirestorePerfilJogadorRepository,
+  FirestoreRankingRepository,
+  FunctionsJogadorRepository,
+  FunctionsQuizRepository,
   YoutubeVideoRepository,
 } from '../repositories';
-import { IonicStorageAdapter, YoutubeAdapter } from '../external';
+import { FirebaseAuthAdapter, IonicStorageAdapter, YoutubeAdapter } from '../external';
 
 export const repositoryProviders: Provider[] = [
   { provide: CANTICO_REPOSITORY_TOKEN, useExisting: FirebaseCanticoRepository },
@@ -37,4 +46,9 @@ export const repositoryProviders: Provider[] = [
   { provide: VIDEO_REPOSITORY_TOKEN, useExisting: YoutubeVideoRepository },
   { provide: STORAGE_SERVICE_TOKEN, useExisting: IonicStorageAdapter },
   { provide: YOUTUBE_SERVICE_TOKEN, useExisting: YoutubeAdapter },
+  { provide: QUIZ_REPOSITORY_TOKEN, useExisting: FunctionsQuizRepository },
+  { provide: RANKING_REPOSITORY_TOKEN, useExisting: FirestoreRankingRepository },
+  { provide: PERFIL_JOGADOR_REPOSITORY_TOKEN, useExisting: FirestorePerfilJogadorRepository },
+  { provide: JOGADOR_REPOSITORY_TOKEN, useExisting: FunctionsJogadorRepository },
+  { provide: AUTH_SERVICE_TOKEN, useExisting: FirebaseAuthAdapter },
 ];

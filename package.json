@@ -11,7 +11,9 @@
     "test": "ng test",
     "lint": "ng lint",
     "docs:build": "compodoc -p tsconfig.json -n 'IPM Web App' -d documentation --hideGenerator",
-    "docs:serve": "compodoc -p tsconfig.json -n 'IPM Web App' -d documentation --hideGenerator -s"
+    "docs:serve": "compodoc -p tsconfig.json -n 'IPM Web App' -d documentation --hideGenerator -s",
+    "game:build-questions": "node content/game/csv-to-json.mjs content/game/template.csv content/game/questions.generated.json",
+    "game:publish": "node functions/scripts/publish-questions.mjs"
   },
   "private": true,
   "description": "Aplicativo web/mobile híbrido da Igreja Presbiteriana de Mauá (IPM), construído com Ionic e Angular.",

@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { Observable, catchError, forkJoin, of } from 'rxjs';
+import { Observable, catchError, combineLatest, of } from 'rxjs';
 import { HomeDataDto } from '../dto';
 import {
   CALENDARIO_REPOSITORY_TOKEN,
@@ -22,7 +22,7 @@ export class GetHomeDataUseCase {
   ) {}
 
   execute(): Observable<HomeDataDto> {
-    return forkJoin({
+    return combineLatest({
       pastorais: this.pastoralRepository.getLimit(6).pipe(catchError(() => of([]))),
       devocionais: this.devocionalRepository.getLimit(6).pipe(catchError(() => of([]))),
       calendario: this.calendarioRepository.getFromToday().pipe(catchError(() => of([]))),

@@ -1,0 +1,73 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/game"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      <span *ngIf="!store.resultado()">Pergunta {{ store.numeroAtual() }}/{{ store.total() }}</span>
+      <span *ngIf="store.resultado()">Resultado</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Carregando -->
+  <div class="centro" *ngIf="store.carregando()">
+    <ion-spinner></ion-spinner>
+    <ion-note>Preparando...</ion-note>
+  </div>
+
+  <!-- Erro -->
+  <div class="centro" *ngIf="store.erro() as erro">
+    <ion-text color="danger"><p>{{ erro }}</p></ion-text>
+    <ion-button fill="outline" (click)="voltarPainel()">Voltar ao painel</ion-button>
+  </div>
+
+  <!-- Jogando -->
+  <ng-container *ngIf="!store.carregando() && !store.resultado() && store.perguntaAtual() as p">
+    <ion-progress-bar
+      [value]="fracaoTempo()"
+      [color]="fracaoTempo() < 0.25 ? 'danger' : 'primary'"
+    ></ion-progress-bar>
+    <ion-note class="timer">⏱ {{ tempo() }}s</ion-note>
+
+    <h2 class="enunciado">{{ p.enunciado }}</h2>
+
+    <ion-button
+      class="alternativa"
+      expand="block"
+      fill="outline"
+      *ngFor="let alt of p.alternativas; let i = index"
+      (click)="responder(alt.id)"
+    >
+      <span class="letra">{{ letras[i] }}</span>
+      <span class="texto">{{ alt.texto }}</span>
+    </ion-button>
+  </ng-container>
+
+  <!-- Resultado -->
+  <ng-container *ngIf="store.resultado() as r">
+    <div class="resultado">
+      <ion-icon name="trophy" color="warning"></ion-icon>
+      <h1>{{ r.acertos }}/{{ r.total }} acertos</h1>
+      <p class="pontos">+{{ r.pontosGanhos }} pontos</p>
+
+      <ion-note *ngIf="r.subiuNivel" color="success" class="subiu">
+        🎉 Você subiu para o nível {{ r.nivelAtual }}!
+      </ion-note>
+      <ion-note *ngIf="!r.subiuNivel">Nível atual: {{ r.nivelAtual }} · {{ r.xpTrilha }} XP</ion-note>
+
+      <div class="gabarito">
+        <div class="linha" *ngFor="let res of r.resultados; let i = index">
+          <ion-icon
+            [name]="res.correta ? 'checkmark-circle' : 'close-circle'"
+            [color]="res.correta ? 'success' : 'danger'"
+          ></ion-icon>
+          <ion-note>{{ i + 1 }}. {{ res.explicacao }}</ion-note>
+        </div>
+      </div>
+
+      <ion-button expand="block" (click)="voltarPainel()">Voltar ao painel</ion-button>
+    </div>
+  </ng-container>
+</ion-content>

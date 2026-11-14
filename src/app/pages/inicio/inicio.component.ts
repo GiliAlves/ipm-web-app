@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import {
   IonCard,
@@ -65,6 +65,7 @@ export class InicioComponent {
   private readonly datePipe = inject(DatePipe);
 
   readonly homeData = this.store.homeData;
+  readonly hasPastorais = computed(() => this.homeData().pastorais?.length > 0);
   readonly searchBarTerm = this.store.searchBarTerm;
   readonly isSpinner = this.store.isSpinner;
   readonly isSubmmit = this.store.isSubmmit;

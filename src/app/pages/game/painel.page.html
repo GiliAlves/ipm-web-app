@@ -1,0 +1,133 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Game Bíblico</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Cabeçalho do jogador -->
+  <ion-card class="cabecalho">
+    <ion-card-content>
+      <div class="jogador">
+        <div class="saudacao">
+          <ion-note>Olá,</ion-note>
+          <h2>
+            {{ apelido() }}
+            <ion-button
+              fill="clear"
+              size="small"
+              class="editar-apelido"
+              aria-label="Editar apelido"
+              (click)="abrirModalApelido()"
+            >
+              <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+            </ion-button>
+          </h2>
+        </div>
+        <ion-badge color="warning" class="ofensiva">
+          <ion-icon name="flame"></ion-icon>
+          {{ ofensiva() }} dias
+        </ion-badge>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Progresso por trilha -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Suas trilhas</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <div class="trilha" *ngFor="let p of progresso()">
+        <div class="trilha-topo">
+          <ion-text><strong>{{ p.trilha }}</strong> · Nível {{ p.nivel }}</ion-text>
+          <ion-button size="small" (click)="jogar(p.trilha)">Jogar</ion-button>
+        </div>
+        <ion-progress-bar [value]="p.progresso"></ion-progress-bar>
+        <ion-note>
+          {{ p.xp }} XP
+          <span *ngIf="p.xpNecessarioProximo as prox"> · faltam {{ prox - p.xp }} p/ o nível {{ p.nivel + 1 }}</span>
+          <span *ngIf="!p.xpNecessarioProximo"> · nível máximo</span>
+        </ion-note>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Ranking mensal -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Ranking do mês</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-segment [value]="trilhaRanking()" (ionChange)="onSegment($event)" scrollable>
+        <ion-segment-button value="geral"><ion-label>Geral</ion-label></ion-segment-button>
+        <ion-segment-button *ngFor="let t of trilhas" [value]="t">
+          <ion-label>{{ t }}</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+
+      <ion-list *ngIf="ranking().entradas.length; else semRanking">
+        <ion-item *ngFor="let e of ranking().entradas" lines="full">
+          <ion-badge slot="start" [color]="e.posicao <= 3 ? 'warning' : 'medium'">{{ e.posicao }}</ion-badge>
+          <ion-label>{{ e.apelido }}</ion-label>
+          <ion-note slot="end">{{ e.pontos }} pts</ion-note>
+        </ion-item>
+      </ion-list>
+      <ng-template #semRanking>
+        <ion-note class="vazio">Ainda não há pontuações este mês. Seja o primeiro!</ion-note>
+      </ng-template>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Modal: definir apelido -->
+  <ion-modal
+    [isOpen]="modalAberto()"
+    [backdropDismiss]="!salvando()"
+    (ionModalDidDismiss)="modalAberto.set(false)"
+  >
+    <ng-template>
+      <ion-header class="ion-no-border">
+        <ion-toolbar>
+          <ion-title>Seu apelido</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="fecharModalApelido()" [disabled]="salvando()">Fechar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-note class="ajuda">
+          Escolha como você quer aparecer no ranking. Apelidos passam por moderação.
+        </ion-note>
+
+        <ion-input
+          label="Apelido"
+          labelPlacement="stacked"
+          fill="outline"
+          autocapitalize="words"
+          maxlength="20"
+          placeholder="Ex.: João P."
+          [value]="apelidoInput()"
+          (ionInput)="apelidoInput.set($any($event.target).value); erroApelido.set(null)"
+          (keyup.enter)="salvarApelido()"
+        ></ion-input>
+
+        <ion-text color="danger" *ngIf="erroApelido() as erro">
+          <p class="erro">{{ erro }}</p>
+        </ion-text>
+
+        <ion-button
+          expand="block"
+          class="ion-margin-top"
+          [disabled]="salvando()"
+          (click)="salvarApelido()"
+        >
+          <ion-spinner *ngIf="salvando()" name="crescent" slot="start"></ion-spinner>
+          {{ salvando() ? 'Salvando…' : 'Salvar' }}
+        </ion-button>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>
