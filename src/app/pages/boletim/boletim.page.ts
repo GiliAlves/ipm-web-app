@@ -1,22 +1,47 @@
-import { Component, OnInit } from '@angular/core';
-import { Firestore, collection, collectionData, query } from '@angular/fire/firestore';
-import { Boletim } from 'src/app/interfaces/boletim.interface';
+import { CommonModule, DatePipe } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import {
+  IonCard,
+  IonCardContent,
+  IonCol,
+  IonContent,
+  IonGrid,
+  IonHeader,
+  IonMenuButton,
+  IonNote,
+  IonRow,
+  IonTitle,
+  IonToolbar,
+  IonButtons,
+} from '@ionic/angular/standalone';
+import { UseBoletimStore } from '../../presentation/signals/use-boletim.store';
 
 @Component({
   selector: 'app-boletim',
   templateUrl: './boletim.page.html',
   styleUrls: ['./boletim.page.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    DatePipe,
+    RouterLink,
+    IonHeader,
+    IonToolbar,
+    IonButtons,
+    IonMenuButton,
+    IonTitle,
+    IonContent,
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonCard,
+    IonCardContent,
+    IonNote,
+  ],
 })
-export class BoletimPage implements OnInit {
-  public boletins!: Boletim[];
+export class BoletimPage {
+  private readonly store = inject(UseBoletimStore);
 
-  constructor(private readonly firestore: Firestore) { }
-
-  ngOnInit() {
-    this.getBoletins()
-  }
-
-  getBoletins = () => collectionData(
-    query(collection(this.firestore, 'boletins'))).subscribe(boletins => this.boletins = boletins as Boletim[]);
-
+  readonly boletins = this.store.boletins;
 }

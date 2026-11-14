@@ -1,13 +1,43 @@
-import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import {
+  IonContent,
+  IonHeader,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonMenuButton,
+  IonSegment,
+  IonSegmentButton,
+  IonTitle,
+  IonToolbar,
+  IonButtons,
+} from '@ionic/angular/standalone';
+import { LazyLoadImageModule } from 'ng-lazyload-image';
 
 @Component({
   selector: 'app-sobre',
   templateUrl: './sobre.component.html',
   styleUrls: ['./sobre.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    IonHeader,
+    IonToolbar,
+    IonButtons,
+    IonMenuButton,
+    IonTitle,
+    IonSegment,
+    IonSegmentButton,
+    IonContent,
+    IonList,
+    IonItem,
+    IonLabel,
+    LazyLoadImageModule,
+  ],
 })
-export class SobreComponent implements OnInit {
-
-  public ipm: boolean = true;
+export class SobreComponent {
+  public ipm = true;
   public defaultImage = '../../../assets/logo_lazy.png';
   public histIPB = [
     {
@@ -55,9 +85,7 @@ export class SobreComponent implements OnInit {
   ]
   constructor() { }
 
-  ngOnInit() {}
-
-  handleHistory($event: any) {
+  handleHistory() {
     this.ipm = !this.ipm;
   }
 

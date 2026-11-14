@@ -3,12 +3,12 @@ export interface Membros {
 
     foto?: string;
     nome: string;
-    dtNasc: any;
+    dtNasc: Date | string;
     genero?: 'masculino'| 'feminino';
     estadoCivil?: 'solteiro' | 'casado' | 'viuvo' | 'divorciado';
     conjuge?: string;
     conjugeId?: string;
-    dataCasamento?: any;
+    dataCasamento?: Date | string;
     
     cep?: string;
     logradouro?: string;

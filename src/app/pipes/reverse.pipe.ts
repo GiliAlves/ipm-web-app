@@ -1,10 +1,19 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'reverse'
+  name: 'reverse',
+  standalone: true,
 })
+/**
+ * Pipe que inverte a ordem dos itens de um array.
+ */
 export class ReversePipe implements PipeTransform {
 
-  transform = (value: any) => value.slice().reverse();
+  /**
+   * Retorna uma nova instância do array invertido.
+   * @param value - Array a ser invertido.
+   * @returns Array invertido.
+   */
+  transform = (value: unknown[]) => value.slice().reverse();
 
 }

@@ -20,7 +20,7 @@
         </ion-col>
       </ion-row>
       <ng-container 
-        *ngTemplateOutlet="index === 1 ? step1 : index === 2 ? step2 : index === 3 ? step3 : index === 4 ? step4 : step5">
+        *ngTemplateOutlet="index() === 1 ? step1 : index() === 2 ? step2 : index() === 3 ? step3 : index() === 4 ? step4 : step5">
       </ng-container>
     </ion-grid>
   </section>
@@ -30,11 +30,11 @@
   <ion-toolbar>
     <ion-row class="ion-align-items-center ion-justify-content-end">
       <ion-col>
-        <ion-label class="ion-margin-start">{{ index }}</ion-label>
+        <ion-label class="ion-margin-start">{{ index() }}</ion-label>
         <ion-note>/5</ion-note>
       </ion-col>
       <ion-col size="2">
-        <ion-button color="medium" size="small" shape="round" expand="block" (click)="prevStep()" [disabled]="index === 1">
+        <ion-button color="medium" size="small" shape="round" expand="block" (click)="prevStep()" [disabled]="index() === 1">
           <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
         </ion-button>
       </ion-col>
@@ -46,7 +46,7 @@
     </ion-row>
     <ion-row>
       <ion-col>
-        <ion-progress-bar [value]="index/5" buffer="0"></ion-progress-bar>
+        <ion-progress-bar [value]="index()/5" buffer="0"></ion-progress-bar>
       </ion-col>
     </ion-row>
   </ion-toolbar>

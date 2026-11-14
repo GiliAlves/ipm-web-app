@@ -1,0 +1,332 @@
+{
+  "meta": {
+    "descricao": "Lote inicial de exemplo do game bíblico IPM. Perguntas em status 'em_revisao' — NÃO usar em produção antes da aprovação teológica (pastor/conselho).",
+    "versaoSchema": 1,
+    "gerado": "exemplo"
+  },
+  "perguntas": [
+    {
+      "id": "bib-0001",
+      "tema": "biblia",
+      "subtema": "antigo-testamento",
+      "trilhas": ["UCP", "UPA"],
+      "dificuldade": "facil",
+      "enunciado": "Quem foi lançado na cova dos leões e preservado por Deus?",
+      "alternativas": [
+        { "id": "a", "texto": "Daniel" },
+        { "id": "b", "texto": "Davi" },
+        { "id": "c", "texto": "Jonas" },
+        { "id": "d", "texto": "Elias" }
+      ],
+      "respostaCorretaId": "a",
+      "explicacao": "Daniel foi lançado na cova por orar a Deus; o Senhor fechou a boca dos leões.",
+      "referencia": { "tipo": "biblia", "versao": "ARA", "livro": "Daniel", "capitulo": 6, "versiculo": "16-23" },
+      "tags": ["daniel", "fidelidade", "milagre"],
+      "status": "em_revisao", "revisadoPor": "", "aprovadoPor": "", "dataAprovacao": "", "versao": 1, "ativo": true
+    },
+    {
+      "id": "bib-0002",
+      "tema": "biblia",
+      "subtema": "antigo-testamento",
+      "trilhas": ["UCP"],
+      "dificuldade": "facil",
+      "enunciado": "Quem Deus mandou construir uma arca para se salvar do dilúvio?",
+      "alternativas": [
+        { "id": "a", "texto": "Abraão" },
+        { "id": "b", "texto": "Noé" },
+        { "id": "c", "texto": "Moisés" },
+        { "id": "d", "texto": "José" }
+      ],
+      "respostaCorretaId": "b",
+      "explicacao": "Noé achou graça diante do Senhor e construiu a arca conforme a ordem de Deus.",
+      "referencia": { "tipo": "biblia", "versao": "ARA", "livro": "Gênesis", "capitulo": 6, "versiculo": "13-22" },
+      "tags": ["noe", "diluvio", "arca"],
+      "status": "em_revisao", "revisadoPor": "", "aprovadoPor": "", "dataAprovacao": "", "versao": 1, "ativo": true
+    },
+    {
+      "id": "bib-0003",
+      "tema": "biblia",
+      "subtema": "novo-testamento",
+      "trilhas": ["UCP", "UPA"],
+      "dificuldade": "facil",
+      "enunciado": "Em qual cidade Jesus nasceu?",
+      "alternativas": [
+        { "id": "a", "texto": "Nazaré" },
+        { "id": "b", "texto": "Jerusalém" },
+        { "id": "c", "texto": "Belém" },
+        { "id": "d", "texto": "Cafarnaum" }
+      ],
+      "respostaCorretaId": "c",
+      "explicacao": "Jesus nasceu em Belém da Judeia, nos dias do rei Herodes.",
+      "referencia": { "tipo": "biblia", "versao": "ARA", "livro": "Mateus", "capitulo": 2, "versiculo": "1" },
+      "tags": ["natividade", "belem"],
+      "status": "em_revisao", "revisadoPor": "", "aprovadoPor": "", "dataAprovacao": "", "versao": 1, "ativo": true
+    },
+    {
+      "id": "bib-0004",
+      "tema": "biblia",
+      "subtema": "novo-testamento",
+      "trilhas": ["UPA", "UMP"],
+      "dificuldade": "medio",
+      "enunciado": "Qual apóstolo negou Jesus três vezes antes do cantar do galo?",
+      "alternativas": [
+        { "id": "a", "texto": "João" },
+        { "id": "b", "texto": "Tomé" },
+        { "id": "c", "texto": "Pedro" },
+        { "id": "d", "texto": "Tiago" }
+      ],
+      "respostaCorretaId": "c",
+      "explicacao": "Pedro negou Jesus três vezes, como o Senhor havia predito.",
+      "referencia": { "tipo": "biblia", "versao": "ARA", "livro": "Lucas", "capitulo": 22, "versiculo": "54-62" },
+      "tags": ["pedro", "negacao"],
+      "status": "em_revisao", "revisadoPor": "", "aprovadoPor": "", "dataAprovacao": "", "versao": 1, "ativo": true
+    },
+    {
+      "id": "bib-0005",
+      "tema": "biblia",
+      "subtema": "novo-testamento",
+      "trilhas": ["UPA", "UMP", "Adultos"],
+      "dificuldade": "medio",
+      "enunciado": "Complete: 'Porque Deus amou ao mundo de tal maneira que deu o seu Filho unigênito, para que todo o que nele crê...'",
+      "alternativas": [
+        { "id": "a", "texto": "não pereça, mas tenha a vida eterna" },
+        { "id": "b", "texto": "seja abençoado em tudo" },
+        { "id": "c", "texto": "receba o Espírito Santo" },
+        { "id": "d", "texto": "herde a terra prometida" }
+      ],
+      "respostaCorretaId": "a",
+      "explicacao": "João 3:16, um dos versículos centrais sobre o amor de Deus e a salvação pela fé.",
+      "referencia": { "tipo": "biblia", "versao": "ARA", "livro": "João", "capitulo": 3, "versiculo": "16" },
+      "tags": ["evangelho", "salvacao"],
+      "status": "em_revisao", "revisadoPor": "", "aprovadoPor": "", "dataAprovacao": "", "versao": 1, "ativo": true
+    },
+    {
+      "id": "bib-0006",
+      "tema": "biblia",
+      "subtema": "novo-testamento",
+      "trilhas": ["UMP", "Adultos"],
+      "dificuldade": "dificil",
+      "enunciado": "Segundo Gálatas 5, qual das opções NÃO faz parte do fruto do Espírito?",
+      "alternativas": [
+        { "id": "a", "texto": "Amor" },
+        { "id": "b", "texto": "Domínio próprio" },
+        { "id": "c", "texto": "Zelo por conhecimento" },
+        { "id": "d", "texto": "Longanimidade" }
+      ],
+      "respostaCorretaId": "c",
+      "explicacao": "O fruto do Espírito é amor, alegria, paz, longanimidade, benignidade, bondade, fidelidade, mansidão e domínio próprio. 'Zelo por conhecimento' não está na lista.",
+      "referencia": { "tipo": "biblia", "versao": "ARA", "livro": "Gálatas", "capitulo": 5, "versiculo": "22-23" },
+      "tags": ["fruto-do-espirito", "santificacao"],
+      "status": "em_revisao", "revisadoPor": "", "aprovadoPor": "", "dataAprovacao": "", "versao": 1, "ativo": true
+    },
+    {
+      "id": "bib-0007",
+      "tema": "biblia",
+      "subtema": "geral",
+      "trilhas": ["UPA", "UMP", "Adultos"],
+      "dificuldade": "medio",
+      "enunciado": "Quantos livros compõem o Novo Testamento?",
+      "alternativas": [
+        { "id": "a", "texto": "39" },
+        { "id": "b", "texto": "27" },
+        { "id": "c", "texto": "66" },
+        { "id": "d", "texto": "24" }
+      ],
+      "respostaCorretaId": "b",
+      "explicacao": "O Novo Testamento tem 27 livros; o Antigo tem 39, totalizando 66.",
+      "referencia": { "tipo": "documento", "fonte": "Cânon das Escrituras", "secao": "Novo Testamento" },
+      "tags": ["canon", "estrutura-biblica"],
+      "status": "em_revisao", "revisadoPor": "", "aprovadoPor": "", "dataAprovacao": "", "versao": 1, "ativo": true
+    },
+    {
+      "id": "hist-0001",
+      "tema": "historia",
+      "subtema": "reforma",
+      "trilhas": ["UMP", "Adultos"],
+      "dificuldade": "medio",
+      "enunciado": "Em que ano Martinho Lutero afixou as 95 Teses, marco tradicional da Reforma Protestante?",
+      "alternativas": [
+        { "id": "a", "texto": "1483" },
+        { "id": "b", "texto": "1517" },
+        { "id": "c", "texto": "1546" },
+        { "id": "d", "texto": "1611" }
+      ],
+      "respostaCorretaId": "b",
+      "explicacao": "Em 31 de outubro de 1517, Lutero afixou as 95 Teses na porta da igreja de Wittenberg.",
+      "referencia": { "tipo": "documento", "fonte": "História da Reforma", "secao": "95 Teses (1517)" },
+      "tags": ["lutero", "reforma", "95-teses"],
+      "status": "em_revisao", "revisadoPor": "", "aprovadoPor": "", "dataAprovacao": "", "versao": 1, "ativo": true
+    },
+    {
+      "id": "hist-0002",
+      "tema": "historia",
+      "subtema": "reforma",
+      "trilhas": ["UMP", "Adultos"],
+      "dificuldade": "medio",
+      "enunciado": "Qual reformador é associado à cidade de Genebra e à tradição reformada/presbiteriana?",
+      "alternativas": [
+        { "id": "a", "texto": "Martinho Lutero" },
+        { "id": "b", "texto": "João Calvino" },
+        { "id": "c", "texto": "Ulrico Zuínglio" },
+        { "id": "d", "texto": "Filipe Melâncton" }
+      ],
+      "respostaCorretaId": "b",
+      "explicacao": "João Calvino liderou a Reforma em Genebra e é referência central da teologia reformada.",
+      "referencia": { "tipo": "documento", "fonte": "História da Reforma", "secao": "Calvino em Genebra" },
+      "tags": ["calvino", "genebra", "reformada"],
+      "status": "em_revisao", "revisadoPor": "", "aprovadoPor": "", "dataAprovacao": "", "versao": 1, "ativo": true
+    },
+    {
+      "id": "hist-0003",
+      "tema": "historia",
+      "subtema": "reforma",
+      "trilhas": ["Adultos"],
+      "dificuldade": "dificil",
+      "enunciado": "Qual é a principal obra teológica escrita por João Calvino?",
+      "alternativas": [
+        { "id": "a", "texto": "A Liberdade Cristã" },
+        { "id": "b", "texto": "As Institutas da Religião Cristã" },
+        { "id": "c", "texto": "O Cativeiro Babilônico da Igreja" },
+        { "id": "d", "texto": "Cidade de Deus" }
+      ],
+      "respostaCorretaId": "b",
+      "explicacao": "'As Institutas da Religião Cristã' são a grande sistematização da teologia de Calvino.",
+      "referencia": { "tipo": "documento", "fonte": "Obras de João Calvino", "secao": "Institutas" },
+      "tags": ["calvino", "institutas"],
+      "status": "em_revisao", "revisadoPor": "", "aprovadoPor": "", "dataAprovacao": "", "versao": 1, "ativo": true
+    },
+    {
+      "id": "hist-0004",
+      "tema": "historia",
+      "subtema": "ipb",
+      "trilhas": ["Adultos"],
+      "dificuldade": "dificil",
+      "enunciado": "Qual missionário é reconhecido por iniciar a obra presbiteriana no Brasil, chegando ao Rio de Janeiro em 1859?",
+      "alternativas": [
+        { "id": "a", "texto": "Ashbel Green Simonton" },
+        { "id": "b", "texto": "Robert Kalley" },
+        { "id": "c", "texto": "George Nash Morton" },
+        { "id": "d", "texto": "Emanuel Vanorden" }
+      ],
+      "respostaCorretaId": "a",
+      "explicacao": "Ashbel Green Simonton chegou ao Rio em 1859 e organizou a primeira igreja presbiteriana do Brasil.",
+      "referencia": { "tipo": "documento", "fonte": "História da IPB", "secao": "Simonton (1859)" },
+      "tags": ["ipb", "simonton", "missoes"],
+      "status": "em_revisao", "revisadoPor": "", "aprovadoPor": "", "dataAprovacao": "", "versao": 1, "ativo": true
+    },
+    {
+      "id": "hist-0005",
+      "tema": "historia",
+      "subtema": "reforma",
+      "trilhas": ["UMP", "Adultos"],
+      "dificuldade": "medio",
+      "enunciado": "Os 'cinco solas' resumem princípios da Reforma. Qual das opções é um deles?",
+      "alternativas": [
+        { "id": "a", "texto": "Sola Ecclesia (somente a Igreja)" },
+        { "id": "b", "texto": "Sola Traditio (somente a Tradição)" },
+        { "id": "c", "texto": "Sola Scriptura (somente a Escritura)" },
+        { "id": "d", "texto": "Sola Ratio (somente a Razão)" }
+      ],
+      "respostaCorretaId": "c",
+      "explicacao": "Os cinco solas: Sola Scriptura, Solus Christus, Sola Gratia, Sola Fide e Soli Deo Gloria.",
+      "referencia": { "tipo": "documento", "fonte": "Princípios da Reforma", "secao": "Os cinco solas" },
+      "tags": ["solas", "reforma"],
+      "status": "em_revisao", "revisadoPor": "", "aprovadoPor": "", "dataAprovacao": "", "versao": 1, "ativo": true
+    },
+    {
+      "id": "conf-0001",
+      "tema": "confissoes",
+      "subtema": "breve-catecismo",
+      "trilhas": ["UMP", "Adultos"],
+      "dificuldade": "medio",
+      "enunciado": "Segundo a 1ª pergunta do Breve Catecismo de Westminster, qual é o fim principal do homem?",
+      "alternativas": [
+        { "id": "a", "texto": "Servir ao próximo e fazer o bem" },
+        { "id": "b", "texto": "Glorificar a Deus e gozá-lo para sempre" },
+        { "id": "c", "texto": "Guardar os mandamentos e ser salvo" },
+        { "id": "d", "texto": "Pregar o evangelho a toda criatura" }
+      ],
+      "respostaCorretaId": "b",
+      "explicacao": "Breve Catecismo, P.1: 'O fim principal do homem é glorificar a Deus e gozá-lo para sempre.'",
+      "referencia": { "tipo": "documento", "fonte": "Breve Catecismo de Westminster", "secao": "Pergunta 1" },
+      "tags": ["breve-catecismo", "westminster"],
+      "status": "em_revisao", "revisadoPor": "", "aprovadoPor": "", "dataAprovacao": "", "versao": 1, "ativo": true
+    },
+    {
+      "id": "conf-0002",
+      "tema": "confissoes",
+      "subtema": "breve-catecismo",
+      "trilhas": ["Adultos"],
+      "dificuldade": "dificil",
+      "enunciado": "Segundo o Breve Catecismo de Westminster, o que é o pecado?",
+      "alternativas": [
+        { "id": "a", "texto": "Qualquer falta de conformidade com a lei de Deus, ou transgressão dela" },
+        { "id": "b", "texto": "Apenas os atos externos que ferem o próximo" },
+        { "id": "c", "texto": "A ausência de boas obras na vida do crente" },
+        { "id": "d", "texto": "A dúvida a respeito da existência de Deus" }
+      ],
+      "respostaCorretaId": "a",
+      "explicacao": "Breve Catecismo, P.14: 'Pecado é qualquer falta de conformidade com a lei de Deus, ou transgressão dela.'",
+      "referencia": { "tipo": "documento", "fonte": "Breve Catecismo de Westminster", "secao": "Pergunta 14" },
+      "tags": ["pecado", "breve-catecismo"],
+      "status": "em_revisao", "revisadoPor": "", "aprovadoPor": "", "dataAprovacao": "", "versao": 1, "ativo": true
+    },
+    {
+      "id": "conf-0003",
+      "tema": "confissoes",
+      "subtema": "sacramentos",
+      "trilhas": ["UPA", "UMP", "Adultos"],
+      "dificuldade": "medio",
+      "enunciado": "Quais são os dois sacramentos reconhecidos pela tradição presbiteriana?",
+      "alternativas": [
+        { "id": "a", "texto": "Batismo e Ceia do Senhor" },
+        { "id": "b", "texto": "Batismo e Confirmação" },
+        { "id": "c", "texto": "Ceia do Senhor e Ordenação" },
+        { "id": "d", "texto": "Batismo e Unção dos enfermos" }
+      ],
+      "respostaCorretaId": "a",
+      "explicacao": "A tradição reformada reconhece dois sacramentos instituídos por Cristo: o Batismo e a Ceia do Senhor.",
+      "referencia": { "tipo": "documento", "fonte": "Confissão de Fé de Westminster", "secao": "Dos Sacramentos" },
+      "tags": ["sacramentos", "batismo", "ceia"],
+      "status": "em_revisao", "revisadoPor": "", "aprovadoPor": "", "dataAprovacao": "", "versao": 1, "ativo": true
+    },
+    {
+      "id": "conf-0004",
+      "tema": "confissoes",
+      "subtema": "westminster",
+      "trilhas": ["UCP", "UPA"],
+      "dificuldade": "facil",
+      "enunciado": "Quantos mandamentos há na Lei de Deus (os Dez Mandamentos)?",
+      "alternativas": [
+        { "id": "a", "texto": "Sete" },
+        { "id": "b", "texto": "Dez" },
+        { "id": "c", "texto": "Doze" },
+        { "id": "d", "texto": "Cinco" }
+      ],
+      "respostaCorretaId": "b",
+      "explicacao": "A Lei moral está resumida nos Dez Mandamentos, entregues por Deus a Moisés.",
+      "referencia": { "tipo": "biblia", "versao": "ARA", "livro": "Êxodo", "capitulo": 20, "versiculo": "1-17" },
+      "tags": ["dez-mandamentos", "lei"],
+      "status": "em_revisao", "revisadoPor": "", "aprovadoPor": "", "dataAprovacao": "", "versao": 1, "ativo": true
+    },
+    {
+      "id": "bib-0008",
+      "tema": "biblia",
+      "subtema": "novo-testamento",
+      "trilhas": ["UCP", "UPA"],
+      "dificuldade": "facil",
+      "enunciado": "Quantos discípulos Jesus escolheu para serem seus apóstolos?",
+      "alternativas": [
+        { "id": "a", "texto": "Sete" },
+        { "id": "b", "texto": "Dez" },
+        { "id": "c", "texto": "Doze" },
+        { "id": "d", "texto": "Setenta" }
+      ],
+      "respostaCorretaId": "c",
+      "explicacao": "Jesus escolheu doze discípulos, a quem também chamou apóstolos.",
+      "referencia": { "tipo": "biblia", "versao": "ARA", "livro": "Lucas", "capitulo": 6, "versiculo": "12-16" },
+      "tags": ["apostolos", "discipulos"],
+      "status": "em_revisao", "revisadoPor": "", "aprovadoPor": "", "dataAprovacao": "", "versao": 1, "ativo": true
+    }
+  ]
+}

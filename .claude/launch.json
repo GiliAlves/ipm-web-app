@@ -1,0 +1,21 @@
+{
+  "version": "0.0.1",
+  "autoPort": true,
+  "configurations": [
+    {
+      "name": "ipm-web-app",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["ng", "serve"],
+      "port": 4200
+    },
+    {
+      "name": "ipm-igreja-web",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-lc",
+        "cd /Users/gilialves/Projetos/ipm-app-igreja && exec flutter run -d web-server --web-port 8091 --web-hostname localhost"
+      ],
+      "port": 8091
+    }
+  ]
+}

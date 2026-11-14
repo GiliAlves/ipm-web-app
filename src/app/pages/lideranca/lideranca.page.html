@@ -18,11 +18,11 @@
     <ion-row>
       <ion-col>
         <ion-list [inset]="true" class="ion-no-padding">
-          <ng-container *ngIf="inicialStorage.pastores.length">
+          <ng-container *ngIf="leadership().pastores.length">
             <ion-list-header class="ion-no-padding">
               <ion-label class="ion-no-margin">Pastores</ion-label>
             </ion-list-header>
-            <ion-item *ngFor="let pastor of inicialStorage.pastores; last as isLast">
+            <ion-item *ngFor="let pastor of leadership().pastores; last as isLast">
               <ion-avatar slot="start">
                 <img alt="pastores" [src]="'../../../assets/pastores/' + pastor.nome + '.jpeg'" />
               </ion-avatar>
@@ -36,11 +36,11 @@
             </ion-item>
           </ng-container>
 
-          <ng-container *ngIf="inicialStorage.presbiteros.length">
+          <ng-container *ngIf="leadership().presbiteros.length">
             <ion-list-header class="ion-no-padding">
               <ion-label>Presbíteros</ion-label>
             </ion-list-header>
-            <ion-item *ngFor="let presbitero of inicialStorage.presbiteros">
+            <ion-item *ngFor="let presbitero of leadership().presbiteros">
               <ion-label>
                 <h3>{{ presbitero.nome }}</h3>
                 <p><a [href]="'mailto:' + presbitero.email">{{ presbitero.email }}</a></p>
@@ -48,11 +48,11 @@
             </ion-item>
           </ng-container>
 
-          <ng-container *ngIf="inicialStorage.diaconos.length">
+          <ng-container *ngIf="leadership().diaconos.length">
             <ion-list-header class="ion-no-padding">
               <ion-label>Diáconos</ion-label>
             </ion-list-header>
-            <ion-item *ngFor="let diacono of inicialStorage.diaconos">
+            <ion-item *ngFor="let diacono of leadership().diaconos">
               <ion-label>
                 <p color="primary">
                   residente na {{ diacono.residente === 'Sede' ? '' : 'congregação Jd. '}}

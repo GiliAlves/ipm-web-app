@@ -1,5 +1,6 @@
 export const environment = {
   production: false,
+  useEmulators: false,
   firebase: {
     projectId: 'ipm-task-app',
     appId: '1:272319172615:web:896504b8606c83bc',

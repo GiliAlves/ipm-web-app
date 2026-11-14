@@ -60,7 +60,7 @@
     </ion-item>
     <cdk-virtual-scroll-viewport appendOnly itemSize="100">
       <ion-item-sliding
-          *cdkVirtualFor="let cantico of canticosSearch$ | async"
+          *cdkVirtualFor="let cantico of canticosSearch$"
           style="
             border-right: 5px solid var(--ion-color-success);
             border-radius: 10px;

@@ -1,5 +1,10 @@
+/**
+ * Remove acentos e cedilha de uma string.
+ * @param term - Texto a ser normalizado.
+ * @returns Texto sem acentos.
+ */
 export const NORMALIZE = (term: string) => {
-  const accentMap: any = {
+  const accentMap: Record<string, string> = {
     á: 'a', à: 'a', ã: 'a',
     é: 'e', è: 'e', ê: 'e',
     í: 'i', ì: 'i', ó: 'o',
@@ -14,32 +19,84 @@ export const NORMALIZE = (term: string) => {
   return ret;
 };
 
-export const NOT_NUMBER = (term: any) => term.replace(/[0-9]/,'');
+/**
+ * Remove todos os caracteres numéricos de uma string.
+ * @param term - Texto a ser filtrado.
+ * @returns Texto sem números.
+ */
+export const NOT_NUMBER = (term: string) => term.replace(/[0-9]/,'');
 
+/**
+ * Converte quebras de linha e remove tags HTML de uma string.
+ * @param term - Texto HTML a ser normalizado.
+ * @returns Texto plano sem tags iniciais.
+ */
 export const NORMALIZE_HTML = (term: string) => term
   .replace(/(<br>)/g, "\n")
   .replace(/(<p>)/g, "\n")
   .replace(/<\/?[^>]+(>|$)/g, "")
   .replace(/^\n/, "");
 
+/**
+ * Decodifica entidades numéricas HTML (`&#NNNN;`) para caracteres Unicode.
+ * @param str - Texto contendo entidades HTML.
+ * @returns Texto com caracteres decodificados.
+ */
 export const DECODE_HTML_CHAR_CODES = (str: string) =>
   str.replace(/(&#(\d+);)/g, (match, capture, charCode) => String.fromCharCode(charCode));
 
-export const SIZE_ARRAY = (arr: any, length: number) => arr.length === length;
+/**
+ * Verifica se o array atingiu um tamanho específico.
+ * @param arr - Array a verificar.
+ * @param length - Tamanho esperado.
+ * @returns `true` se o array possuir o tamanho informado.
+ */
+export const SIZE_ARRAY = (arr: unknown[], length: number) => arr.length === length;
 
-export const REMOVE_FIRST_FROM_ARRAY = (arr: any) => arr.pop();
+/**
+ * Remove o último elemento do array.
+ * @param arr - Array a ser modificado.
+ * @returns Elemento removido.
+ */
+export const REMOVE_FIRST_FROM_ARRAY = (arr: unknown[]) => arr.pop();
 
-export const UNIQUE_ARRAY = (arr: any) =>
-  arr.filter((a: any, i: any) => arr.indexOf(a) === i);
+/**
+ * Remove valores duplicados de um array (comparação por referência).
+ * @param arr - Array a ser filtrado.
+ * @returns Array com valores únicos.
+ */
+export const UNIQUE_ARRAY = <T>(arr: T[]) =>
+  arr.filter((a, i) => arr.indexOf(a) === i);
 
-export const FIND_IN_ARRAY = (arr: any, item: any, key: string) =>
-  arr.find((a: any) => (a[key] === item[key]));
+/**
+ * Busca um objeto dentro de um array comparando uma chave.
+ * @param arr - Array de objetos.
+ * @param item - Objeto de referência para comparação.
+ * @param key - Propriedade usada na comparação.
+ * @returns Objeto encontrado ou `undefined`.
+ */
+export const FIND_IN_ARRAY = <T>(arr: T[], item: T, key: string) =>
+  arr.find((a) => ((a as Record<string, unknown>)[key] === (item as Record<string, unknown>)[key]));
 
-export const FILTER_IN_ARRAY = (arr: any, key: string, term: string) =>
-  arr.filter(( result: any ) => result[key].toLowerCase().indexOf(term) > -1);
+/**
+ * Filtra um array de objetos por substring em uma propriedade (case-insensitive).
+ * @param arr - Array de objetos.
+ * @param key - Propriedade a ser pesquisada.
+ * @param term - Termo de busca.
+ * @returns Array filtrado.
+ */
+export const FILTER_IN_ARRAY = <T>(arr: T[], key: keyof T, term: string) =>
+  arr.filter((result) => (result[key] as string).toLowerCase().indexOf(term) > -1);
 
-export const REMOVE_ITEM_ARRAY = (arr: any, item: any, key: string) =>
-  arr.filter((a: any) => a[key] !== item[key]);
+/**
+ * Remove um objeto de um array comparando uma chave.
+ * @param arr - Array de objetos.
+ * @param item - Objeto a ser removido.
+ * @param key - Propriedade usada na comparação.
+ * @returns Array sem o objeto informado.
+ */
+export const REMOVE_ITEM_ARRAY = <T>(arr: T[], item: T, key: string) =>
+  arr.filter((a) => (a as Record<string, unknown>)[key] !== (item as Record<string, unknown>)[key]);
 
   export const BTN_ACTION = [
     {

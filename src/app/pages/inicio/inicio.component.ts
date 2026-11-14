@@ -1,41 +1,75 @@
-import { DatePipe } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-import { IonDatetime, ToastController } from '@ionic/angular';
-import { Storage } from '@ionic/storage-angular';
-import { OrderByDirection, Timestamp } from 'firebase/firestore';
-import { Observable } from 'rxjs';
-import { Calendario } from 'src/app/interfaces/calendario.interface';
-import { Cantico } from 'src/app/interfaces/cantico.interface';
-import { Devocional, Position } from 'src/app/interfaces/devocional.interface';
+import { CommonModule, DatePipe } from '@angular/common';
+import { Component, computed, inject } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import {
+  IonCard,
+  IonCol,
+  IonContent,
+  IonGrid,
+  IonHeader,
+  IonIcon,
+  IonImg,
+  IonLabel,
+  IonMenuButton,
+  IonMenuToggle,
+  IonNote,
+  IonRow,
+  IonTabButton,
+  IonText,
+  IonThumbnail,
+  IonTitle,
+  IonToolbar,
+  IonButtons
+} from '@ionic/angular/standalone';
 import { InicialStorage } from 'src/app/interfaces/inicial.interface';
-import { NovoCantico, Tematica } from 'src/app/interfaces/novo-cantico.interface';
-import { Pastoral } from 'src/app/interfaces/pastoral.interface';
-import { YouTube } from 'src/app/interfaces/youTube.interface';
-import { BIBLIA, HORARIOS, INICIAL_STORAGE, LINKS, MESSAGE_GET_STORAGE_ERROR, RESET_HINO_CANTICO, SOCIAL, TEMATICAS } from 'src/app/model/shared';
-import { FirebaseService } from 'src/app/services/firebase.service';
-import { YoutubeService } from 'src/app/services/youtube.service';
-import { DECODE_HTML_CHAR_CODES, NORMALIZE_HTML } from 'src/utils/utils';
+import { Tematica } from 'src/app/interfaces/novo-cantico.interface';
+import { BIBLIA, HORARIOS, INICIAL_STORAGE, LINKS, SOCIAL, TEMATICAS } from 'src/app/model/shared';
+import { UseHomeStore } from '../../presentation/signals/use-home.store';
 
-
+/**
+ * Página inicial do aplicativo em standalone component.
+ */
 @Component({
   selector: 'app-inicio',
   templateUrl: './inicio.component.html',
   styleUrls: ['./inicio.component.scss'],
+  standalone: true,
+  providers: [DatePipe],
+  imports: [
+    CommonModule,
+    DatePipe,
+    RouterLink,
+    IonHeader,
+    IonToolbar,
+    IonButtons,
+    IonMenuButton,
+    IonTitle,
+    IonContent,
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonCard,
+    IonText,
+    IonNote,
+    IonImg,
+    IonThumbnail,
+    IonIcon,
+    IonLabel,
+    IonMenuToggle,
+    IonTabButton,
+  ],
 })
-export class InicioComponent implements OnInit {
-  @ViewChild('popoverCancioneiro') popoverCancioneiro!: any;
-  @ViewChild('popoverHino') popoverHino!: any;
-  @ViewChild('datetime') datetime!: IonDatetime;
+export class InicioComponent {
+  private readonly router = inject(Router);
+  private readonly store = inject(UseHomeStore);
+  private readonly datePipe = inject(DatePipe);
 
-  public pastorais$!: Observable<Pastoral[]>;
-  public devocionais$!: Observable<Devocional[]>;
-  public calendar$!: Observable<Calendario[]>;
-
-  public cantico: Cantico[] = [];
-  public hino: NovoCantico[] = [];
-  public eventos: Calendario[] = [];
-  public evento!: Calendario;
+  readonly homeData = this.store.homeData;
+  readonly hasPastorais = computed(() => this.homeData().pastorais?.length > 0);
+  readonly searchBarTerm = this.store.searchBarTerm;
+  readonly isSpinner = this.store.isSpinner;
+  readonly isSubmmit = this.store.isSubmmit;
+  readonly scrollTop = this.store.scrollTop;
 
   public biblia = BIBLIA;
   public tematicas: Tematica[] = TEMATICAS;
@@ -43,193 +77,25 @@ export class InicioComponent implements OnInit {
   public social = SOCIAL;
   public horarios = HORARIOS;
   public links = LINKS;
-  private messageGetStorageError: string = MESSAGE_GET_STORAGE_ERROR;
 
   public date = new Date();
   public calendarDates: string[] = [];
-  public searchBarTerm: string = '';
   public valueDay: string | undefined = '';
-  public scrollTop: boolean = true;
-  public isSpinner: boolean = false;
-  public isSubmmit: boolean = false;
-  public isSelected: boolean = false;
-
-  constructor(
-    private datePipe: DatePipe,
-    private firebaseService: FirebaseService,
-    private youTubeService: YoutubeService,
-    private toastController: ToastController,
-    private router: Router,
-    private storage: Storage) {}
-
-  async ngOnInit() {
-    await this.getStorage();
-
-    this.getVideos();
-
-    this.setFirebase('pastorais');
-    this.getAllPastorais();
-
-    this.setFirebase('devocionais');
-    this.getAllDevocionais();
-
-    // this.setFirebase('eventos', 'dataInicio', 'asc');
-    // this.getAllCalendar();
-    // this.setEventsCalendar(this.date.getMonth() + 1);
-
-    this.setFirebase('membros', 'nome', 'asc');
-  }
-
-  private setFirebase(path: string, fieldPath: string = 'data', orderByDirection: OrderByDirection = 'desc') {
-    this.firebaseService.path = path;
-    this.firebaseService.fieldPath = fieldPath;
-    this.firebaseService.orderByDirection = orderByDirection;
-  }
-
-  private getVideos = () =>
-    this.youTubeService.getVideosForChanel()
-      .subscribe((youTube: YouTube) => {
-        if(youTube && youTube.items.length) {
-          this.inicialStorage.videosStorage = youTube;
-        }
-        this.setStorage();
-      });
-
-  private getAllPastorais = () =>
-    this.pastorais$ = this.firebaseService.getLimit(6) as Observable<Pastoral[]>;
-
-  private getAllDevocionais = () =>
-    this.devocionais$ = this.firebaseService.getLimit(6) as Observable<Devocional[]>;
-
-  private getAllCalendar  = () =>
-      this.calendar$ = this.firebaseService.getWhere('dataInicio', '>=', Timestamp.now()) as Observable<Calendario[]>;
-
-  private getStorage = async () =>
-    await this.storage.get('inicialStorage')
-      .then(storage => storage !== null ? this.inicialStorage = storage : this.setStorage())
-      .catch(err => this.messageErrorStorage(err));
-
-  private setStorage = async () =>
-    await this.storage.set('inicialStorage', this.inicialStorage)
-      .then(storage => this.inicialStorage = storage)
-      .catch(err => this.messageErrorStorage(err));
-
-  private setEventsCalendar = (monthEvent: number) =>
-    this.calendar$.subscribe(calendar => {
-      this.valueDay = this.datePipe.transform(calendar[0].dataInicio?.toDate(), 'yyyy-MM-dd')?.toString();
-      this.calendarDates = [];
-
-      if (!this.isSelected)
-        this.evento = calendar[0];
-
-      calendar.forEach(evento => {
-        if (evento && evento.dataInicio) {
-          let day = this.datePipe.transform(evento.dataInicio.toDate(), 'dd')?.toString();
-          evento.day = day;
-          this.eventos.push(evento);
-
-          if (day && (evento.mes === monthEvent)) {
-            this.calendarDates.push(day);
-          }
-        }
-      })
-    })
-
-  private messageErrorStorage = (err: any) =>
-    this.presentToast(this.messageGetStorageError, err);
-
-  private async presentToast(message: string, duration: number = 200, position: Position = 'top') {
-    const toast = await this.toastController.create({ message, duration, position });
-    await toast.present();
-  }
+  public isSelected = false;
 
   public trasformerText = (text: string) => text.replace('|', "\n").replace(/&quot;/g, '"');
 
   public handleScroll = ($event: CustomEvent) =>
-    this.scrollTop = ($event.detail.scrollTop === 0) ? true : false;
+    this.store.handleScroll($event.detail.scrollTop === 0);
 
-  public resetSearch = () => this.searchBarTerm = '';
-
-  public selectedCalendar() {
-    this.isSelected = true;
-    const container: any = document.querySelector('ion-datetime');
-
-    this.eventos.forEach(evento => {
-      setTimeout(() => {
-        const mesAtual = container.shadowRoot.querySelector('.calendar-body').children[1].querySelector('button[data-day="1"]').getAttribute('data-month');
-        if (this.datePipe.transform(this.datetime.value?.toString(), 'dd') === evento.day && evento.mes === +mesAtual) {
-          this.evento = evento;
-        }
-      }, 200);
-    })
-  }
-
-  public openCalendar() {
-    const container: any = document.querySelector('ion-datetime');
-
-    setTimeout(() => {
-      const mesAtual = container.shadowRoot.querySelector('.calendar-body').children[1].querySelector('button[data-day="1"]').getAttribute('data-month');
-      this.setEventsCalendar(+mesAtual);
-    }, 500);
-  }
-
+  public resetSearch = () => this.store.updateSearchBarTerm('');
 
   public searchBar(item: string, path: string, fieldPath: string) {
-    switch (item) {
-      case 'backspace':
-        this.searchBarTerm = this.searchBarTerm.substring(0, this.searchBarTerm.length - 1);
-        if (this.searchBarTerm.length < 1) {
-          this.hino = [];
-          this.inicialStorage.hino = RESET_HINO_CANTICO;
-
-          this.cantico = [];
-          this.inicialStorage.cantico  = RESET_HINO_CANTICO;
-        }
-        break;
-
-      case 'arrow-forward':
-        if (this.searchBarTerm && this.isSubmmit) {
-          this.popoverHino.dismiss();
-          this.popoverCancioneiro.dismiss();
-          this.hino = [];
-          this.cantico = [];
-          this.router.navigate([`/${path === 'hinos' ? 'novo-cantico' : 'cancioneiro'}/${this.searchBarTerm}`]);
-          this.resetSearch();
-        }
-        break;
-
-      default:
-        if (this.searchBarTerm.length < 3) {
-          this.searchBarTerm += item;
-          this.searchBarTerm = this.searchBarTerm.replace(/^[0]+$/i, '');
-          this.isSpinner = true;
-
-          setTimeout(() => {
-            this.setFirebase(path, fieldPath, 'asc');
-            this.firebaseService.getWhere('numero', '==', this.searchBarTerm).subscribe(value => {
-              this.isSubmmit = true;
-              this.isSpinner = false;
-
-              switch (path) {
-                case 'hinos':
-                  this.hino = value as NovoCantico[];
-                  this.hino.forEach((hino, index) => this.hino[index].letra = DECODE_HTML_CHAR_CODES(NORMALIZE_HTML(hino.letra)));
-                  this.inicialStorage.hino = this.hino[0];
-                  this.setStorage();
-                  break;
-
-                case 'canticos':
-                  this.cantico = value as Cantico[];
-                  this.cantico.forEach((cantico, index) => this.cantico[index].letra = DECODE_HTML_CHAR_CODES(NORMALIZE_HTML(cantico.letra)));
-                  this.inicialStorage.cantico = this.cantico[0];
-                  this.setStorage();
-                  break;
-              }
-            });
-          }, 1500);
-        }
-        break;
-    }
+    // TODO: reimplementar busca com SearchCanticoUseCase / SearchNovoCanticoUseCase
+    void item;
+    void path;
+    void fieldPath;
   }
 }
+
 

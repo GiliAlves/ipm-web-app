@@ -5,8 +5,7 @@
     {
       "files": ["*.ts"],
       "parserOptions": {
-        "project": ["**/tsconfig.json"],
-        "createDefaultProgram": true
+        "project": ["**/tsconfig.json"]
       },
       "extends": [
         "plugin:@angular-eslint/recommended",
@@ -21,11 +20,12 @@
             "ignoreParameters": true
           }
         ],
-        "@typescript-eslint/no-empty-function": [ 
+        "@typescript-eslint/no-empty-function": [
           "error", {
-            "ignoreParameters": true
+            "allow": ["arrowFunctions", "constructors"]
           }
         ],
+        "@typescript-eslint/no-explicit-any": "warn",
         "@angular-eslint/component-class-suffix": [
           "error",
           {
